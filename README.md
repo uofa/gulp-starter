@@ -11,7 +11,7 @@
 * Download and unzip to your WAMP's `www` folder placing all code within a `gulp-starter` directory
   * Or change `localProjectBaseDir` var in `gulpfile.js` to whatever folder name you choose to use
   * Other path variables exist at the beginning of `gulpfile.js` but take care when modifying these
-* If instead you choose to clone this repo using the GitHub client, copy the contents of this repo to your WAMP's `www` folder (placing all code within a `gulp-starter` directory) - do **not** run the batch files here
+* If instead you choose to clone this repo using the GitHub client, copy the contents of this repo to your WAMP's `www` folder (placing all code within a `gulp-starter` directory)
   * This way your cloned copy can remain clean
     * Should you choose to use this repo for other projects simply repeat the process of copying the cloned repo
 * Drop all code that requires pre-processing (so fonts, images, JavaScript and CSS) into the `/app` directory adhering to the following structure

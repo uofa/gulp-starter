@@ -438,7 +438,7 @@ gulp.task('prepare:js:remote', function(){
         ))
         .pipe($.if(
             argv.production, // --production flag
-            uglify({preserveComments: 'some'})
+            $.uglify({preserveComments: 'some'})
         ))
         .pipe($.order([
             '**/**/jquery.js',

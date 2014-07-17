@@ -13,9 +13,10 @@
   * Other path variables exist at the beginning of `gulpfile.js` but take care when modifying these
 * If instead you choose to clone this repo using the GitHub client, copy the contents of this repo to your WAMP's `www` folder (placing all code within a `gulp-starter` directory)
   * This way your cloned copy can remain clean
-    * Should you choose to use this repo for other projects simply repeat the process of copying the cloned repo
+    * Should you choose to use this repo for other projects simply repeat the process of copying the cloned repo to a new location
 * Drop all code that requires pre-processing (so fonts, images, JavaScript and CSS) into the `/app` directory adhering to the following structure
   * Everything else can go into `/public_html`
+    * So `*.html`, `*.php`, etc.
 
 ### Folder Structure
 
@@ -74,14 +75,14 @@
 
 * Install Composer - https://getcomposer.org/Composer-Setup.exe
   * You may need to enable OpenSSL in your PHP installation by going directly to `./wamp/bin/php/php-5.4.x/php.ini` and enabling the OpenSSL extension
-* Run `composer-installs.bat`
+* Double-click `composer-installs.bat` to run
   * Ensure that setup completes successfully
 
 ---
 
 ## Gulp Installation
 
-* Run `npm-installs.bat`
+* Double-click `npm-installs.bat` to run
   * Ensure that setup completes successfully
 
 ---
@@ -96,24 +97,24 @@
 * Working **locally**
     * Open a command prompt from within your root folder and type in `gulp` - leave this prompt open
     * This will build everything and push it to `/public_html`
-      * `gulp` will open up your browser to this page - keep this open
+      * `gulp` will open up Chrome to this page - keep this open
     * Begin coding as you normally would and any changes to your code will be mimicked in your browser without having to reload the page
 
 * Working **remotely** with your `development` environment
     * Open a command prompt from within your root folder and type in `gulp upload` - leave this prompt open
       * This command uses the `development` environmental details specified in `.ftppass`
-      * To form a URL it combines "homepages" with the `webAccount` var
+      * To form a URL it combines the `remoteBaseDevUrl` var ("homepages") with the `webAccount` var
     * This will build everything and push the code in `/public_html` to your development web server following the same folder structure
-      * `gulp` will open up your browser to this page - keep this open
+      * `gulp` will open up Chrome to this page - keep this open
     * Begin coding as you normally would pressing `Ctrl + F5` to see any file changes
 
 * Working **remotely** with your `production` environment
     * Open a command prompt from within your root folder and type in `gulp upload --production` - leave this prompt open
       * This command uses the `production` environmental details specified in `.ftppass`
-      * To form a URL it changes to use "www" combined with the `symbolicLink` var
+      * To form a URL it changes to use `remoteBaseProdUrl` var ("www") combined with the `symbolicLink` var
       * It also fully minifies and obfuscates JavaScript and removes all console logging
     * This will build everything and push the code in `/public_html` to your production web server following the same folder structure
-      * `gulp` will open up your browser to this page - keep this open
+      * `gulp` will open up Chrome to this page - keep this open
     * Begin coding as you normally would pressing `Ctrl + F5` to see any file changes
 
 ---
@@ -133,10 +134,9 @@
 ## Chrome and Gulp (Optional)
 
 * Download the [Gulp Devtools extension for Chrome Developer Tools](https://chrome.google.com/webstore/detail/gulp-devtools/ojpmgjhofceebfifeajnjojpokebkkji) from the Chrome Web Store
-* Type in `gulp-devtools` and run from a command prompt in the root of your directory
-  * e.g. `./gulp-starter`
+* Type `gulp-devtools` into a command prompt in the root of your directory
 * Open Chrome Developer tools and find the Gulp tab
-  * Your `gulp` tasks should now be accessible from Chrome
+  * Your `gulp` tasks should now be accessible to run from within Chrome
 
 ---
 

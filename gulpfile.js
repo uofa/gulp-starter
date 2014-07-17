@@ -12,8 +12,9 @@ var protocol = 'http', //https doesn't work with (local) browserSync
     sftpHost = 'ftpweb.abdn.ac.uk';
 
 var src = 'app',
-    scripts = 'scripts',
-    styles = 'styles',
+        images = 'images',
+        scripts = 'scripts',
+        styles = 'styles',
     bowerComponents = 'bower_components',
     composerModules = 'composer_plugins',
     dist = 'public_html';
@@ -42,15 +43,27 @@ var browserSync = require('browser-sync'),
     mainBowerFiles = require('main-bower-files')
 ;
 
-var reload = browserSync.reload;
+var webBrowser = 'chrome',
+    reload = browserSync.reload;
 
 var currentLevel = './',
     upOneLevel = '../';
 
+var stylesheetFileTypeArray = ['css'],
+    scriptFileTypeArray = ['js'],
+    imageFileTypeArray = ['gif', 'png'],
+    pageFileTypeArray = ['html', 'php'],
+    fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff'];
+
+var imageFileTypes = imageFileTypeArray.join(','),
+    pageFileTypes = pageFileTypeArray.join(','),
+    otherFileTypes = pageFileTypeArray.concat(fontFileTypeArray).join(','), //html,php,eot,svg,ttf,woff
+    allValidFileTypes = stylesheetFileTypeArray.concat(scriptFileTypeArray, imageFileTypeArray, pageFileTypeArray, fontFileTypeArray).join(','); //css,js,gif,png,html,php,eot,svg,ttf,woff
+
 src = currentLevel + src + '/',
 dist = currentLevel + dist + '/';
 
-var htmlPhpFiles = dist + '**/*.{html,php}',
+var htmlPhpFiles = dist + '**/*.{' + pageFileTypes + '}',
     phpFiles = dist + '**/*.php';
 
 var srcScripts = src + scripts,
@@ -60,11 +73,11 @@ var srcScripts = src + scripts,
 
 var srcCss = src + '**/*.css',
     srcJs = src + '**/*.js',
-    srcImages = src + '**/*.{gif,png}';
+    srcImages = src + '**/*.{' + imageFileTypes + '}';
 
 var distCss = dist + '**/*.css',
     distJs = dist + '**/*.js',
-    distImages = dist + '**/*.{gif,png}';
+    distImages = dist + '**/*.{' + imageFileTypes + '}';
 
 var remoteBaseCssDevPrependUrl = '/' + webAccount + '/' + remoteProjectBaseDir,
     remoteBaseCssProdPrependUrl = '/' + symbolicLink + '/' + remoteProjectBaseDir;
@@ -80,6 +93,18 @@ var authDev = 'development', //defined in .ftppass
     authProd = 'production', //defined in .ftppass
     remotePath = 'public_html/' + remoteProjectBaseDir,
     browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/' + dist;
+
+var AUTOPREFIXER_BROWSERS = [
+  'ie >= 7', //10
+  'ie_mob >= 10',
+  'ff >= 30',
+  'chrome >= 34',
+  'safari >= 7',
+  'opera >= 23',
+  'ios >= 7',
+  'android >= 4.4',
+  'bb >= 10'
+];
 
 /*------------------------------------------------*/
 
@@ -175,7 +200,8 @@ gulp.task('bower:copy', function(){
     console.log('See: https://github.com/ck86/main-bower-files#overrides-options');
     console.log('');
     return gulp.src(mainBowerFiles())
-        .pipe(gulp.dest(srcScripts))
+        .pipe($.if('*.css', gulp.dest(srcStyles)))
+        .pipe($.if('*.js', gulp.dest(srcScripts)))
     ;
 });
 
@@ -198,7 +224,7 @@ gulp.task('clean:js', function(){
 });
 
 gulp.task('clean:images', function(){
-    return gulp.src([dist + '**/*.{gif,png}'], {read: false})
+    return gulp.src([dist + '**/*.{' + imageFileTypes + '}'], {read: false})
         .pipe($.rimraf())
     ;
 });
@@ -216,6 +242,19 @@ gulp.task('clean:all', function(){
 
 /*------------------------------------------------*/
 
+function calculateAdjustedUrl(url){
+    var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
+    r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
+
+    if(url.charAt(0) == '/') //absolute URL, leave alone
+        return url + r;
+
+    if(url.indexOf('/') == -1)
+        return upOneLevel + images + '/' + url + r;
+
+    return upOneLevel + url.replace(/^(?:\.\.\/)+/, '') + r;
+}
+
 gulp.task('compile:css:local', function(){
     return gulp.src(srcCss)
         .pipe($.plumber({
@@ -224,17 +263,11 @@ gulp.task('compile:css:local', function(){
         .pipe($.changed(dist)) //must be dist
         .pipe($.cssUrlAdjuster({
             append: function(url){
-                var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
-                r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
-
-                if(url.charAt(0) == '/') //absolute URL
-                    return url + r
-
-                return upOneLevel + url.replace(/^(?:\.\.\/)+/, '') + r;
+                return calculateAdjustedUrl(url);
             }
         }))
         .pipe($.csso())
-        .pipe($.autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
+        .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
         .pipe($.size({title: 'compile:css:local'}))
@@ -285,13 +318,7 @@ gulp.task('compile:css:remote', function(){
             !argv.production,
             $.cssUrlAdjuster({
                 append: function(url){
-                    var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
-                    r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
-
-                    if(url.charAt(0) == '/') //absolute URL
-                        return url + r
-
-                    return remoteCssDevPrependUrl + url.replace(/^(?:\.\.\/)+/, '') + r;
+                    return calculateAdjustedUrl(url);
                 }
             })
         ))
@@ -299,18 +326,12 @@ gulp.task('compile:css:remote', function(){
             argv.production, // --production flag
             $.cssUrlAdjuster({
                 append: function(url){
-                    var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
-                    r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
-
-                    if(url.charAt(0) == '/') //absolute URL
-                        return url + r
-
-                    return remoteCssProdPrependUrl + url.replace(/^(?:\.\.\/)+/, '') + r;
+                    return calculateAdjustedUrl(url);
                 }
             })
         ))
         .pipe($.csso())
-        .pipe($.autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
+        .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
         .pipe($.size({title: 'compile:css:remote'}))
@@ -337,7 +358,7 @@ gulp.task('compile:js:remote', function(){
         ))
         .pipe($.if(
             argv.production, // --production flag
-            $.uglify()
+            $.uglify({preserveComments: 'some'})
         ))
         .pipe($.order([
             '**/**/jquery.js',
@@ -362,13 +383,7 @@ gulp.task('prepare:css:remote', function(){
             !argv.production,
             $.cssUrlAdjuster({
                 append: function(url){
-                    var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
-                    r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
-
-                    if(url.charAt(0) == '/') //absolute URL
-                        return url + r
-
-                    return remoteCssDevPrependUrl + url.replace(/^(?:\.\.\/)+/, '') + r;
+                    return calculateAdjustedUrl(url);
                 }
             })
         ))
@@ -376,18 +391,12 @@ gulp.task('prepare:css:remote', function(){
             argv.production, // --production flag
             $.cssUrlAdjuster({
                 append: function(url){
-                    var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
-                    r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
-
-                    if(url.charAt(0) == '/') //absolute URL
-                        return url + r
-
-                    return remoteCssProdPrependUrl + url.replace(/^(?:\.\.\/)+/, '') + r;
+                    return calculateAdjustedUrl(url);
                 }
             })
         ))
         .pipe($.csso())
-        .pipe($.autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
+        .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
         .pipe(gulp.dest(dist))
         .pipe($.size({title: 'prepare:css:remote'}))
         .pipe($.if(
@@ -429,7 +438,7 @@ gulp.task('prepare:js:remote', function(){
         ))
         .pipe($.if(
             argv.production, // --production flag
-            $.uglify()
+            uglify({preserveComments: 'some'})
         ))
         .pipe($.order([
             '**/**/jquery.js',
@@ -500,7 +509,7 @@ gulp.task('optimise:images', function(){
 });
 
 gulp.task('moveotherfiles', function(){
-    return gulp.src([src + '**/*', '!' + src + '**/*.{css,js,gif,png}'])
+    return gulp.src([src + '**/*.{' + otherFileTypes + '}'])
         .pipe(gulp.dest(dist))
     ;
 });
@@ -508,8 +517,8 @@ gulp.task('moveotherfiles', function(){
 /*------------------------------------------------*/
 
 gulp.task('sftp', function(){
-    return gulp.src([dist + '**/*.{css,js,gif,png,html,php,eot,svg,ttf,woff}', '!./gulpfile.js'])
-        .pipe($.plumber({
+    return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!./gulpfile.js'])
+        .pipe(plumber({
             errorHandler: onError
         }))
         .pipe($.if(
@@ -549,7 +558,7 @@ gulp.task('serve:remote', function(){
 });
 
 gulp.task('openurl:remote', function(){
-    return argv.production ? open(remoteBaseProdUrl, 'chrome') : open(remoteBaseDevUrl, 'chrome');
+    return argv.production ? open(remoteBaseProdUrl, webBrowser) : open(remoteBaseDevUrl, webBrowser);
 });
 
 /*------------------------------------------------*/

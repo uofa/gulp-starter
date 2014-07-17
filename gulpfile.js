@@ -508,7 +508,7 @@ gulp.task('moveotherfiles', function(){
 /*------------------------------------------------*/
 
 gulp.task('sftp', function(){
-    return gulp.src([dist + '**/*.{css,js,gif,png,php,eot,svg,ttf,woff}', '!./gulpfile.js'])
+    return gulp.src([dist + '**/*.{css,js,gif,png,html,php,eot,svg,ttf,woff}', '!./gulpfile.js'])
         .pipe($.plumber({
             errorHandler: onError
         }))

@@ -72,7 +72,7 @@
 
 * Install Composer - https://getcomposer.org/Composer-Setup.exe
   * You may need to enable OpenSSL in your PHP installation by going directly to `./wamp/bin/php/php-5.4.x/php.ini` and enabling the OpenSSL extension
-* Double-click to run `composer-installs.bat`
+* Double-click `composer-installs.bat` to run
   * Ensure that setup completes successfully
 * Add `C:\Users\%USERNAME%\AppData\Roaming\Composer\vendor\bin` to `PATH` System Variable
     * Start > Run > `control sysdm.cpl,,3`
@@ -82,7 +82,7 @@
 
 ## Gulp Installation
 
-* Double-click to run `npm-installs.bat`
+* Double-click `npm-installs.bat` to run
   * Ensure that setup completes successfully
 
 ### Modify `gulp` to run globally

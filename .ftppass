@@ -1,0 +1,12 @@
+{
+  "development": {
+    "user": "",
+    "passphrase": "",
+    "keyLocation": "./secure/private"
+  },
+  "production": {
+    "user": "",
+    "passphrase": "",
+    "keyLocation": "./secure/private"
+  }
+}

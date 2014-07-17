@@ -1,0 +1,7 @@
+{
+  "config": {
+    "vendor-dir": "./composer_plugins"
+  },
+  "require": {
+  }
+}

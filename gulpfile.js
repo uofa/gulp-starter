@@ -15,7 +15,6 @@ var src = 'app',
     scripts = 'scripts',
     styles = 'styles',
     bowerComponents = 'bower_components',
-    composerModules = 'composer_plugins',
     dist = 'public_html';
 
 var concatJsFile = 'all.min.js'; //see 'File Config' section in repo README.md for more info
@@ -27,19 +26,44 @@ var concatJsFile = 'all.min.js'; //see 'File Config' section in repo README.md f
 
 'use strict';
 
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
+var base = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/',
+    node_modules = base + 'npm/node_modules/',
+    composer_modules = base + 'Composer/vendor/bin/';
+
+var gulp = require(node_modules + 'gulp');
 
 module.exports = gulp; //for Chrome plugin + gulp-devtools
 
-var browserSync = require('browser-sync'),
-    stylish = require('jshint-stylish'),
-    open = require('opn'),
-    pagespeed = require('psi'),
-    runSequence = require('run-sequence'),
-    argv = require('yargs').argv,
-    Pageres = require('pageres'),
-    mainBowerFiles = require('main-bower-files')
+var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
+    changed = require(node_modules + 'gulp-changed'),
+    complexity = require(node_modules + 'gulp-complexity'),
+    csslint = require(node_modules + 'gulp-csslint'),
+    csso = require(node_modules + 'gulp-csso'),
+    cssUrlAdjuster = require(node_modules + 'gulp-css-url-adjuster'),
+    htmlhint = require(node_modules + 'gulp-htmlhint'),
+    imagemin = require(node_modules + 'gulp-imagemin'),
+    jscs = require(node_modules + 'gulp-jscs'),
+    jshint = require(node_modules + 'gulp-jshint'),
+    plumber = require(node_modules + 'gulp-plumber'),
+    removelogs = require(node_modules + 'gulp-removelogs'),
+    rimraf = require(node_modules + 'gulp-rimraf'),
+    sftp = require(node_modules + 'gulp-sftp'),
+    shell = require(node_modules + 'gulp-shell'),
+    size = require(node_modules + 'gulp-size'),
+    soften = require(node_modules + 'gulp-soften'),
+    uglify = require(node_modules + 'gulp-uglify'),
+    util = require(node_modules + 'gulp-util'),
+    browserSync = require(node_modules + 'browser-sync'),
+    stylish = require(node_modules + 'jshint-stylish'),
+    open = require(node_modules + 'opn'),
+    pagespeed = require(node_modules + 'psi'),
+    runSequence = require(node_modules + 'run-sequence'),
+    order = require(node_modules + 'gulp-order'),
+    concat = require(node_modules + 'gulp-concat'),
+    iff = require(node_modules + 'gulp-if'),
+    argv = require(node_modules + 'yargs').argv,
+    Pageres = require(node_modules + 'pageres'),
+    mainBowerFiles = require(node_modules + 'main-bower-files')
 ;
 
 var reload = browserSync.reload;
@@ -93,52 +117,52 @@ var onError = function(error){
 
 gulp.task('csslint', function(){
     return gulp.src(srcCss)
-        .pipe($.csslint())
-        .pipe($.csslint.reporter())
+        .pipe(csslint())
+        .pipe(csslint.reporter())
     ;
 });
 
 gulp.task('jshint', function(){
     return gulp.src(srcJs)
-        .pipe($.jshint())
-        .pipe($.jshint.reporter(stylish))
-        .pipe($.jshint.reporter('fail'))
+        .pipe(jshint())
+        .pipe(jshint.reporter(stylish))
+        .pipe(jshint.reporter('fail'))
     ;
 });
 
 gulp.task('stats', function(){
     return gulp.src(srcJs)
-        .pipe($.complexity())
+        .pipe(complexity())
     ;
 });
 
 gulp.task('jscs', function(){
     return gulp.src(srcScripts + '/custom.js') //only run against single file - memory intensive
-        .pipe($.jscs())
+        .pipe(jscs())
     ;
 });
 
 gulp.task('htmlhint', function(){
     return gulp.src(phpFiles, {base: currentLevel})
-        .pipe($.htmlhint({'htmlhintrc': './.htmlhintrc'}))
-        .pipe($.htmlhint.reporter(stylish))
+        .pipe(htmlhint({'htmlhintrc': './.htmlhintrc'}))
+        .pipe(htmlhint.reporter(stylish))
     ;
 });
 
 gulp.task('phpcs', function(){
     return gulp.src(phpFiles, {base: currentLevel})
-        .pipe($.shell([
-            'echo "' + composerModules + '/bin/phpcs" -n --standard="' + composerModules + '/phpcs-ruleset.xml" "<%= file.path %>"',
-            '"' + composerModules + '/bin/phpcs" -n --standard="' + composerModules + '/phpcs-ruleset.xml" "<%= file.path %>"'
+        .pipe(shell([
+            'echo phpcs -n --standard="' + composer_modules + 'phpcs-ruleset.xml" "<%= file.path %>"',
+            'phpcs -n --standard="' + composer_modules + 'phpcs-ruleset.xml" "<%= file.path %>"'
         ], {ignoreErrors: true}))
     ;
 });
 
 gulp.task('phpmd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
-        .pipe($.shell([
-            'echo "' + composerModules + '/bin/phpmd" "<%= file.path %>" text codesize,design,naming,unusedcode',
-            '"' + composerModules + '/bin/phpmd" "<%= file.path %>" text codesize,design,naming,unusedcode'
+        .pipe(shell([
+            'echo phpmd "<%= file.path %>" text codesize,design,naming,unusedcode',
+            'phpmd "<%= file.path %>" text codesize,design,naming,unusedcode'
         ], {ignoreErrors: true}))
     ;
 });
@@ -164,7 +188,7 @@ gulp.task('pagespeed', pagespeed.bind(null, {
     threshold: 65
 }));
 
-gulp.task('bower:install', $.shell.task([
+gulp.task('bower:install', shell.task([
     'bower install'
 ]))
 
@@ -187,25 +211,25 @@ gulp.task('bower', function(callback){
 
 gulp.task('clean:css', function(){
     return gulp.src([dist + '**/*.css'], {read: false})
-        .pipe($.rimraf())
+        .pipe(rimraf())
     ;
 });
 
 gulp.task('clean:js', function(){
     return gulp.src([dist + '**/*.js'], {read: false})
-        .pipe($.rimraf())
+        .pipe(rimraf())
     ;
 });
 
 gulp.task('clean:images', function(){
     return gulp.src([dist + '**/*.{gif,png}'], {read: false})
-        .pipe($.rimraf())
+        .pipe(rimraf())
     ;
 });
 
 gulp.task('tabsto4spaces', function(){
     return gulp.src(htmlPhpFiles)
-        .pipe($.soften(4)) //4 spaces
+        .pipe(soften(4)) //4 spaces
         .pipe(gulp.dest(dist))
     ;
 });
@@ -218,11 +242,11 @@ gulp.task('clean:all', function(){
 
 gulp.task('compile:css:local', function(){
     return gulp.src(srcCss)
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.changed(dist)) //must be dist
-        .pipe($.cssUrlAdjuster({
+        .pipe(changed(dist)) //must be dist
+        .pipe(cssUrlAdjuster({
             append: function(url){
                 var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
                 r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
@@ -233,26 +257,26 @@ gulp.task('compile:css:local', function(){
                 return upOneLevel + url.replace(/^(?:\.\.\/)+/, '') + r;
             }
         }))
-        .pipe($.csso())
-        .pipe($.autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
+        .pipe(csso())
+        .pipe(autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
-        .pipe($.size({title: 'compile:css:local'}))
+        .pipe(size({title: 'compile:css:local'}))
     ;
 });
 
 gulp.task('compile:js:local', function(){
     return gulp.src(srcJs, {base: src})
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.uglify({
+        .pipe(uglify({
             mangle: false,
             output: {
                 beautify: true
             }
         }))
-        .pipe($.order([
+        .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
             '**/**/custom.js',
@@ -260,7 +284,7 @@ gulp.task('compile:js:local', function(){
             '**/**/jquery.fancybox.js',
             '**/**/*.js'
         ]))
-        .pipe($.concat(concatJsFile))
+        .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(reload({stream: true}))
     ;
@@ -268,7 +292,7 @@ gulp.task('compile:js:local', function(){
 
 gulp.task('reloadhtmlphp', function(){
     return gulp.src(htmlPhpFiles)
-        .pipe($.changed(htmlPhpFiles))
+        .pipe(changed(htmlPhpFiles))
         .pipe(reload({stream: true}))
     ;
 });
@@ -277,13 +301,13 @@ gulp.task('reloadhtmlphp', function(){
 
 gulp.task('compile:css:remote', function(){
     return gulp.src(srcCss)
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.changed(dist)) //must be dist
-        .pipe($.if(
+        .pipe(changed(dist)) //must be dist
+        .pipe(iff(
             !argv.production,
-            $.cssUrlAdjuster({
+            cssUrlAdjuster({
                 append: function(url){
                     var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
                     r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
@@ -295,9 +319,9 @@ gulp.task('compile:css:remote', function(){
                 }
             })
         ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.cssUrlAdjuster({
+        .pipe(iff(
+            argv.production, //--production
+            cssUrlAdjuster({
                 append: function(url){
                     var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
                     r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
@@ -309,37 +333,37 @@ gulp.task('compile:css:remote', function(){
                 }
             })
         ))
-        .pipe($.csso())
-        .pipe($.autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
+        .pipe(csso())
+        .pipe(autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
-        .pipe($.size({title: 'compile:css:remote'}))
+        .pipe(size({title: 'compile:css:remote'}))
     ;
 });
 
 gulp.task('compile:js:remote', function(){
     return gulp.src(srcJs, {base: src})
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.removelogs()
+        .pipe(iff(
+            argv.production, //--production
+            removelogs()
         ))
-        .pipe($.if(
+        .pipe(iff(
             !argv.production,
-            $.uglify({
+            uglify({
                 mangle: false,
                 output: {
                     beautify: true
                 }
             })
         ))
-        .pipe($.if(
+        .pipe(iff(
             argv.production, // --production flag
-            $.uglify()
+            uglify()
         ))
-        .pipe($.order([
+        .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
             '**/**/custom.js',
@@ -347,20 +371,20 @@ gulp.task('compile:js:remote', function(){
             '**/**/jquery.fancybox.js',
             '**/**/*.js'
         ]))
-        .pipe($.concat(concatJsFile))
+        .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
     ;
 });
 
 gulp.task('prepare:css:remote', function(){
     return gulp.src(srcCss, {base: src})
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.changed(dist)) //must be dist
-        .pipe($.if(
+        .pipe(changed(dist)) //must be dist
+        .pipe(iff(
             !argv.production,
-            $.cssUrlAdjuster({
+            cssUrlAdjuster({
                 append: function(url){
                     var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
                     r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
@@ -372,9 +396,9 @@ gulp.task('prepare:css:remote', function(){
                 }
             })
         ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.cssUrlAdjuster({
+        .pipe(iff(
+            argv.production, //--production
+            cssUrlAdjuster({
                 append: function(url){
                     var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
                     r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
@@ -386,21 +410,21 @@ gulp.task('prepare:css:remote', function(){
                 }
             })
         ))
-        .pipe($.csso())
-        .pipe($.autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
+        .pipe(csso())
+        .pipe(autoprefixer('last 1 version', '> 1%', 'ie 8', 'ie 7', {cascade: true}))
         .pipe(gulp.dest(dist))
-        .pipe($.size({title: 'prepare:css:remote'}))
-        .pipe($.if(
+        .pipe(size({title: 'prepare:css:remote'}))
+        .pipe(iff(
             !argv.production,
-            $.sftp({
+            sftp({
                 host: sftpHost,
                 auth: authDev,
                 remotePath: remotePath
             })
         ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
+        .pipe(iff(
+            argv.production, //--production
+            sftp({
                 host: sftpHost,
                 auth: authProd,
                 remotePath: remotePath
@@ -411,27 +435,27 @@ gulp.task('prepare:css:remote', function(){
 
 gulp.task('prepare:js:remote', function(){
     return gulp.src(srcJs, {base: src})
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.removelogs()
+        .pipe(iff(
+            argv.production, //--production
+            removelogs()
         ))
-        .pipe($.if(
+        .pipe(iff(
             !argv.production,
-            $.uglify({
+            uglify({
                 mangle: false,
                 output: {
                     beautify: true
                 }
             })
         ))
-        .pipe($.if(
+        .pipe(iff(
             argv.production, // --production flag
-            $.uglify()
+            uglify()
         ))
-        .pipe($.order([
+        .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
             '**/**/custom.js',
@@ -439,20 +463,20 @@ gulp.task('prepare:js:remote', function(){
             '**/**/jquery.fancybox.js',
             '**/**/*.js'
         ]))
-        .pipe($.concat(concatJsFile))
+        .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
-        .pipe($.size({title: 'prepare:js:remote'}))
-        .pipe($.if(
+        .pipe(size({title: 'prepare:js:remote'}))
+        .pipe(iff(
             !argv.production,
-            $.sftp({
+            sftp({
                 host: sftpHost,
                 auth: authDev,
                 remotePath: remotePath + '/' + scripts
             })
         ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
+        .pipe(iff(
+            argv.production, //--production
+            sftp({
                 host: sftpHost,
                 auth: authProd,
                 remotePath: remotePath + '/' + scripts
@@ -463,21 +487,21 @@ gulp.task('prepare:js:remote', function(){
 
 gulp.task('reloadhtmlphpandupload', function(){
     return gulp.src(htmlPhpFiles, {base: dist})
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.changed(htmlPhpFiles))
-        .pipe($.if(
+        .pipe(changed(htmlPhpFiles))
+        .pipe(iff(
             !argv.production,
-            $.sftp({
+            sftp({
                 host: sftpHost,
                 auth: authDev,
                 remotePath: remotePath
             })
         ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
+        .pipe(iff(
+            argv.production, //--production
+            sftp({
                 host: sftpHost,
                 auth: authProd,
                 remotePath: remotePath
@@ -490,7 +514,7 @@ gulp.task('reloadhtmlphpandupload', function(){
 
 gulp.task('optimise:images', function(){
     return gulp.src(srcImages)
-        .pipe($.imagemin({
+        .pipe(imagemin({
             optimizationLevel: 5,
             progressive: true,
             interlaced: true
@@ -509,20 +533,20 @@ gulp.task('moveotherfiles', function(){
 
 gulp.task('sftp', function(){
     return gulp.src([dist + '**/*.{css,js,gif,png,php,eot,svg,ttf,woff}', '!./gulpfile.js'])
-        .pipe($.plumber({
+        .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe($.if(
+        .pipe(iff(
             !argv.production,
-            $.sftp({
+            sftp({
                 host: sftpHost,
                 auth: authDev,
                 remotePath: remotePath
             })
         ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
+        .pipe(iff(
+            argv.production, //--production
+            sftp({
                 host: sftpHost,
                 auth: authProd,
                 remotePath: remotePath

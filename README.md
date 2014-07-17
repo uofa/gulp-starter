@@ -27,9 +27,6 @@
         /scripts
         /styles
     /bower_components
-    /composer_plugins
-        phpcs-ruleset.xml
-    /node_modules
     /public_html
         *.html
         *.php
@@ -76,6 +73,9 @@
   * You may need to enable OpenSSL in your PHP installation by going directly to `./wamp/bin/php/php-5.4.x/php.ini` and enabling the OpenSSL extension
 * Run `composer-installs.bat`
   * Ensure that setup completes successfully
+* Add `C:\Users\%USERNAME%\AppData\Roaming\Composer\vendor\bin` to `PATH` System Variable
+    * Start > Run > `control sysdm.cpl,,3`
+* Copy `phpcs-ruleset.xml` to `C:\Users\%USERNAME%\AppData\Roaming\Composer\vendor\bin`
 
 ---
 
@@ -83,6 +83,26 @@
 
 * Run `npm-installs.bat`
   * Ensure that setup completes successfully
+
+### Modify `gulp` to run globally
+
+* Start > Run > `C:\Users\%USERNAME%\AppData\Roaming\npm\node_modules\gulp\bin\gulp.js`
+   * @ Line ~76
+```
+if (!env.modulePath) {
+    env.modulePath = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/npm/node_modules/gulp/';
+    env.modulePackage.version = cliPackage.version;
+
+    /*
+    gutil.log(
+      chalk.red('Local gulp not found in'),
+      chalk.magenta(tildify(env.cwd))
+    );
+    gutil.log(chalk.red('Try running: npm install gulp'));
+    process.exit(1);
+    */
+}
+```
 
 ---
 

@@ -36,14 +36,9 @@ Thumbs.db
 # Custom #
 ######################
 private
-composer.lock
 bower_components/*
-composer_plugins/*
-node_modules/*
-!phpcs-ruleset.xml
 !.keep
 public_html/*
 !.keep
 !*.html
 !*.php
-composer_plugins/autoload.php

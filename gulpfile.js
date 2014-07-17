@@ -347,7 +347,7 @@ gulp.task('compile:css:remote', function(){
             })
         ))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             cssUrlAdjuster({
                 append: function(url){
                     return calculateAdjustedUrl(url);
@@ -368,7 +368,7 @@ gulp.task('compile:js:remote', function(){
             errorHandler: onError
         }))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             removelogs()
         ))
         .pipe(iff(
@@ -412,7 +412,7 @@ gulp.task('prepare:css:remote', function(){
             })
         ))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             cssUrlAdjuster({
                 append: function(url){
                     return calculateAdjustedUrl(url);
@@ -432,7 +432,7 @@ gulp.task('prepare:css:remote', function(){
             })
         ))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             sftp({
                 host: sftpHost,
                 auth: authProd,
@@ -448,7 +448,7 @@ gulp.task('prepare:js:remote', function(){
             errorHandler: onError
         }))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             removelogs()
         ))
         .pipe(iff(
@@ -484,7 +484,7 @@ gulp.task('prepare:js:remote', function(){
             })
         ))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             sftp({
                 host: sftpHost,
                 auth: authProd,
@@ -509,7 +509,7 @@ gulp.task('reloadhtmlphpandupload', function(){
             })
         ))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             sftp({
                 host: sftpHost,
                 auth: authProd,
@@ -554,7 +554,7 @@ gulp.task('sftp', function(){
             })
         ))
         .pipe(iff(
-            argv.production, //--production
+            argv.production, // --production flag
             sftp({
                 host: sftpHost,
                 auth: authProd,

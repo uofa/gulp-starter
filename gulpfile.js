@@ -118,16 +118,29 @@ var authDev = 'development', //defined in .ftppass
     remotePath = 'public_html/' + remoteProjectBaseDir,
     browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/' + dist;
 
+var SCREEN_RESOLUTIONS = [
+    '320x480',
+    '320x568',
+    '768x1024',
+    '1024x768',
+    '1280x1024',
+    '1280x800',
+    '1366x768',
+    '1440x900',
+    '1600x900',
+    '1920x1080'
+];
+
 var AUTOPREFIXER_BROWSERS = [
-  'ie >= 7', //10
-  'ie_mob >= 10',
-  'ff >= 30',
-  'chrome >= 34',
-  'safari >= 7',
-  'opera >= 23',
-  'ios >= 7',
-  'android >= 4.4',
-  'bb >= 10'
+    'ie >= 7', //10
+    'ie_mob >= 10',
+    'ff >= 30',
+    'chrome >= 34',
+    'safari >= 7',
+    'opera >= 23',
+    'ios >= 7',
+    'android >= 4.4',
+    'bb >= 10'
 ];
 
 /*------------------------------------------------*/
@@ -163,13 +176,13 @@ gulp.task('stats', function(){
 
 gulp.task('jscs', function(){
     return gulp.src(srcScripts + '/custom.js') //only run against single file - memory intensive
-        .pipe(jscs())
+        .pipe(jscs(currentLevel + '.jscsrc'))
     ;
 });
 
 gulp.task('htmlhint', function(){
     return gulp.src(phpFiles, {base: currentLevel})
-        .pipe(htmlhint({'htmlhintrc': './.htmlhintrc'}))
+        .pipe(htmlhint({'htmlhintrc': currentLevel + '.htmlhintrc'}))
         .pipe(htmlhint.reporter(stylish))
     ;
 });
@@ -194,7 +207,7 @@ gulp.task('phpmd', function(){
 
 gulp.task('screenshots', function(){
     var pageres = new Pageres({crop: true})
-        .src(remoteBaseDevUrl, ['320x480', '320x568', '768x1024', '1024x768', '1280x1024', '1280x800', '1366x768', '1440x900', '1600x900', '1920x1080'])
+        .src(remoteBaseDevUrl, SCREEN_RESOLUTIONS)
         .dest(__dirname);
 
     pageres.run(function(error){
@@ -319,7 +332,7 @@ gulp.task('compile:js:local', function(){
         ]))
         .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
-        .pipe(reload({stream: true}))
+        .pipe(reload({stream: true, once: true}))
     ;
 });
 
@@ -357,7 +370,6 @@ gulp.task('compile:css:remote', function(){
         .pipe(csso())
         .pipe(autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
         .pipe(gulp.dest(dist))
-        .pipe(reload({stream: true}))
         .pipe(size({title: 'compile:css:remote'}))
     ;
 });
@@ -541,7 +553,7 @@ gulp.task('moveotherfiles', function(){
 /*------------------------------------------------*/
 
 gulp.task('sftp', function(){
-    return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!./gulpfile.js'])
+    return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!' + currentLevel + 'gulpfile.js'])
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -565,7 +577,7 @@ gulp.task('sftp', function(){
 });
 
 gulp.task('serve:local', function(){
-    browserSync.init(null, {
+    browserSync({
         proxy: browserSyncProxyUrl,
         notify: false
     });
@@ -602,3 +614,6 @@ gulp.task('default', function(callback){
 gulp.task('upload', function(callback){
     runSequence('build:remote', 'sftp', 'serve:remote', 'openurl:remote', callback);
 });
+
+//Load custom tasks from the `tasks` directory (if it exists)
+try { require(node_modules + 'require-dir')('tasks'); } catch (error) {}

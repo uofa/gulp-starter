@@ -309,6 +309,7 @@ gulp.task('compile:js:local', function(){
         .pipe($.concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(reload({stream: true, once: true}))
+        .pipe($.size({title: 'compile:js:local'}))
     ;
 });
 
@@ -382,6 +383,7 @@ gulp.task('compile:js:remote', function(){
         ]))
         .pipe($.concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
+        .pipe($.size({title: 'compile:js:remote'}))
     ;
 });
 
@@ -512,9 +514,7 @@ gulp.task('reloadhtmlphpandupload', function(){
 gulp.task('optimise:images', function(){
     return gulp.src(srcImages)
         .pipe($.imagemin({
-            optimizationLevel: 5,
-            progressive: true,
-            interlaced: true
+            optimizationLevel: 5 //0-7
         }))
         .pipe(gulp.dest(dist))
     ;

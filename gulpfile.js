@@ -1,7 +1,7 @@
 /* ===== Start of configurable variables ===== */
 
 var localProjectBaseDir = 'gulp-starter',
-    remoteProjectBaseDir = ''; //in case sub-folder(s) is used within /public_html
+    remoteProjectBaseDir = ''; //in case sub-directories are used within the remote /public_html
 
 var webAccount = '', //for development - use same one specified in .ftppass as user
     symbolicLink = ''; //for production

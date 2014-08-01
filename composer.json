@@ -3,5 +3,8 @@
     "vendor-dir": "./composer_plugins"
   },
   "require": {
+    "squizlabs/php_codesniffer": "*",
+    "pdepend/pdepend": "*",
+    "phpmd/phpmd": "*"
   }
 }

@@ -538,7 +538,9 @@ gulp.task('reloadhtmlphpandupload', function(){
 gulp.task('optimise:images', function(){
     return gulp.src(srcImages)
         .pipe(imagemin({
-            optimizationLevel: 5 //0-7
+            optimizationLevel: 5, //0-7
+            progressive: true, //jpg
+            interlaced: true //gif
         }))
         .pipe(gulp.dest(dist))
     ;

@@ -5,6 +5,7 @@
   "require": {
     "squizlabs/php_codesniffer": "*",
     "pdepend/pdepend": "*",
-    "phpmd/phpmd": "*"
+    "phpmd/phpmd": "*",
+    "sebastian/phpcpd": "*"
   }
 }

@@ -205,6 +205,15 @@ gulp.task('phpmd', function(){
     ;
 });
 
+gulp.task('phpcpd', function(){
+    return gulp.src(phpFiles, {base: currentLevel})
+        .pipe(shell([
+            'echo phpcpd "<%= file.path %>"',
+            'phpcpd "<%= file.path %>"'
+        ], {ignoreErrors: true}))
+    ;
+});
+
 gulp.task('screenshots', function(){
     var pageres = new Pageres({crop: true})
         .src(remoteBaseDevUrl, SCREEN_RESOLUTIONS)

@@ -165,6 +165,7 @@ $ gulp jshint
 $ gulp stats
 $ gulp phpcs
 $ gulp phpmd
+$ gulp phpcpd
 $ gulp screenshots
 $ gulp pagespeed
 $ gulp bower

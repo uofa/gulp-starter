@@ -1,37 +1,14 @@
-/* ===== Start of configurable variables ===== */
-
-var localProjectBaseDir = 'gulp-starter',
-    remoteProjectBaseDir = ''; //in case sub-directories are used within the remote /public_html
-
-var webAccount = '', //for development - use same one specified in .ftppass as user
-    symbolicLink = ''; //for production
-
-var protocol = 'http', //https doesn't work with (local) browserSync
-    remoteBaseDevUrl = 'homepages.abdn.ac.uk',
-    remoteBaseProdUrl = 'www.abdn.ac.uk',
-    sftpHost = 'ftpweb.abdn.ac.uk';
-
-var src = 'app',
-        images = 'images',
-        scripts = 'scripts',
-        styles = 'styles',
-    bowerComponents = 'bower_components',
-    dist = 'public_html';
-
-var concatJsFile = 'all.min.js'; //see 'File Config' section in repo README.md for more info
-
-/* ===== End of configurable variables ===== */
-
-
-
-
 'use strict';
 
 var base = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/',
     node_modules = base + 'npm/node_modules/',
     composer_modules = base + 'Composer/vendor/bin/';
 
-var gulp = require(node_modules + 'gulp');
+var currentLevel = './',
+    upOneLevel = '../';
+
+var gulp = require(node_modules + 'gulp'),
+    config = require(currentLevel + 'config.json');
 
 module.exports = gulp; //for Chrome plugin + gulp-devtools
 
@@ -70,9 +47,6 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
 var webBrowser = 'chrome',
     reload = browserSync.reload;
 
-var currentLevel = './',
-    upOneLevel = '../';
-
 var stylesheetFileTypeArray = ['css'],
     scriptFileTypeArray = ['js'],
     imageFileTypeArray = ['gif', 'png'],
@@ -83,6 +57,23 @@ var imageFileTypes = imageFileTypeArray.join(','),
     pageFileTypes = pageFileTypeArray.join(','),
     otherFileTypes = pageFileTypeArray.concat(fontFileTypeArray).join(','), //html,php,eot,svg,ttf,woff
     allValidFileTypes = stylesheetFileTypeArray.concat(scriptFileTypeArray, imageFileTypeArray, pageFileTypeArray, fontFileTypeArray).join(','); //css,js,gif,png,html,php,eot,svg,ttf,woff
+
+// Loaded from ./config.json
+var localProjectBaseDir = config.projectSettings.localProjectBaseDir,
+    remoteProjectBaseDir = config.projectSettings.remoteProjectBaseDir,
+    webAccount = config.environmentalSettings.webAccount,
+    symbolicLink = config.environmentalSettings.symbolicLink,
+    protocol = config.urlSettings.protocol,
+    remoteBaseDevUrl = config.urlSettings.remoteBaseDevUrl,
+    remoteBaseProdUrl = config.urlSettings.remoteBaseProdUrl,
+    sftpHost = config.urlSettings.sftpHost,
+    src = config.folderSettings.src,
+    dist = config.folderSettings.dist,
+    images = config.folderSettings.images,
+    scripts = config.folderSettings.scripts,
+    styles = config.folderSettings.styles,
+    bowerComponents = config.folderSettings.bowerComponents,
+    concatJsFile = config.filenameSettings.concatJsFile;
 
 src = currentLevel + src + '/',
 dist = currentLevel + dist + '/';

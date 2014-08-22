@@ -1,0 +1,32 @@
+{
+  "projectSettings" : {
+    "localProjectBaseDir" : "gulp-starter",
+    "remoteProjectBaseDir" : "",
+    "_comments" : "remoteProjectBaseDir is available in case sub-directories are used within the remote /public_html"
+  },
+  "environmentalSettings" : {
+    "webAccount" : "",
+    "symbolicLink" : "",
+    "_comments" : "webAccount should be used for development (use same one specified in .ftppass as user) and symbolicLink should be used for production"
+  },
+  "urlSettings" : {
+    "protocol" : "http",
+    "remoteBaseDevUrl" : "homepages.abdn.ac.uk",
+    "remoteBaseProdUrl" : "www.abdn.ac.uk",
+    "sftpHost" : "ftpweb.abdn.ac.uk",
+    "_comments" : "https doesn't work with (local) browserSync"
+  },
+  "folderSettings" : {
+    "src" : "app",
+    "dist" : "public_html",
+    "images" : "images",
+    "scripts" : "scripts",
+    "styles" : "styles",
+    "bowerComponents" : "bower_components",
+    "_comments" : ""
+  },
+  "filenameSettings" : {
+    "concatJsFile" : "all.min.js",
+    "_comments" : "see 'File Configuration' section in repo README.md for more info"
+  }
+}

@@ -9,8 +9,8 @@
 ## Code Installation
 
 * Download and unzip to your WAMP's `www` directory placing all code within a `gulp-starter` directory
-  * Or change `localProjectBaseDir` var in `gulpfile.js` to whatever directory name you have chosen to use
-  * Other path variables exist at the beginning of `gulpfile.js` but take care when modifying these
+  * Or change `localProjectBaseDir` in `config.json` to whatever directory name you have chosen to use
+  * Other path variables exist in `config.json` but take care when modifying these
 * If instead you choose to clone this repo using the GitHub client, copy the contents of this repo to your WAMP's `www` directory (placing all code within a `gulp-starter` directory)
   * This way your cloned copy can remain clean
     * Should you choose to use this repo for other projects simply repeat the process of copying the cloned repo to a new location
@@ -54,13 +54,13 @@
   * Add your private SSH key file to `/secure` and name the file `private` (without any extension)
     * Remember it must be in the OpenSSH format
         * [puttygen](http://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe) can export into this format
-* Change the `webAccount` var in `gulpfile.js` to that of your remote `development` web account
+* Change `webAccount` in `config.json` to that of your remote `development` web account
   * e.g. `wdu999`
 * Amend `.ftppass` to contain the passphrase linked to your SSH details and the user/web account you want to SFTP into
-    * The web account set for `development` should be the same as that set for the `webAccount` var ^above^
+    * The web account set for `development` should be the same as that set for `webAccount` in `config.json` (as ^above^)
     * Define the details of your `production` environment in the same way you have done for `development`
     * For info, by default uploads are transferred to `public_html` on the remote web server no matter what environment is used
-* Change the `symbolicLink` var in `gulpfile.js` to that set for your `production` environment
+* Change `symbolicLink` in `config.json` to that set for your `production` environment
   * e.g. `medi-cal` (which corresponds to http://www.abdn.ac.uk/medi-cal/)
 
 ---
@@ -114,7 +114,7 @@ $ gulp upload
 
   * Open the terminal within your project directory - leave this prompt open after execution
     * This command uses the `development` environmental details specified in `.ftppass`
-    * To form a URL it combines the `remoteBaseDevUrl` var ('homepages') with the `webAccount` var
+    * To form a URL it combines `remoteBaseDevUrl` ('homepages') with `webAccount` as set in `config.json`
   * This will build everything and push the code in `/public_html` to your development web server following the same directory structure
     * `gulp` will open up Chrome to this page - keep this page open
   * Begin coding as you normally would pressing `Ctrl + F5` to view your file changes
@@ -127,7 +127,7 @@ $ gulp upload --production
 
   * Open the terminal within your project directory - leave this prompt open after execution
     * This command uses the `production` environmental details specified in `.ftppass`
-    * To form a URL it changes to use `remoteBaseProdUrl` var ('www') combined with the `symbolicLink` var
+    * To form a URL it changes to use `remoteBaseProdUrl` ('www') combined with `symbolicLink` as set in `config.json`
     * It also fully minifies and obfuscates JavaScript and removes all console logging whilst preserving license comment blocks
   * This will build everything and push the code in `/public_html` to your production web server following the same directory structure
     * `gulp` will open up Chrome to this page - keep this page open
@@ -150,6 +150,8 @@ $ gulp screenshots
 $ gulp pagespeed
 $ gulp bower
 ```
+
+* You can also create separate task files within the `/tasks` folder (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line
 
 ---
 

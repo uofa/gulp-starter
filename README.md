@@ -187,6 +187,13 @@ $ gulp bower
 
 ---
 
+## Rulesets
+
+* [PHP_Codesniffer (phpcs)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/phpcs-ruleset.xml)
+* [PHP Mess Detector (phpmd)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/phpmd-ruleset.xml)
+
+---
+
 ## Chrome and Gulp (Optional)
 
 * Download the [Gulp Devtools extension for Chrome Developer Tools](https://chrome.google.com/webstore/detail/gulp-devtools/ojpmgjhofceebfifeajnjojpokebkkji) from the Chrome Web Store

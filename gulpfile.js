@@ -190,8 +190,8 @@ gulp.task('phpcs', function(){
 gulp.task('phpmd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe(shell([
-            'echo phpmd "<%= file.path %>" text codesize,design,naming,unusedcode',
-            'phpmd "<%= file.path %>" text codesize,design,naming,unusedcode'
+            'echo phpmd "<%= file.path %>" text "' + composer_modules + 'phpmd-ruleset.xml"',
+            'phpmd "<%= file.path %>" text "' + composer_modules + 'phpmd-ruleset.xml"'
         ], {ignoreErrors: true}))
     ;
 });

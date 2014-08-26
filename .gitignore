@@ -1,3 +1,4 @@
+###################
 # Compiled source #
 ###################
 *.com
@@ -7,6 +8,7 @@
 *.o
 *.so
 
+############
 # Packages #
 ############
 *.7z
@@ -18,11 +20,13 @@
 *.tar
 *.zip
 
+######################
 # Logs and databases #
 ######################
 *.log
 *.sqlite
 
+######################
 # OS generated files #
 ######################
 .DS_Store
@@ -33,14 +37,16 @@
 ehthumbs.db
 Thumbs.db
 
+##########
 # Custom #
-######################
+##########
 private
 composer.lock
 bower_components/*
 composer_plugins/*
 node_modules/*
 !phpcs-ruleset.xml
+!phpmd-ruleset.xml
 !.keep
 public_html/*
 !.keep

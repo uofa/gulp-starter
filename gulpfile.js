@@ -167,8 +167,8 @@ gulp.task('phpcs', function(){
 gulp.task('phpmd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
-            'echo "' + composerModules + '/bin/phpmd" "<%= file.path %>" text codesize,design,naming,unusedcode',
-            '"' + composerModules + '/bin/phpmd" "<%= file.path %>" text codesize,design,naming,unusedcode'
+            'echo "' + composerModules + '/bin/phpmd" "<%= file.path %>" text "' + composerModules + '/phpmd-ruleset.xml"',
+            '"' + composerModules + '/bin/phpmd" "<%= file.path %>" text "' + composerModules + '/phpmd-ruleset.xml"'
         ], {ignoreErrors: true}))
     ;
 });

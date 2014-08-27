@@ -30,6 +30,7 @@
     /bower_components
     /composer_plugins
         phpcs-ruleset.xml
+        phpmd-ruleset.xml
     /node_modules
     /public_html
         *.html

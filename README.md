@@ -194,6 +194,13 @@ $ gulp bower
 
 ---
 
+## BrowserStack
+
+* If you're doing any cross-browser testing with BrowserStack's local setup, you can edit when running `$ gulp` and live-reload directly inside of a BrowserStack VM.
+  * Use `3000` as the port number and untick HTTPS
+
+---
+
 ## Chrome and Gulp (Optional)
 
 * Download the [Gulp Devtools extension for Chrome Developer Tools](https://chrome.google.com/webstore/detail/gulp-devtools/ojpmgjhofceebfifeajnjojpokebkkji) from the Chrome Web Store

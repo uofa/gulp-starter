@@ -63,7 +63,6 @@
     <rule ref="Squiz.Functions.LowercaseFunctionKeywords" />
 
     <rule ref="Squiz.Operators.IncrementDecrementUsage" />
-    <rule ref="Squiz.Operators.ValidLogicalOperators" />
     <rule ref="Squiz.PHP.CommentedOutCode" />
 
     <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing" />

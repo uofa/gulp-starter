@@ -115,7 +115,7 @@ var AUTOPREFIXER_BROWSERS = [
 
 var onError = function(error){
     //cause the terminal to play a beep sound to get your attention should an error occur
-    util.beep();
+    $.util.beep();
     console.log(error);
 };
 

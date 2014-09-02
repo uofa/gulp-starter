@@ -6,7 +6,8 @@ var currentLevel = './',
 var gulp = require('gulp'),
     config = require(currentLevel + 'config.json');
 
-var $ = require('gulp-load-plugins')();
+var $ = require('gulp-load-plugins')(),
+gutil = require('gulp-util');
 
 module.exports = gulp; //for Chrome plugin + gulp-devtools
 
@@ -115,7 +116,7 @@ var AUTOPREFIXER_BROWSERS = [
 
 var onError = function(error){
     //cause the terminal to play a beep sound to get your attention should an error occur
-    util.beep();
+    gutil.beep();
     console.log(error);
 };
 

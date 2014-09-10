@@ -17,7 +17,9 @@ var browserSync = require('browser-sync'),
     runSequence = require('run-sequence'),
     argv = require('yargs').argv,
     Pageres = require('pageres'),
-    mainBowerFiles = require('main-bower-files')
+    mainBowerFiles = require('main-bower-files'),
+    fs = require('fs'), //part of Node
+    penthouse = require('penthouse')
 ;
 
 var webBrowser = 'chrome',
@@ -27,12 +29,13 @@ var stylesheetFileTypeArray = ['css'],
     scriptFileTypeArray = ['js'],
     imageFileTypeArray = ['gif', 'png'],
     pageFileTypeArray = ['html', 'php'],
-    fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff'];
+    fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff'],
+    serverFileTypeArray = ['htaccess', 'access'];
 
 var imageFileTypes = imageFileTypeArray.join(','),
     pageFileTypes = pageFileTypeArray.join(','),
     otherFileTypes = pageFileTypeArray.concat(fontFileTypeArray).join(','), //html,php,eot,svg,ttf,woff
-    allValidFileTypes = stylesheetFileTypeArray.concat(scriptFileTypeArray, imageFileTypeArray, pageFileTypeArray, fontFileTypeArray).join(','); //css,js,gif,png,html,php,eot,svg,ttf,woff
+    allValidFileTypes = stylesheetFileTypeArray.concat(scriptFileTypeArray, imageFileTypeArray, pageFileTypeArray, fontFileTypeArray, serverFileTypeArray).join(','); //css,js,gif,png,html,php,eot,svg,ttf,woff,htaccess,access
 
 // Loaded from ./config.json
 var localProjectBaseDir = config.projectSettings.localProjectBaseDir,
@@ -84,6 +87,7 @@ remoteBaseProdUrl = protocol + '://' + remoteBaseProdUrl + remoteBaseCssProdPrep
 var authDev = 'development', //defined in .ftppass
     authProd = 'production', //defined in .ftppass
     remotePath = 'public_html/' + remoteProjectBaseDir,
+    remotePlatform = 'windows',
     browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/' + dist;
 
 var SCREEN_RESOLUTIONS = [
@@ -110,6 +114,8 @@ var AUTOPREFIXER_BROWSERS = [
     'android >= 4.4',
     'bb >= 10'
 ];
+
+var currentFile = ''; //used with tap plugin to know what file is currently within the pipe
 
 /*------------------------------------------------*/
 
@@ -223,6 +229,17 @@ gulp.task('bower', function(callback){
     runSequence('bower:install', 'bower:copy', callback);
 });
 
+gulp.task('critical:css', function(){
+    penthouse({
+        url: browserSyncProxyUrl, //localhost
+        css: srcStyles + '/screen.css', //main CSS file
+        width: 400,
+        height: 240
+    }, function(error, criticalCss){
+        console.log(criticalCss);
+    });
+});
+
 /*------------------------------------------------*/
 
 gulp.task('clean:css', function(){
@@ -256,18 +273,44 @@ gulp.task('clean:all', function(){
 
 /*------------------------------------------------*/
 
+String.prototype.replaceLast = function(find, replace){
+    var index = this.lastIndexOf(find);
+
+    if(index >= 0)
+        return this.substring(0, index) + replace + this.substring(index + find.length);
+
+    return this.toString();
+};
+
 function calculateAdjustedUrl(url){
-    var r = 'r=' + Math.random().toString().substr(2, 5); //prevent caching
-    r = url.indexOf('?') == -1 ? '?' + r : '&' + r;
+    var output = ''; //var to hold result
 
-    if(url.charAt(0) == '/') //absolute URL, leave alone
-        return url + r;
+    currentFile = currentFile.replace(/\\/g, '/'); //convert all back-slashes to forward-slashes
+    var dirname = currentFile.replace(/\/[^\/]*\/?$/, '') + '/';
+    var url_without_params = url.replace(/(\?.*)|(#.*)/g, '');
 
-    if(url.indexOf('/') == -1)
-        return upOneLevel + images + '/' + url + r;
+    if(fs.existsSync(dirname + url_without_params)) //if path already exists, leave alone
+        output = url;
+    else if(url.charAt(0) == '/') //absolute URL, leave alone
+        output = url;
+    else if(url.indexOf('/') == -1)
+        output = upOneLevel + images + '/' + url;
+    else
+        output = upOneLevel + url.replace(/^(?:\.\.\/)+/, '');
 
-    return upOneLevel + url.replace(/^(?:\.\.\/)+/, '') + r;
+    var output_without_params = output.replace(/(\?.*)|(#.*)/g, '');
+
+    if(fs.existsSync(dirname + output_without_params)){
+        var stats = fs.statSync(dirname + output_without_params);
+        var filemtime = stats.mtime.getTime() / 1000; //convert to Unix timestamp
+        output = output.replaceLast('.', '.' + filemtime + '.');
+    } else
+        console.log('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
+
+    return output;
 }
+
+/*------------------------------------------------*/
 
 gulp.task('compile:css:local', function(){
     return gulp.src(srcCss)
@@ -275,6 +318,9 @@ gulp.task('compile:css:local', function(){
             errorHandler: onError
         }))
         .pipe($.changed(dist)) //must be dist
+        .pipe($.tap(function(file, t){
+            currentFile = file.path; //update global var
+        }))
         .pipe($.cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
@@ -329,22 +375,14 @@ gulp.task('compile:css:remote', function(){
             errorHandler: onError
         }))
         .pipe($.changed(dist)) //must be dist
-        .pipe($.if(
-            !argv.production,
-            $.cssUrlAdjuster({
-                append: function(url){
-                    return calculateAdjustedUrl(url);
-                }
-            })
-        ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.cssUrlAdjuster({
-                append: function(url){
-                    return calculateAdjustedUrl(url);
-                }
-            })
-        ))
+        .pipe($.tap(function(file, t){
+            currentFile = file.path; //update global var
+        }))
+        .pipe($.cssUrlAdjuster({
+            append: function(url){
+                return calculateAdjustedUrl(url);
+            }
+        }))
         .pipe($.csso())
         .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
         .pipe(gulp.dest(dist))
@@ -394,22 +432,14 @@ gulp.task('prepare:css:remote', function(){
             errorHandler: onError
         }))
         .pipe($.changed(dist)) //must be dist
-        .pipe($.if(
-            !argv.production,
-            $.cssUrlAdjuster({
-                append: function(url){
-                    return calculateAdjustedUrl(url);
-                }
-            })
-        ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.cssUrlAdjuster({
-                append: function(url){
-                    return calculateAdjustedUrl(url);
-                }
-            })
-        ))
+        .pipe($.tap(function(file, t){
+            currentFile = file.path; //update global var
+        }))
+        .pipe($.cssUrlAdjuster({
+            append: function(url){
+                return calculateAdjustedUrl(url);
+            }
+        }))
         .pipe($.csso())
         .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
         .pipe(gulp.dest(dist))
@@ -419,7 +449,8 @@ gulp.task('prepare:css:remote', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
-                remotePath: remotePath
+                remotePath: remotePath,
+                remotePlatform: remotePlatform
             })
         ))
         .pipe($.if(
@@ -427,7 +458,8 @@ gulp.task('prepare:css:remote', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
-                remotePath: remotePath
+                remotePath: remotePath,
+                remotePlatform: remotePlatform
             })
         ))
     ;
@@ -471,7 +503,8 @@ gulp.task('prepare:js:remote', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
-                remotePath: remotePath + '/' + scripts
+                remotePath: remotePath + '/' + scripts,
+                remotePlatform: remotePlatform
             })
         ))
         .pipe($.if(
@@ -479,7 +512,8 @@ gulp.task('prepare:js:remote', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
-                remotePath: remotePath + '/' + scripts
+                remotePath: remotePath + '/' + scripts,
+                remotePlatform: remotePlatform
             })
         ))
     ;
@@ -496,7 +530,8 @@ gulp.task('reloadhtmlphpandupload', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
-                remotePath: remotePath
+                remotePath: remotePath,
+                remotePlatform: remotePlatform
             })
         ))
         .pipe($.if(
@@ -504,7 +539,8 @@ gulp.task('reloadhtmlphpandupload', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
-                remotePath: remotePath
+                remotePath: remotePath,
+                remotePlatform: remotePlatform
             })
         ))
     ;
@@ -532,7 +568,7 @@ gulp.task('moveotherfiles', function(){
 /*------------------------------------------------*/
 
 gulp.task('sftp', function(){
-    return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!' + currentLevel + 'gulpfile.js'])
+    return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!' + currentLevel + 'gulpfile.js'], {dot: true})
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -541,7 +577,8 @@ gulp.task('sftp', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
-                remotePath: remotePath
+                remotePath: remotePath,
+                remotePlatform: remotePlatform
             })
         ))
         .pipe($.if(
@@ -549,7 +586,8 @@ gulp.task('sftp', function(){
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
-                remotePath: remotePath
+                remotePath: remotePath,
+                remotePlatform: remotePlatform
             })
         ))
     ;
@@ -595,4 +633,4 @@ gulp.task('upload', function(callback){
 });
 
 //Load custom tasks from the `tasks` directory (if it exists)
-try { require('require-dir')('tasks'); } catch (error) {}
+try { require('require-dir')('tasks'); } catch (error) { console.error(error); }

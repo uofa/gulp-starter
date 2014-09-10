@@ -49,7 +49,7 @@ node_modules/*
 !phpmd-ruleset.xml
 !.keep
 public_html/*
-!.keep
+!.htaccess
 !*.html
 !*.php
 composer_plugins/autoload.php

@@ -39,6 +39,6 @@ private
 bower_components/*
 !.keep
 public_html/*
-!.keep
+!.htaccess
 !*.html
 !*.php

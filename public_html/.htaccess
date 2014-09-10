@@ -1,0 +1,7 @@
+RewriteEngine On
+
+##===============================================
+##File revving: screen.1410180532.css > screen.css
+##===============================================
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+)\.(\d+)\.(js|css|gif|png|jpe?g|pdf|xml|svg|eot|ttf|otf|woff|ico|htc)$ $1.$3 [L]

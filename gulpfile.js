@@ -329,7 +329,7 @@ function calculateAdjustedUrl(url){
         var filemtime = stats.mtime.getTime() / 1000; //convert to Unix timestamp
         output = output.replaceLast('.', '.' + filemtime + '.');
     } else
-        console.log('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
+        console.error('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
 
     return output;
 }
@@ -350,8 +350,8 @@ gulp.task('compile:css:local', function(){
                 return calculateAdjustedUrl(url);
             }
         }))
-        .pipe(csso())
-        .pipe(autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
+        .pipe(iff('*.css', csso()))
+        .pipe(autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
         .pipe(size({title: 'compile:css:local'}))
@@ -363,12 +363,12 @@ gulp.task('compile:js:local', function(){
         .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe(uglify({
+        .pipe(iff('*.js', uglify({
             mangle: false,
             output: {
                 beautify: true
             }
-        }))
+        })))
         .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
@@ -407,8 +407,8 @@ gulp.task('compile:css:remote', function(){
                 return calculateAdjustedUrl(url);
             }
         }))
-        .pipe(csso())
-        .pipe(autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
+        .pipe(iff('*.css', csso()))
+        .pipe(autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(size({title: 'compile:css:remote'}))
     ;
@@ -424,7 +424,7 @@ gulp.task('compile:js:remote', function(){
             removelogs()
         ))
         .pipe(iff(
-            !argv.production,
+            !argv.production && '*.js',
             uglify({
                 mangle: false,
                 output: {
@@ -433,7 +433,7 @@ gulp.task('compile:js:remote', function(){
             })
         ))
         .pipe(iff(
-            argv.production, // --production flag
+            argv.production && '*.js', // --production flag
             uglify({preserveComments: 'some'})
         ))
         .pipe(order([
@@ -464,8 +464,8 @@ gulp.task('prepare:css:remote', function(){
                 return calculateAdjustedUrl(url);
             }
         }))
-        .pipe(csso())
-        .pipe(autoprefixer(AUTOPREFIXER_BROWSERS, {cascade: true}))
+        .pipe(iff('*.css', csso()))
+        .pipe(autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(size({title: 'prepare:css:remote'}))
         .pipe(iff(
@@ -499,7 +499,7 @@ gulp.task('prepare:js:remote', function(){
             removelogs()
         ))
         .pipe(iff(
-            !argv.production,
+            !argv.production && '*.js',
             uglify({
                 mangle: false,
                 output: {
@@ -508,7 +508,7 @@ gulp.task('prepare:js:remote', function(){
             })
         ))
         .pipe(iff(
-            argv.production, // --production flag
+            argv.production && '*.js', // --production flag
             uglify({preserveComments: 'some'})
         ))
         .pipe(order([

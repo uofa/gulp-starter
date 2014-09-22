@@ -79,7 +79,7 @@
 * Install Composer - https://getcomposer.org/Composer-Setup.exe
   * You may need to enable OpenSSL in your PHP installation by going directly to `./wamp/bin/php/php-5.4.x/php.ini` and enabling the OpenSSL extension
 * Double-click `composer-installs.bat` to run the installation
-  * Ensure that setup completes successfully
+  * The prompt window will close itself when setup has finished successfully
 * To check your installation is configured properly, open a terminal and type in `composer --version`
   * This should return a long hash similar to `28c65b5425f7f8722c260e3787b74c1ea6b37e3b`
 

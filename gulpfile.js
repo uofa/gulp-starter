@@ -2,7 +2,8 @@
 
 var base = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/',
     node_modules = base + 'npm/node_modules/',
-    composer_modules = base + 'Composer/vendor/bin/';
+    composer_bin = base + 'Composer/vendor/bin/',
+    composer_plugins = 'composer_plugins/';
 
 var currentLevel = './',
     upOneLevel = '../';
@@ -188,8 +189,8 @@ gulp.task('htmlhint', function(){
 gulp.task('phpcs', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe(shell([
-            'echo phpcs -n --standard="' + composer_modules + 'phpcs-ruleset.xml" "<%= file.path %>"',
-            'phpcs -n --standard="' + composer_modules + 'phpcs-ruleset.xml" "<%= file.path %>"'
+            'echo phpcs -n --standard="' + composer_plugins + 'phpcs-ruleset.xml" "<%= file.path %>"',
+            'phpcs -n --standard="' + composer_plugins + 'phpcs-ruleset.xml" "<%= file.path %>"'
         ], {ignoreErrors: true}))
     ;
 });
@@ -197,8 +198,8 @@ gulp.task('phpcs', function(){
 gulp.task('phpmd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe(shell([
-            'echo phpmd "<%= file.path %>" text "' + composer_modules + 'phpmd-ruleset.xml"',
-            'phpmd "<%= file.path %>" text "' + composer_modules + 'phpmd-ruleset.xml"'
+            'echo phpmd "<%= file.path %>" text "' + composer_plugins + 'phpmd-ruleset.xml"',
+            'phpmd "<%= file.path %>" text "' + composer_plugins + 'phpmd-ruleset.xml"'
         ], {ignoreErrors: true}))
     ;
 });

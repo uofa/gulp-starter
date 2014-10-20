@@ -80,6 +80,9 @@
     * Start > Run > `control sysdm.cpl,,3`
 * To check your installation is configured properly, open a terminal and type in `composer --version`
   * This should return a long hash similar to `28c65b5425f7f8722c260e3787b74c1ea6b37e3b`
+* Copy the directory `./gulp-starter/composer_plugins/CodeSniffer/` and paste at `C:\Users\%USERNAME%\AppData\Roaming\Composer\vendor\squizlabs\php_codesniffer\`
+  * Click 'Yes' when the 'Confirm Folder Replace' dialog appears
+  * Click 'Copy and Replace' when the 'Copy File' dialog appears
 
 ---
 
@@ -171,7 +174,7 @@ $ gulp bower
 $ gulp critical:css
 ```
 
-* You can also create separate task files within the `/tasks` folder (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line
+* You can also create separate task files within the `/tasks` directory (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line
 
 ---
 

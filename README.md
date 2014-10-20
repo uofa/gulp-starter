@@ -76,8 +76,9 @@
   * You may need to enable OpenSSL in your PHP installation by going directly to `./wamp/bin/php/php-5.4.x/php.ini` and enabling the OpenSSL extension
 * Double-click `composer-installs.bat` to run the installation
   * The prompt window will close itself when setup has finished successfully
-* Add `C:\Users\%USERNAME%\AppData\Roaming\Composer\vendor\bin` to `PATH` System Variable
+* Add `C:\Users\<username>\AppData\Roaming\Composer\vendor\bin` to the `PATH` System Variable
     * Start > Run > `control sysdm.cpl,,3`
+    * Remember to change `<username>`
 * To check your installation is configured properly, open a terminal and type in `composer --version`
   * This should return a long hash similar to `28c65b5425f7f8722c260e3787b74c1ea6b37e3b`
 * Copy the directory `./gulp-starter/composer_plugins/CodeSniffer/` and paste at `C:\Users\%USERNAME%\AppData\Roaming\Composer\vendor\squizlabs\php_codesniffer\`

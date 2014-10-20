@@ -25,7 +25,7 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     jshint = require(node_modules + 'gulp-jshint'),
     plumber = require(node_modules + 'gulp-plumber'),
     removelogs = require(node_modules + 'gulp-removelogs'),
-    rimraf = require(node_modules + 'gulp-rimraf'),
+    del = require(node_modules + 'del'),
     sftp = require(node_modules + 'gulp-sftp'),
     shell = require(node_modules + 'gulp-shell'),
     size = require(node_modules + 'gulp-size'),
@@ -267,22 +267,16 @@ gulp.task('critical:css', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('clean:css', function(){
-    return gulp.src([dist + '**/*.css'], {read: false})
-        .pipe(rimraf())
-    ;
+gulp.task('clean:css', function(cb){
+    del([dist + '**/*.css'], cb);
 });
 
-gulp.task('clean:js', function(){
-    return gulp.src([dist + '**/*.js'], {read: false})
-        .pipe(rimraf())
-    ;
+gulp.task('clean:js', function(cb){
+    del([dist + '**/*.js'], cb);
 });
 
-gulp.task('clean:images', function(){
-    return gulp.src([dist + '**/*.{' + imageFileTypes + '}'], {read: false})
-        .pipe(rimraf())
-    ;
+gulp.task('clean:images', function(cb){
+    del([dist + '**/*.{' + imageFileTypes + '}'], cb);
 });
 
 gulp.task('tabsto4spaces', function(){

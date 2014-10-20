@@ -19,7 +19,8 @@ var browserSync = require('browser-sync'),
     Pageres = require('pageres'),
     mainBowerFiles = require('main-bower-files'),
     fs = require('fs'), //part of Node
-    penthouse = require('penthouse')
+    penthouse = require('penthouse'),
+    del = require('del')
 ;
 
 var webBrowser = 'chrome',
@@ -242,22 +243,16 @@ gulp.task('critical:css', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('clean:css', function(){
-    return gulp.src([dist + '**/*.css'], {read: false})
-        .pipe($.rimraf())
-    ;
+gulp.task('clean:css', function(cb){
+    del([dist + '**/*.css'], cb);
 });
 
-gulp.task('clean:js', function(){
-    return gulp.src([dist + '**/*.js'], {read: false})
-        .pipe($.rimraf())
-    ;
+gulp.task('clean:js', function(cb){
+    del([dist + '**/*.js'], cb);
 });
 
-gulp.task('clean:images', function(){
-    return gulp.src([dist + '**/*.{' + imageFileTypes + '}'], {read: false})
-        .pipe($.rimraf())
-    ;
+gulp.task('clean:images', function(cb){
+    del([dist + '**/*.{' + imageFileTypes + '}'], cb);
 });
 
 gulp.task('tabsto4spaces', function(){

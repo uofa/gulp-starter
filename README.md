@@ -156,7 +156,7 @@ $ gulp bower
 $ gulp critical:css
 ```
 
-* You can also create separate task files within the `/tasks` folder (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line
+* You can also create separate task files within the `/tasks` directory (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line
 
 ---
 

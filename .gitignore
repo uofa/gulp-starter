@@ -43,7 +43,9 @@ Thumbs.db
 private
 composer.lock
 bower_components/*
-composer_plugins/*
+#composer_plugins/*
+#!composer_plugins/CodeSniffer/*
+composer_plugins/autoload.php
 node_modules/*
 !phpcs-ruleset.xml
 !phpmd-ruleset.xml
@@ -52,4 +54,3 @@ public_html/*
 !.htaccess
 !*.html
 !*.php
-composer_plugins/autoload.php

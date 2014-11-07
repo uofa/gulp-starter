@@ -591,7 +591,8 @@ gulp.task('sftp', function(){
 gulp.task('serve:local', function(){
     browserSync({
         proxy: browserSyncProxyUrl,
-        notify: false
+        notify: false,
+        logPrefix: localProjectBaseDir
     });
 
     gulp.watch(htmlPhpFiles, ['reloadhtmlphp']);

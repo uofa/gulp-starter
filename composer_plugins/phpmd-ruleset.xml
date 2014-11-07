@@ -20,12 +20,13 @@
     <rule ref="rulesets/naming.xml">
         <exclude name="ShortVariable" />
         <exclude name="LongVariable" />
+        <exclude name="ShortMethodName" />
     </rule>
     <rule ref="rulesets/naming.xml/ShortVariable" since="0.2" message="Avoid variables with short names like {0}. Configured minimum length is {1}." class="PHPMD\Rule\Naming\ShortVariable" externalInfoUrl="http://phpmd.org/rules/naming.html#shortvariable">
         <priority>3</priority>
         <properties>
             <property name="minimum" description="Minimum length for a variable, property or parameter name" value="3"/>
-            <property name="exceptions" value="id,pg,ch,fh,a,b,c,i,j,k,d,m,y,dd,mm,yy,hh,mi,ss,pp,in,ft,pt,to,or" />
+            <property name="exceptions" description="Comma-separated list of exceptions" value="id,pg,ch,fh,a,b,c,i,j,k,d,m,y,dd,mm,yy,hh,mi,ss,pp,in,ft,pt,to,or" />
         </properties>
     </rule>
     <rule ref="rulesets/naming.xml/LongVariable" since="0.2" message="Avoid excessively long variable names like {0}. Keep variable name length under {1}." class="PHPMD\Rule\Naming\LongVariable" externalInfoUrl="http://phpmd.org/rules/naming.html#longvariable">
@@ -33,6 +34,14 @@
         <priority>3</priority>
         <properties>
             <property name="maximum" description="The variable length reporting threshold" value="38"/>
+        </properties>
+    </rule>
+    <rule name="ShortMethodName" since="0.2" message="Avoid using short method names like {0}::{1}(). The configured minimum method name length is {2}." class="PHPMD\Rule\Naming\ShortMethodName" externalInfoUrl="http://phpmd.org/rules/naming.html#shortmethodname">
+        <description>Detects when very short method names are used.</description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="Minimum length for a method or function name" value="3"/>
+            <property name="exceptions" description="Comma-separated list of exceptions" value="up"/>
         </properties>
     </rule>
 </ruleset>

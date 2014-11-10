@@ -25,7 +25,6 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     jshint = require(node_modules + 'gulp-jshint'),
     plumber = require(node_modules + 'gulp-plumber'),
     removelogs = require(node_modules + 'gulp-removelogs'),
-    del = require(node_modules + 'del'),
     sftp = require(node_modules + 'gulp-sftp'),
     shell = require(node_modules + 'gulp-shell'),
     size = require(node_modules + 'gulp-size'),
@@ -45,7 +44,9 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     mainBowerFiles = require(node_modules + 'main-bower-files'),
     fs = require('fs'), //part of Node
     tap = require(node_modules + 'gulp-tap'),
-    penthouse = require(node_modules + 'penthouse')
+    penthouse = require(node_modules + 'penthouse'),
+    del = require(node_modules + 'del'),
+    eol = require(node_modules + 'gulp-eol')
 ;
 
 var webBrowser = 'chrome',
@@ -286,8 +287,15 @@ gulp.task('tabsto4spaces', function(){
     ;
 });
 
-gulp.task('clean:all', function(){
-    return gulp.start('tabsto4spaces', 'clean:css', 'clean:js', 'clean:images');
+gulp.task('eolfix', function(){
+    return gulp.src(htmlPhpFiles)
+        .pipe(eol('\r\n', false))
+        .pipe(gulp.dest(dist))
+    ;
+});
+
+gulp.task('clean:all', function(callback){
+    return runSequence(['tabsto4spaces', 'eolfix'], 'clean:css', 'clean:js', 'clean:images', callback);
 });
 
 /*------------------------------------------------*/

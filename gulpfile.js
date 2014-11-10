@@ -262,8 +262,15 @@ gulp.task('tabsto4spaces', function(){
     ;
 });
 
-gulp.task('clean:all', function(){
-    return gulp.start('tabsto4spaces', 'clean:css', 'clean:js', 'clean:images');
+gulp.task('eolfix', function(){
+    return gulp.src(htmlPhpFiles)
+        .pipe($.eol('\r\n', false))
+        .pipe(gulp.dest(dist))
+    ;
+});
+
+gulp.task('clean:all', function(callback){
+    return runSequence(['tabsto4spaces', 'eolfix'], 'clean:css', 'clean:js', 'clean:images', callback);
 });
 
 /*------------------------------------------------*/

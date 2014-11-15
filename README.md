@@ -97,7 +97,7 @@
 ### Modify `gulp` to run globally
 
 * Start > Run > `C:\Users\%USERNAME%\AppData\Roaming\npm\node_modules\gulp\bin\gulp.js`
-   * @ Line ~76
+   * @ Line ~84
 ```
 if (!env.modulePath) {
     env.modulePath = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/npm/node_modules/gulp/';

@@ -36,9 +36,12 @@ Thumbs.db
 # Custom #
 ######################
 private
-bower_components/*
-!.keep
-public_html/*
+public_html/**
 !.htaccess
 !*.html
 !*.php
+bower_components/**
+secure/**
+tasks/**
+!tasks/*.js
+!.keep

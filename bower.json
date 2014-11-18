@@ -5,7 +5,7 @@
   },
   "overrides": {
     "modernizr": {
-      "main": "modernizr.js"
+      "ignore": "true"
     }
   }
 }

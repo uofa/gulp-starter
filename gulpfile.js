@@ -239,20 +239,8 @@ gulp.task('bower:install', shell.task([
     'bower install'
 ]))
 
-gulp.task('bower:copy', function(){
-    console.log('');
-    console.log('If your package doesn\'t appear in ' + srcScripts + ' then the main property in that packages bower.json hasn\'t been set. You will therefore need to create an override in your bower.json file to specifiy the main files of that package.');
-    console.log('');
-    console.log('See: https://github.com/ck86/main-bower-files#overrides-options');
-    console.log('');
-    return gulp.src(mainBowerFiles())
-        .pipe(iff('*.css', gulp.dest(srcStyles)))
-        .pipe(iff('*.js', gulp.dest(srcScripts)))
-    ;
-});
-
-gulp.task('bower', function(callback){
-    runSequence('bower:install', 'bower:copy', callback);
+gulp.task('bower', function(){
+    return gulp.start('bower:install');
 });
 
 gulp.task('critical:css', function(){
@@ -362,7 +350,10 @@ gulp.task('compile:css:local', function(){
 });
 
 gulp.task('compile:js:local', function(){
-    return gulp.src(srcJs, {base: src})
+    var files = mainBowerFiles({filter: /\.(js)$/i});
+    files.push(srcJs);
+
+    return gulp.src(files)
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -418,7 +409,10 @@ gulp.task('compile:css:remote', function(){
 });
 
 gulp.task('compile:js:remote', function(){
-    return gulp.src(srcJs, {base: src})
+    var files = mainBowerFiles({filter: /\.(js)$/i});
+    files.push(srcJs);
+
+    return gulp.src(files)
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -493,7 +487,10 @@ gulp.task('prepare:css:remote', function(){
 });
 
 gulp.task('prepare:js:remote', function(){
-    return gulp.src(srcJs, {base: src})
+    var files = mainBowerFiles({filter: /\.(js)$/i});
+    files.push(srcJs);
+
+    return gulp.src(files)
         .pipe(plumber({
             errorHandler: onError
         }))

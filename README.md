@@ -157,6 +157,9 @@ $ gulp critical:css
 ```
 
 * You can also create separate task files within the `/tasks` directory (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line
+* Note for bower users: if your package doesn't appear in the `dist` directory then the main property for that packages `bower.json` hasn't been set.
+   * You will therefore need to [create an override in your `bower.json`](https://github.com/uofa/gulp-starter/blob/global-version/bower.json#L6-10) file to specify the main files of that package.
+   * See [https://github.com/ck86/main-bower-files#overrides-options](https://github.com/ck86/main-bower-files#overrides-options) for more
 
 ---
 

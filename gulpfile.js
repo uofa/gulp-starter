@@ -61,7 +61,7 @@ var stylesheetFileTypeArray = ['css'],
 
 var imageFileTypes = imageFileTypeArray.join(','),
     pageFileTypes = pageFileTypeArray.join(','),
-    otherFileTypes = pageFileTypeArray.concat(fontFileTypeArray).join(','), //html,php,eot,svg,ttf,woff
+    otherFileTypes = pageFileTypeArray.concat(fontFileTypeArray, serverFileTypeArray).join(','), //html,php,eot,svg,ttf,woff,htaccess,access
     allValidFileTypes = stylesheetFileTypeArray.concat(scriptFileTypeArray, imageFileTypeArray, pageFileTypeArray, fontFileTypeArray, serverFileTypeArray).join(','); //css,js,gif,png,html,php,eot,svg,ttf,woff,htaccess,access
 
 // Loaded from ./config.json

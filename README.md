@@ -196,7 +196,7 @@ $ gulp critical:css
 
 ## Rulesets
 
-* [PHP_Codesniffer (phpcs)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/phpcs-ruleset.xml)
+* [PHP Codesniffer (phpcs)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/phpcs-ruleset.xml)
 * [PHP Mess Detector (phpmd)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/phpmd-ruleset.xml)
 
 ---

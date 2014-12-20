@@ -621,7 +621,9 @@ gulp.task('serve:local', function(){
     browserSync({
         proxy: browserSyncProxyUrl,
         notify: false,
-        logPrefix: localProjectBaseDir
+        logPrefix: function(){
+            return this.compile('{green:[' + localProjectBaseDir + '] ');
+        }
     });
 
     gulp.watch(htmlPhpFiles, ['reloadhtmlphp']);

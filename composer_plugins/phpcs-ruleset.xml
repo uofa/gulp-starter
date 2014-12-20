@@ -3,6 +3,9 @@
     <description>Custom Coding Standards</description>
 
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
+    <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedIF">
+        <severity>0</severity>
+    </rule>
     <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop" />
     <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall" />
     <rule ref="Generic.CodeAnalysis.JumbledIncrementer" />
@@ -27,7 +30,6 @@
     Argument lists MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one argument per line. -->
     <rule ref="Generic.Functions.FunctionCallArgumentSpacing" />
 
-    <rule ref="Generic.Formatting.MultipleStatementAlignment" />
     <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
 
     <rule ref="Generic.NamingConventions.ConstructorName" />
@@ -66,7 +68,6 @@
     <rule ref="Squiz.Functions.LowercaseFunctionKeywords" />
 
     <rule ref="Squiz.Operators.IncrementDecrementUsage" />
-    <rule ref="Squiz.PHP.CommentedOutCode" />
 
     <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing" />
     <rule ref="Squiz.WhiteSpace.OperatorSpacing" />

@@ -73,6 +73,7 @@
     <rule ref="Squiz.WhiteSpace.OperatorSpacing" />
     <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing" /><!-- Visibility MUST be declared on all methods. -->
     <rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
 
     <exclude-pattern>*/.git/*</exclude-pattern>
 </ruleset>

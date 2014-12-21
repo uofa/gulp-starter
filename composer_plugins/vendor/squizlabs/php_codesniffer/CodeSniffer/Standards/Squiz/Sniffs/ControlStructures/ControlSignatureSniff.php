@@ -200,7 +200,7 @@ class Squiz_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_CodeSn
         if ($tokens[$stackPtr]['code'] === T_TRY
             || $tokens[$stackPtr]['code'] === T_DO
         ) {
-            $closer = $tokens[$stackPtr]['scope_closer'];
+            $closer = @$tokens[$stackPtr]['scope_closer'];
         } else if ($tokens[$stackPtr]['code'] === T_ELSE
             || $tokens[$stackPtr]['code'] === T_ELSEIF
         ) {

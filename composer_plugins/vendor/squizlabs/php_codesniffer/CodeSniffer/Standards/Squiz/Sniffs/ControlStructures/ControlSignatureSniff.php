@@ -84,7 +84,7 @@ class Squiz_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_CodeSn
             }
         }
 
-        if ($found !== 0 && (!in_array($tokens[$stackPtr]['code'], array(T_ELSE, T_DO)))) {
+        if ($found !== 0 && (!in_array($tokens[$stackPtr]['code'], array(T_TRY, T_DO, T_ELSE)))) {
             $error = 'Expected 0 spaces after %s keyword; %s found';
             $data  = array(
                       strtoupper($tokens[$stackPtr]['content']),
@@ -99,7 +99,7 @@ class Squiz_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_CodeSn
                     $phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
                 }
             }
-        } else if (($found !== 1 && $found !== 'newline') && (in_array($tokens[$stackPtr]['code'], array(T_ELSE, T_DO)))) {
+        } else if (($found !== 1 && $found !== 'newline') && (in_array($tokens[$stackPtr]['code'], array(T_TRY, T_DO, T_ELSE)))) {
             $error = 'Expected 1 space after %s keyword; %s found';
             $data  = array(
                       strtoupper($tokens[$stackPtr]['content']),
@@ -200,7 +200,7 @@ class Squiz_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_CodeSn
         if ($tokens[$stackPtr]['code'] === T_TRY
             || $tokens[$stackPtr]['code'] === T_DO
         ) {
-            $closer = @$tokens[$stackPtr]['scope_closer'];
+            $closer = $tokens[$stackPtr]['scope_closer'];
         } else if ($tokens[$stackPtr]['code'] === T_ELSE
             || $tokens[$stackPtr]['code'] === T_ELSEIF
         ) {

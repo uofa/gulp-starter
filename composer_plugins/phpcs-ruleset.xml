@@ -46,6 +46,8 @@
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
     <rule ref="Squiz.Strings.ConcatenationSpacing" />
+    <rule ref="Squiz.Strings.DoubleQuoteUsage" />
+    <rule ref="Squiz.Strings.EchoedStrings" />
 
     <rule ref="Squiz.ControlStructures.ControlSignature">
         <severity>0</severity>

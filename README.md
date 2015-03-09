@@ -166,6 +166,8 @@ $ gulp upload --production
 $ gulp csslint
 $ gulp jshint
 $ gulp stats
+$ gulp jscs
+$ gulp htmlhint
 $ gulp phpcs
 $ gulp phpmd
 $ gulp phpcpd

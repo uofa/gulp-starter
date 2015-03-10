@@ -46,9 +46,9 @@
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
     <rule ref="Squiz.Strings.ConcatenationSpacing" />
-	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
-		<severity>0</severity>
-	</rule>
+     <rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
+          <severity>0</severity>
+     </rule>
     <rule ref="Squiz.Strings.EchoedStrings" />
 
     <rule ref="Squiz.ControlStructures.ControlSignature">

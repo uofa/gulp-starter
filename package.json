@@ -5,6 +5,7 @@
         "node": ">=0.10.0"
     },
     "devDependencies": {
+        "gulp": "*",
         "gulp-util": "*",
         "gulp-csslint": "*",
         "gulp-jshint": "*",
@@ -49,5 +50,5 @@
     "repository": {
         "type": "git",
         "url": "git@github.com:uofa/gulp-starter.git"
-    },
+    }
 }

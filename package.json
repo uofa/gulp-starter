@@ -1,5 +1,6 @@
 {
-
+    "name": "gulp-starter",
+    "description": "Gulp Starter Project",
     "engines": {
         "node": ">=0.10.0"
     },
@@ -41,5 +42,12 @@
         "bower": "*",
         "del": "*",
         "gulp-eol": "*"
-    }
+    },
+    "author": "University of Aberdeen",
+    "private": true,
+    "license": "MIT License, http://www.opensource.org/licenses/MIT",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:uofa/gulp-starter.git"
+    },
 }

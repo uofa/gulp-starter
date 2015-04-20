@@ -1,7 +1,42 @@
 {
-  "devDependencies": {
-  },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "devDependencies": {
+    "browser-sync": "*",
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-changed": "*",
+    "gulp-complexity": "*",
+    "gulp-concat": "*",
+    "gulp-css-url-adjuster": "*",
+    "gulp-csslint": "*",
+    "gulp-csso": "*",
+    "gulp-htmlhint": "*",
+    "gulp-if": "*",
+    "gulp-imagemin": "*",
+    "gulp-jscs": "*",
+    "gulp-jshint": "*",
+    "gulp-load-plugins": "*",
+    "gulp-order": "*",
+    "gulp-plumber": "*",
+    "gulp-removelogs": "*",
+    "gulp-rimraf": "*",
+    "gulp-sftp": "*",
+    "gulp-shell": "*",
+    "gulp-size": "*",
+    "gulp-soften": "*",
+    "gulp-tap": "*",
+    "gulp-uglify": "*",
+    "gulp-util": "*",
+    "jshint-stylish": "*",
+    "main-bower-files": "*",
+    "opn": "*",
+    "pageres": "*",
+    "penthouse": "*",
+    "psi": "*",
+    "require-dir": "*",
+    "run-sequence": "*",
+    "yargs": "*"
   }
 }

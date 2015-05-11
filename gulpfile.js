@@ -20,7 +20,8 @@ var browserSync = require('browser-sync'),
     mainBowerFiles = require('main-bower-files'),
     fs = require('fs'), //part of Node
     penthouse = require('penthouse'),
-    del = require('del')
+    del = require('del'),
+    bower = require('bower')
 ;
 
 var webBrowser = 'chrome',
@@ -202,17 +203,23 @@ gulp.task('screenshots', function(){
     });
 });
 
-gulp.task('pagespeed', pagespeed.bind(null, {
+gulp.task('pagespeed', function(cb){
     //You can use a Google Developer API key: http://goo.gl/RkN0vE
-    url: remoteBaseDevUrl,
-    //key: 'YOUR_API_KEY',
-    strategy: 'mobile',
-    threshold: 65
-}));
+    pagespeed.output(remoteBaseDevUrl, {
+        //key: 'YOUR_API_KEY',
+        strategy: 'mobile',
+        threshold: 65
+    }, cb);
+});
 
-gulp.task('bower:install', $.shell.task([
-    'bower install'
-]))
+gulp.task('bower:install', function(){
+    bower.commands
+        .install([/* custom libs */], {save: true}, {/* custom config */})
+        .on('end', function(installed){
+            if(Object.keys(installed).length !== 0)
+                console.log(Object.keys(installed));
+        });
+});
 
 gulp.task('bower', function(){
     return gulp.start('bower:install');

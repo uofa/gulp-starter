@@ -46,9 +46,11 @@ public_html/**
 !.htaccess
 !*.html
 !*.php
+app/**
 bower_components/**
 node_modules/**
 secure/**
+vendor/**
 composer_plugins/*
 !composer_plugins/vendor/
 !composer_plugins/*-ruleset.xml

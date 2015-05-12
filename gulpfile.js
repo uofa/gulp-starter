@@ -46,7 +46,8 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     tap = require(node_modules + 'gulp-tap'),
     penthouse = require(node_modules + 'penthouse'),
     del = require(node_modules + 'del'),
-    eol = require(node_modules + 'gulp-eol')
+    eol = require(node_modules + 'gulp-eol'),
+    bower = require(node_modules + 'bower')
 ;
 
 var webBrowser = 'chrome',
@@ -236,9 +237,14 @@ gulp.task('pagespeed', function(cb){
     }, cb);
 });
 
-gulp.task('bower:install', shell.task([
-    'bower install'
-]))
+gulp.task('bower:install', function(){
+    bower.commands
+        .install([/* custom libs */], {save: true}, {/* custom config */})
+        .on('end', function(installed){
+            if(Object.keys(installed).length !== 0)
+                console.log(Object.keys(installed));
+        });
+});
 
 gulp.task('bower', function(){
     return gulp.start('bower:install');

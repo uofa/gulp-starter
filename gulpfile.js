@@ -227,13 +227,14 @@ gulp.task('screenshots', function(){
     });
 });
 
-gulp.task('pagespeed', pagespeed.bind(null, {
+gulp.task('pagespeed', function(cb){
     //You can use a Google Developer API key: http://goo.gl/RkN0vE
-    url: remoteBaseDevUrl,
-    //key: 'YOUR_API_KEY',
-    strategy: 'mobile',
-    threshold: 65
-}));
+    pagespeed.output(remoteBaseDevUrl, {
+        //key: 'YOUR_API_KEY',
+        strategy: 'mobile',
+        threshold: 65
+    }, cb);
+});
 
 gulp.task('bower:install', shell.task([
     'bower install'

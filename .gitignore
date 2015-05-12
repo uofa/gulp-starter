@@ -40,8 +40,10 @@ public_html/**
 !.htaccess
 !*.html
 !*.php
+app/**
 bower_components/**
 secure/**
+vendor/**
 tasks/**
 !tasks/*.js
 !.keep

@@ -90,7 +90,7 @@ var authDev = 'development', //defined in .ftppass
     authProd = 'production', //defined in .ftppass
     remotePath = 'public_html/' + remoteProjectBaseDir,
     remotePlatform = 'windows',
-    browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/' + dist;
+    browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/';
 
 var SCREEN_RESOLUTIONS = [
     '320x480',
@@ -239,15 +239,15 @@ gulp.task('critical:css', function(){
 /*------------------------------------------------*/
 
 gulp.task('clean:css', function(cb){
-    del([dist + '**/*.css'], cb);
+    del([dist + '**/*.css'], {'force': true}, cb);
 });
 
 gulp.task('clean:js', function(cb){
-    del([dist + '**/*.js'], cb);
+    del([dist + '**/*.js'], {'force': true}, cb);
 });
 
 gulp.task('clean:images', function(cb){
-    del([dist + '**/*.{' + imageFileTypes + '}'], cb);
+    del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true}, cb);
 });
 
 gulp.task('tabsto4spaces', function(){

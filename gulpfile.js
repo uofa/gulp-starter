@@ -224,7 +224,7 @@ gulp.task('screenshots', function(){
         if(error)
             throw error;
 
-        console.log('Successfully generated 10 screenshots');
+        console.log("Successfully generated 10 screenshots for:\n" + remoteBaseDevUrl);
     });
 });
 

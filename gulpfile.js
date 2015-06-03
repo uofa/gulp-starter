@@ -376,6 +376,7 @@ gulp.task('compile:js:local', function(){
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
+            '**/**/URI.js',
             '**/**/*.js'
         ]))
         .pipe(concat(concatJsFile))

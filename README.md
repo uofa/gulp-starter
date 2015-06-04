@@ -66,7 +66,7 @@
 
 * Install Node.js - http://nodejs.org/download/ (Windows Installer)
 * To check your installation is configured properly, open a terminal and type in `node --version`
-  * This should return a version number at or above `0.10.x`
+  * This should return a version number at or above `0.12.x`
 
 ---
 
@@ -92,7 +92,7 @@
 * Double-click `npm-installs.bat` to run the installation
   * Ensure that setup completes successfully
 * To check your installation is configured properly, open a terminal and type in `gulp --version`
-  * This should return a version number at or above `3.5.x`
+  * This should return a version number at or above `3.8.x`
 
 ### Modify `gulp` to run globally
 

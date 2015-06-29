@@ -302,7 +302,7 @@ function calculateAdjustedUrl(url){
 
 /*------------------------------------------------*/
 
-gulp.task('compile:css:local', function(){
+gulp.task('app:build:styles:src', function(){
     return gulp.src(srcCss)
         .pipe($.plumber({
             errorHandler: onError
@@ -320,11 +320,11 @@ gulp.task('compile:css:local', function(){
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
-        .pipe($.size({title: 'compile:css:local'}))
+        .pipe($.size({title: 'app:build:styles:src'}))
     ;
 });
 
-gulp.task('compile:js:local', function(){
+gulp.task('app:build:scripts:src', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
 
@@ -349,7 +349,7 @@ gulp.task('compile:js:local', function(){
         .pipe($.concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(reload({stream: true, once: true}))
-        .pipe($.size({title: 'compile:js:local'}))
+        .pipe($.size({title: 'app:build:scripts:src'}))
     ;
 });
 
@@ -602,8 +602,8 @@ gulp.task('serve:local', function(){
     });
 
     gulp.watch(htmlPhpFiles, ['reloadhtmlphp']);
-    gulp.watch(srcCss, ['compile:css:local']);
-    gulp.watch(srcJs, ['compile:js:local']);
+    gulp.watch(srcCss, ['app:build:styles:src']);
+    gulp.watch(srcJs, ['app:build:scripts:src']);
 });
 
 gulp.task('serve:remote', function(){
@@ -619,7 +619,7 @@ gulp.task('openurl:remote', function(){
 /*------------------------------------------------*/
 
 gulp.task('build:local', function(callback){
-    runSequence('clean:all', ['compile:css:local', 'compile:js:local', 'optimise:images', 'moveotherfiles'], callback);
+    runSequence('clean:all', ['app:build:styles:src', 'app:build:scripts:src', 'optimise:images', 'moveotherfiles'], callback);
 });
 
 gulp.task('build:remote', function(callback){

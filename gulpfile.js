@@ -362,191 +362,6 @@ gulp.task('reloadhtmlphp', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('compile:css:remote', function(){
-    return gulp.src(srcCss)
-        .pipe($.plumber({
-            errorHandler: onError
-        }))
-        .pipe($.changed(dist)) //must be dist
-        .pipe($.tap(function(file, t){
-            currentFile = file.path; //update global var
-        }))
-        .pipe($.cssUrlAdjuster({
-            append: function(url){
-                return calculateAdjustedUrl(url);
-            }
-        }))
-        .pipe($.if('*.css', $.csso()))
-        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-        .pipe(gulp.dest(dist))
-        .pipe($.size({title: 'compile:css:remote'}))
-    ;
-});
-
-gulp.task('compile:js:remote', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
-    files.push(srcJs);
-
-    return gulp.src(files)
-        .pipe($.plumber({
-            errorHandler: onError
-        }))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.removelogs()
-        ))
-        .pipe($.if(
-            !argv.production && '*.js',
-            $.uglify({
-                mangle: false,
-                output: {
-                    beautify: true
-                }
-            })
-        ))
-        .pipe($.if(
-            argv.production && '*.js', // --production flag
-            $.uglify({preserveComments: 'some'})
-        ))
-        .pipe($.order([
-            '**/**/jquery.js',
-            '**/**/jquery.ui.js',
-            '**/**/custom.js',
-            '**/**/modernizr.js',
-            '**/**/jquery.fancybox.js',
-            '**/**/*.js'
-        ]))
-        .pipe($.concat(concatJsFile))
-        .pipe(gulp.dest(distScripts))
-        .pipe($.size({title: 'compile:js:remote'}))
-    ;
-});
-
-gulp.task('prepare:css:remote', function(){
-    return gulp.src(srcCss, {base: src})
-        .pipe($.plumber({
-            errorHandler: onError
-        }))
-        .pipe($.changed(dist)) //must be dist
-        .pipe($.tap(function(file, t){
-            currentFile = file.path; //update global var
-        }))
-        .pipe($.cssUrlAdjuster({
-            append: function(url){
-                return calculateAdjustedUrl(url);
-            }
-        }))
-        .pipe($.if('*.css', $.csso()))
-        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-        .pipe(gulp.dest(dist))
-        .pipe($.size({title: 'prepare:css:remote'}))
-        .pipe($.if(
-            !argv.production,
-            $.sftp({
-                host: sftpHost,
-                auth: authDev,
-                remotePath: remotePath,
-                remotePlatform: remotePlatform
-            })
-        ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
-                host: sftpHost,
-                auth: authProd,
-                remotePath: remotePath,
-                remotePlatform: remotePlatform
-            })
-        ))
-    ;
-});
-
-gulp.task('prepare:js:remote', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
-    files.push(srcJs);
-
-    return gulp.src(files)
-        .pipe($.plumber({
-            errorHandler: onError
-        }))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.removelogs()
-        ))
-        .pipe($.if(
-            !argv.production && '*.js',
-            $.uglify({
-                mangle: false,
-                output: {
-                    beautify: true
-                }
-            })
-        ))
-        .pipe($.if(
-            argv.production && '*.js', // --production flag
-            $.uglify({preserveComments: 'some'})
-        ))
-        .pipe($.order([
-            '**/**/jquery.js',
-            '**/**/jquery.ui.js',
-            '**/**/custom.js',
-            '**/**/modernizr.js',
-            '**/**/jquery.fancybox.js',
-            '**/**/*.js'
-        ]))
-        .pipe($.concat(concatJsFile))
-        .pipe(gulp.dest(distScripts))
-        .pipe($.size({title: 'prepare:js:remote'}))
-        .pipe($.if(
-            !argv.production,
-            $.sftp({
-                host: sftpHost,
-                auth: authDev,
-                remotePath: remotePath + '/' + scripts,
-                remotePlatform: remotePlatform
-            })
-        ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
-                host: sftpHost,
-                auth: authProd,
-                remotePath: remotePath + '/' + scripts,
-                remotePlatform: remotePlatform
-            })
-        ))
-    ;
-});
-
-gulp.task('reloadhtmlphpandupload', function(){
-    return gulp.src(htmlPhpFiles, {base: dist})
-        .pipe($.plumber({
-            errorHandler: onError
-        }))
-        .pipe($.changed(htmlPhpFiles))
-        .pipe($.if(
-            !argv.production,
-            $.sftp({
-                host: sftpHost,
-                auth: authDev,
-                remotePath: remotePath,
-                remotePlatform: remotePlatform
-            })
-        ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
-                host: sftpHost,
-                auth: authProd,
-                remotePath: remotePath,
-                remotePlatform: remotePlatform
-            })
-        ))
-    ;
-});
-
-/*------------------------------------------------*/
-
 gulp.task('optimise:images', function(){
     return gulp.src(srcImages)
         .pipe($.imagemin({
@@ -558,7 +373,7 @@ gulp.task('optimise:images', function(){
     ;
 });
 
-gulp.task('moveotherfiles', function(){
+gulp.task('__app:copy:files', function(){
     return gulp.src([src + '**/*.{' + otherFileTypes + '}'])
         .pipe(gulp.dest(dist))
     ;
@@ -619,11 +434,11 @@ gulp.task('openurl:remote', function(){
 /*------------------------------------------------*/
 
 gulp.task('build:local', function(callback){
-    runSequence('clean:all', ['app:build:styles:src', 'app:build:scripts:src', 'optimise:images', 'moveotherfiles'], callback);
+    runSequence('clean:all', ['app:build:styles:src', 'app:build:scripts:src', 'optimise:images', '__app:copy:files'], callback);
 });
 
 gulp.task('build:remote', function(callback){
-    runSequence('clean:all', ['compile:css:remote', 'compile:js:remote', 'optimise:images', 'moveotherfiles'], callback);
+    runSequence('clean:all', ['compile:css:remote', 'compile:js:remote', 'optimise:images', '__app:copy:files'], callback);
 });
 
 gulp.task('default', function(callback){

@@ -57,7 +57,7 @@ var stylesheetFileTypeArray = ['css'],
     scriptFileTypeArray = ['js'],
     imageFileTypeArray = ['gif', 'png'],
     pageFileTypeArray = ['html', 'php'],
-    fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff'],
+    fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff', 'woff2'],
     serverFileTypeArray = ['htaccess', 'access'];
 
 var imageFileTypes = imageFileTypeArray.join(','),
@@ -324,7 +324,7 @@ function calculateAdjustedUrl(url){
 
     if(fs.existsSync(dirname + output_without_params)){
         var stats = fs.statSync(dirname + output_without_params);
-        var filemtime = stats.mtime.getTime() / 1000; //convert to Unix timestamp
+        var filemtime = Math.round(stats.mtime.getTime() / 1000); //convert to Unix timestamp
         output = output.replaceLast('.', '.' + filemtime + '.');
     } else
         console.error('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
@@ -592,7 +592,7 @@ gulp.task('optimise:images', function(){
 });
 
 gulp.task('moveotherfiles', function(){
-    return gulp.src([src + '**/*.{' + otherFileTypes + '}'])
+    return gulp.src([src + '.{' + otherFileTypes + '}', src + '**/*.{' + otherFileTypes + '}'])
         .pipe(gulp.dest(dist))
     ;
 });

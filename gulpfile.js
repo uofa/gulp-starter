@@ -19,7 +19,14 @@ var browserSync = require('browser-sync'),
     Pageres = require('pageres'),
     mainBowerFiles = require('main-bower-files'),
     fs = require('fs'), //part of Node
+<<<<<<< HEAD
     del = require('del');
+=======
+    penthouse = require('penthouse'),
+    del = require('del'),
+    bower = require('bower')
+;
+>>>>>>> uoa-repo/master
 
 var webBrowser = 'chrome',
     reload = browserSync.reload;
@@ -28,7 +35,7 @@ var stylesheetFileTypeArray = ['css'],
     scriptFileTypeArray = ['js'],
     imageFileTypeArray = ['gif', 'png'],
     pageFileTypeArray = ['html', 'php'],
-    fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff'],
+    fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff', 'woff2'],
     serverFileTypeArray = ['htaccess', 'access'];
 
 var imageFileTypes = imageFileTypeArray.join(','),
@@ -87,7 +94,7 @@ var authDev = 'development', //defined in .ftppass
     authProd = 'production', //defined in .ftppass
     remotePath = 'public_html/' + remoteProjectBaseDir,
     remotePlatform = 'windows',
-    browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/' + dist;
+    browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/';
 
 var SCREEN_RESOLUTIONS = [
     '320x480',
@@ -187,6 +194,7 @@ gulp.task('app:generate:screenshots', function(){
         .dest(__dirname);
 
     pageres.run(function(error){
+<<<<<<< HEAD
         if(error){
             onError(error);
         } else {
@@ -196,13 +204,83 @@ gulp.task('app:generate:screenshots', function(){
 });
 
 gulp.task('app:generate:pagespeed', pagespeed.bind(null, {
-    //You can use a Google Developer API key: http://goo.gl/RkN0vE
-    url: remoteBaseDevUrl,
-    //key: 'YOUR_API_KEY',
-    strategy: 'mobile',
-    threshold: 65
-}));
+=======
+        if(error)
+            throw error;
 
+        console.log("Successfully generated 10 screenshots for:\n" + remoteBaseDevUrl);
+    });
+});
+
+gulp.task('pagespeed', function(cb){
+>>>>>>> uoa-repo/master
+    //You can use a Google Developer API key: http://goo.gl/RkN0vE
+    pagespeed.output(remoteBaseDevUrl, {
+        //key: 'YOUR_API_KEY',
+        strategy: 'mobile',
+        threshold: 65
+    }, cb);
+});
+
+<<<<<<< HEAD
+=======
+gulp.task('bower:install', function(){
+    bower.commands
+        .install([/* custom libs */], {save: true}, {/* custom config */})
+        .on('end', function(installed){
+            if(Object.keys(installed).length !== 0)
+                console.log(Object.keys(installed));
+        });
+});
+
+gulp.task('bower', function(){
+    return gulp.start('bower:install');
+});
+
+gulp.task('critical:css', function(){
+    penthouse({
+        url: browserSyncProxyUrl, //localhost
+        css: srcStyles + '/screen.css', //main CSS file
+        width: 400,
+        height: 240
+    }, function(error, criticalCss){
+        console.log(criticalCss);
+    });
+});
+
+/*------------------------------------------------*/
+
+gulp.task('clean:css', function(cb){
+    del([dist + '**/*.css'], {'force': true}, cb);
+});
+
+gulp.task('clean:js', function(cb){
+    del([dist + '**/*.js'], {'force': true}, cb);
+});
+
+gulp.task('clean:images', function(cb){
+    del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true}, cb);
+});
+
+gulp.task('tabsto4spaces', function(){
+    return gulp.src(htmlPhpFiles)
+        .pipe($.soften(4)) //4 spaces
+        .pipe(gulp.dest(dist))
+    ;
+});
+
+gulp.task('eolfix', function(){
+    return gulp.src(htmlPhpFiles)
+        .pipe($.eol('\r\n', false))
+        .pipe(gulp.dest(dist))
+    ;
+});
+
+gulp.task('clean:all', function(callback){
+    return runSequence(['tabsto4spaces', 'eolfix'], 'clean:css', 'clean:js', 'clean:images', callback);
+});
+
+>>>>>>> uoa-repo/master
 /*------------------------------------------------*/
 
 String.prototype.replaceLast = function(find, replace){
@@ -234,7 +312,7 @@ function calculateAdjustedUrl(url){
 
     if(fs.existsSync(dirname + output_without_params)){
         var stats = fs.statSync(dirname + output_without_params);
-        var filemtime = stats.mtime.getTime() / 1000; //convert to Unix timestamp
+        var filemtime = Math.round(stats.mtime.getTime() / 1000) //convert to Unix timestamp
         output = output.replaceLast('.', '.' + filemtime + '.');
     } else {
         onError('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
@@ -287,6 +365,7 @@ gulp.task('app:build:scripts:src', function(){
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
+            '**/**/URI.js',
             '**/**/*.js'
         ]))
         .pipe($.concat(concatJsFile))
@@ -341,10 +420,15 @@ gulp.task('app:process:src:tabs', function(){
     ;
 });
 
+<<<<<<< HEAD
 //Convert line endings from /n to /r/n
 gulp.task('app:process:src:eol', function(){
     return gulp.src(htmlPhpFiles)
         .pipe($.eol('\r\n', false))
+=======
+gulp.task('moveotherfiles', function(){
+    return gulp.src([src + '.{' + otherFileTypes + '}', src + '**/*.{' + otherFileTypes + '}'])
+>>>>>>> uoa-repo/master
         .pipe(gulp.dest(dist))
     ;
 });

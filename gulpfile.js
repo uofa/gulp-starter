@@ -126,14 +126,14 @@ var onError = function(error){
 
 /*------------------------------------------------*/
 
-gulp.task('app:lint:styles', function(){
+gulp.task('app:lint:src:csslint', function(){
     return gulp.src(srcCss)
         .pipe($.csslint())
         .pipe($.csslint.reporter())
     ;
 });
 
-gulp.task('app:lint:scripts:jshint', function(){
+gulp.task('app:lint:src:jshint', function(){
     return gulp.src(srcJs)
         .pipe($.jshint())
         .pipe($.jshint.reporter(stylish))
@@ -141,20 +141,20 @@ gulp.task('app:lint:scripts:jshint', function(){
     ;
 });
 
-gulp.task('app:lint:html', function(){
+gulp.task('app:lint:dist:htmlhint', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.htmlhint({'htmlhintrc': currentLevel + '.htmlhintrc'}))
         .pipe($.htmlhint.reporter(stylish))
     ;
 });
 
-gulp.task('app:lint:scripts:jscs', function(){
+gulp.task('app:lint:src:jscs', function(){
     return gulp.src(srcScripts + '/custom.js') //only run against single file - memory intensive
         .pipe($.jscs(currentLevel + '.jscsrc'))
     ;
 });
 
-gulp.task('app:lint:php:phpcs', function(){
+gulp.task('app:lint:dist:phpcs', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpcs" -n --standard="' + composerModules + '/phpcs-ruleset.xml" "<%= file.path %>"',
@@ -163,7 +163,7 @@ gulp.task('app:lint:php:phpcs', function(){
     ;
 });
 
-gulp.task('app:lint:php:phpmd', function(){
+gulp.task('app:lint:dist:phpmd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpmd" "<%= file.path %>" text "' + composerModules + '/phpmd-ruleset.xml"',
@@ -172,7 +172,7 @@ gulp.task('app:lint:php:phpmd', function(){
     ;
 });
 
-gulp.task('app:lint:php:phpcpd', function(){
+gulp.task('app:lint:dist:phpcpd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpcpd" "<%= file.path %>"',
@@ -181,7 +181,7 @@ gulp.task('app:lint:php:phpcpd', function(){
     ;
 });
 
-gulp.task('app:generate:screenshots', function(){
+gulp.task('app:generate:dist:screenshots', function(){
     var pageres = new Pageres({crop: true})
         .src(remoteBaseDevUrl, SCREEN_RESOLUTIONS)
         .dest(__dirname);
@@ -195,7 +195,7 @@ gulp.task('app:generate:screenshots', function(){
     });
 });
 
-gulp.task('app:generate:pagespeed', pagespeed.bind(null, {
+gulp.task('app:generate:dist:pagespeed', pagespeed.bind(null, {
     //You can use a Google Developer API key: http://goo.gl/RkN0vE
     url: remoteBaseDevUrl,
     //key: 'YOUR_API_KEY',

@@ -19,9 +19,7 @@ var browserSync = require('browser-sync'),
     Pageres = require('pageres'),
     mainBowerFiles = require('main-bower-files'),
     fs = require('fs'), //part of Node
-    penthouse = require('penthouse'),
-    del = require('del')
-;
+    del = require('del');
 
 var webBrowser = 'chrome',
     reload = browserSync.reload;
@@ -123,7 +121,7 @@ var currentFile = ''; //used with tap plugin to know what file is currently with
 var onError = function(error){
     //cause the terminal to play a beep sound to get your attention should an error occur
     $.util.beep();
-    console.log(error);
+    console.error(error);
 };
 
 /*------------------------------------------------*/
@@ -183,20 +181,21 @@ gulp.task('app:sniff:phpcpd', function(){
     ;
 });
 
-gulp.task('screenshots', function(){
+gulp.task('app:generate:screenshots', function(){
     var pageres = new Pageres({crop: true})
         .src(remoteBaseDevUrl, SCREEN_RESOLUTIONS)
         .dest(__dirname);
 
     pageres.run(function(error){
-        if(error)
-            throw error;
-
-        console.log('Successfully generated 10 screenshots');
+        if(error){
+            onError(error);
+        } else {
+            console.log('Successfully generated 10 screenshots');
+        }
     });
 });
 
-gulp.task('pagespeed', pagespeed.bind(null, {
+gulp.task('app:generate:pagespeed', pagespeed.bind(null, {
     //You can use a Google Developer API key: http://goo.gl/RkN0vE
     url: remoteBaseDevUrl,
     //key: 'YOUR_API_KEY',
@@ -237,8 +236,9 @@ function calculateAdjustedUrl(url){
         var stats = fs.statSync(dirname + output_without_params);
         var filemtime = stats.mtime.getTime() / 1000; //convert to Unix timestamp
         output = output.replaceLast('.', '.' + filemtime + '.');
-    } else
-        console.error('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
+    } else {
+        onError('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
+    }
 
     return output;
 }
@@ -296,8 +296,6 @@ gulp.task('app:build:scripts:src', function(){
     ;
 });
 
-/*------------------------------------------------*/
-
 gulp.task('app:build:images:src', function(){
     return gulp.src(srcImages)
         .pipe($.imagemin({
@@ -311,7 +309,7 @@ gulp.task('app:build:images:src', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('app:serve:local', function(){
+gulp.task('app:serve', function(){
     browserSync({
         proxy: browserSyncProxyUrl,
         notify: false,
@@ -327,12 +325,12 @@ gulp.task('app:serve:local', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('app:build:local', function(callback){
+gulp.task('app:build', function(callback){
     runSequence('__app:clean:all', ['app:build:styles:src', 'app:build:scripts:src', 'app:build:images:src', '__app:copy:files'], callback);
 });
 
 gulp.task('default', function(callback){
-    runSequence('app:build:local', 'app:serve:local', callback);
+    runSequence('app:build', 'app:serve', callback);
 });
 
 //Converts tabs to 4 spaces
@@ -368,12 +366,9 @@ gulp.task('__app:install:dependencies', $.shell.task([
 //Copes file from src to dist
 gulp.task('__app:copy:files', function(){
     return gulp.src([src + '**/*.{' + otherFileTypes + '}'])
-        .pipe(gulp.dest(dist))
-    ;
+        .pipe(gulp.dest(dist));
 });
 
-
-/* -- Clean tasks -- */
 gulp.task('__app:clean:styles', function(cb){
     del([dist + '**/*.css'], cb);
 });
@@ -389,14 +384,12 @@ gulp.task('__app:clean:images', function(cb){
 gulp.task('__app:clean:all', function(cb){
     return runSequence(['app:process:src:tabs', 'app:process:src:eol'], '__app:clean:styles', '__app:clean:scripts', '__app:clean:images', cb);
 });
-/* -- End Clean tasks -- */
 
 //Reloads the page when html or PHP files are changed
 gulp.task('__app:reload:page', function(){
     return gulp.src(htmlPhpFiles)
         .pipe($.changed(htmlPhpFiles))
-        .pipe(reload({stream: true}))
-    ;
+        .pipe(reload({stream: true}));
 });
 
 /**
@@ -405,4 +398,4 @@ gulp.task('__app:reload:page', function(){
 */
 
 //Load custom tasks from the `tasks` directory (if it exists)
-try { require('require-dir')('tasks'); } catch (error) { console.error(error); }
+try { require('require-dir')('tasks'); } catch (error) { onError(error); }

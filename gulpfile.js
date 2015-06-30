@@ -126,14 +126,14 @@ var onError = function(error){
 
 /*------------------------------------------------*/
 
-gulp.task('app:lint:css', function(){
+gulp.task('app:lint:styles', function(){
     return gulp.src(srcCss)
         .pipe($.csslint())
         .pipe($.csslint.reporter())
     ;
 });
 
-gulp.task('app:lint:js', function(){
+gulp.task('app:lint:scripts:jshint', function(){
     return gulp.src(srcJs)
         .pipe($.jshint())
         .pipe($.jshint.reporter(stylish))
@@ -148,13 +148,13 @@ gulp.task('app:lint:html', function(){
     ;
 });
 
-gulp.task('app:sniff:js', function(){
+gulp.task('app:lint:scripts:jscs', function(){
     return gulp.src(srcScripts + '/custom.js') //only run against single file - memory intensive
         .pipe($.jscs(currentLevel + '.jscsrc'))
     ;
 });
 
-gulp.task('app:sniff:phpcs', function(){
+gulp.task('app:lint:php:phpcs', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpcs" -n --standard="' + composerModules + '/phpcs-ruleset.xml" "<%= file.path %>"',
@@ -163,7 +163,7 @@ gulp.task('app:sniff:phpcs', function(){
     ;
 });
 
-gulp.task('app:sniff:phpmd', function(){
+gulp.task('app:lint:php:phpmd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpmd" "<%= file.path %>" text "' + composerModules + '/phpmd-ruleset.xml"',
@@ -172,7 +172,7 @@ gulp.task('app:sniff:phpmd', function(){
     ;
 });
 
-gulp.task('app:sniff:phpcpd', function(){
+gulp.task('app:lint:php:phpcpd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpcpd" "<%= file.path %>"',

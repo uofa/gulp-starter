@@ -128,14 +128,14 @@ var onError = function(error){
 
 /*------------------------------------------------*/
 
-gulp.task('csslint', function(){
+gulp.task('app:lint:css', function(){
     return gulp.src(srcCss)
         .pipe($.csslint())
         .pipe($.csslint.reporter())
     ;
 });
 
-gulp.task('jshint', function(){
+gulp.task('app:lint:js', function(){
     return gulp.src(srcJs)
         .pipe($.jshint())
         .pipe($.jshint.reporter(stylish))
@@ -143,26 +143,20 @@ gulp.task('jshint', function(){
     ;
 });
 
-gulp.task('stats', function(){
-    return gulp.src(srcJs)
-        .pipe($.complexity())
-    ;
-});
-
-gulp.task('jscs', function(){
-    return gulp.src(srcScripts + '/custom.js') //only run against single file - memory intensive
-        .pipe($.jscs(currentLevel + '.jscsrc'))
-    ;
-});
-
-gulp.task('htmlhint', function(){
+gulp.task('app:lint:html', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.htmlhint({'htmlhintrc': currentLevel + '.htmlhintrc'}))
         .pipe($.htmlhint.reporter(stylish))
     ;
 });
 
-gulp.task('phpcs', function(){
+gulp.task('app:sniff:js', function(){
+    return gulp.src(srcScripts + '/custom.js') //only run against single file - memory intensive
+        .pipe($.jscs(currentLevel + '.jscsrc'))
+    ;
+});
+
+gulp.task('app:sniff:phpcs', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpcs" -n --standard="' + composerModules + '/phpcs-ruleset.xml" "<%= file.path %>"',
@@ -171,7 +165,7 @@ gulp.task('phpcs', function(){
     ;
 });
 
-gulp.task('phpmd', function(){
+gulp.task('app:sniff:phpmd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpmd" "<%= file.path %>" text "' + composerModules + '/phpmd-ruleset.xml"',
@@ -180,7 +174,7 @@ gulp.task('phpmd', function(){
     ;
 });
 
-gulp.task('phpcpd', function(){
+gulp.task('app:sniff:phpcpd', function(){
     return gulp.src(phpFiles, {base: currentLevel})
         .pipe($.shell([
             'echo "' + composerModules + '/bin/phpcpd" "<%= file.path %>"',
@@ -209,57 +203,6 @@ gulp.task('pagespeed', pagespeed.bind(null, {
     strategy: 'mobile',
     threshold: 65
 }));
-
-gulp.task('bower:install', $.shell.task([
-    'bower install'
-]))
-
-gulp.task('bower', function(){
-    return gulp.start('bower:install');
-});
-
-gulp.task('critical:css', function(){
-    penthouse({
-        url: browserSyncProxyUrl, //localhost
-        css: srcStyles + '/screen.css', //main CSS file
-        width: 400,
-        height: 240
-    }, function(error, criticalCss){
-        console.log(criticalCss);
-    });
-});
-
-/*------------------------------------------------*/
-
-gulp.task('clean:css', function(cb){
-    del([dist + '**/*.css'], cb);
-});
-
-gulp.task('clean:js', function(cb){
-    del([dist + '**/*.js'], cb);
-});
-
-gulp.task('clean:images', function(cb){
-    del([dist + '**/*.{' + imageFileTypes + '}'], cb);
-});
-
-gulp.task('tabsto4spaces', function(){
-    return gulp.src(htmlPhpFiles)
-        .pipe($.soften(4)) //4 spaces
-        .pipe(gulp.dest(dist))
-    ;
-});
-
-gulp.task('eolfix', function(){
-    return gulp.src(htmlPhpFiles)
-        .pipe($.eol('\r\n', false))
-        .pipe(gulp.dest(dist))
-    ;
-});
-
-gulp.task('clean:all', function(callback){
-    return runSequence(['tabsto4spaces', 'eolfix'], 'clean:css', 'clean:js', 'clean:images', callback);
-});
 
 /*------------------------------------------------*/
 
@@ -353,16 +296,9 @@ gulp.task('app:build:scripts:src', function(){
     ;
 });
 
-gulp.task('reloadhtmlphp', function(){
-    return gulp.src(htmlPhpFiles)
-        .pipe($.changed(htmlPhpFiles))
-        .pipe(reload({stream: true}))
-    ;
-});
-
 /*------------------------------------------------*/
 
-gulp.task('optimise:images', function(){
+gulp.task('app:build:images:src', function(){
     return gulp.src(srcImages)
         .pipe($.imagemin({
             optimizationLevel: 5, //0-7
@@ -373,41 +309,9 @@ gulp.task('optimise:images', function(){
     ;
 });
 
-gulp.task('__app:copy:files', function(){
-    return gulp.src([src + '**/*.{' + otherFileTypes + '}'])
-        .pipe(gulp.dest(dist))
-    ;
-});
-
 /*------------------------------------------------*/
 
-gulp.task('sftp', function(){
-    return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!' + currentLevel + 'gulpfile.js'], {dot: true})
-        .pipe(plumber({
-            errorHandler: onError
-        }))
-        .pipe($.if(
-            !argv.production,
-            $.sftp({
-                host: sftpHost,
-                auth: authDev,
-                remotePath: remotePath,
-                remotePlatform: remotePlatform
-            })
-        ))
-        .pipe($.if(
-            argv.production, // --production flag
-            $.sftp({
-                host: sftpHost,
-                auth: authProd,
-                remotePath: remotePath,
-                remotePlatform: remotePlatform
-            })
-        ))
-    ;
-});
-
-gulp.task('serve:local', function(){
+gulp.task('app:serve:local', function(){
     browserSync({
         proxy: browserSyncProxyUrl,
         notify: false,
@@ -416,38 +320,89 @@ gulp.task('serve:local', function(){
         }
     });
 
-    gulp.watch(htmlPhpFiles, ['reloadhtmlphp']);
+    gulp.watch(htmlPhpFiles, ['__app:reload:page']);
     gulp.watch(srcCss, ['app:build:styles:src']);
     gulp.watch(srcJs, ['app:build:scripts:src']);
 });
 
-gulp.task('serve:remote', function(){
-    gulp.watch(htmlPhpFiles, ['reloadhtmlphpandupload']);
-    gulp.watch(srcCss, ['prepare:css:remote']);
-    gulp.watch(srcJs, ['prepare:js:remote']);
-});
-
-gulp.task('openurl:remote', function(){
-    return argv.production ? open(remoteBaseProdUrl, webBrowser) : open(remoteBaseDevUrl, webBrowser);
-});
-
 /*------------------------------------------------*/
 
-gulp.task('build:local', function(callback){
-    runSequence('clean:all', ['app:build:styles:src', 'app:build:scripts:src', 'optimise:images', '__app:copy:files'], callback);
-});
-
-gulp.task('build:remote', function(callback){
-    runSequence('clean:all', ['compile:css:remote', 'compile:js:remote', 'optimise:images', '__app:copy:files'], callback);
+gulp.task('app:build:local', function(callback){
+    runSequence('__app:clean:all', ['app:build:styles:src', 'app:build:scripts:src', 'app:build:images:src', '__app:copy:files'], callback);
 });
 
 gulp.task('default', function(callback){
-    runSequence('build:local', 'serve:local', callback);
+    runSequence('app:build:local', 'app:serve:local', callback);
 });
 
-gulp.task('upload', function(callback){
-    runSequence('build:remote', 'sftp', 'serve:remote', 'openurl:remote', callback);
+//Converts tabs to 4 spaces
+gulp.task('app:process:src:tabs', function(){
+    return gulp.src(htmlPhpFiles)
+        .pipe($.soften(4))
+        .pipe(gulp.dest(dist))
+    ;
 });
+
+//Convert line endings from /n to /r/n
+gulp.task('app:process:src:eol', function(){
+    return gulp.src(htmlPhpFiles)
+        .pipe($.eol('\r\n', false))
+        .pipe(gulp.dest(dist))
+    ;
+});
+
+/**
+ * Private Tasks
+ *
+ * Since JS doesn't support proper OOP, these tasks have double underscores at the beginning
+ * of their names to indicate privacy. That is to say that whilst these tasks /can/ be called
+ * from the command line, they are really reserved only for internal use by other gulp tasks.
+ *
+*/
+
+//Installs bower dependencies
+gulp.task('__app:install:dependencies', $.shell.task([
+    'bower install'
+]));
+
+//Copes file from src to dist
+gulp.task('__app:copy:files', function(){
+    return gulp.src([src + '**/*.{' + otherFileTypes + '}'])
+        .pipe(gulp.dest(dist))
+    ;
+});
+
+
+/* -- Clean tasks -- */
+gulp.task('__app:clean:styles', function(cb){
+    del([dist + '**/*.css'], cb);
+});
+
+gulp.task('__app:clean:scripts', function(cb){
+    del([dist + '**/*.js'], cb);
+});
+
+gulp.task('__app:clean:images', function(cb){
+    del([dist + '**/*.{' + imageFileTypes + '}'], cb);
+});
+
+gulp.task('__app:clean:all', function(cb){
+    return runSequence(['app:process:src:tabs', 'app:process:src:eol'], '__app:clean:styles', '__app:clean:scripts', '__app:clean:images', cb);
+});
+/* -- End Clean tasks -- */
+
+//Reloads the page when html or PHP files are changed
+gulp.task('__app:reload:page', function(){
+    return gulp.src(htmlPhpFiles)
+        .pipe($.changed(htmlPhpFiles))
+        .pipe(reload({stream: true}))
+    ;
+});
+
+/**
+ * End Private Tasks
+ *
+*/
 
 //Load custom tasks from the `tasks` directory (if it exists)
 try { require('require-dir')('tasks'); } catch (error) { console.error(error); }

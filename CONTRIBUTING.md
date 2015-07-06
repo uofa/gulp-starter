@@ -5,6 +5,7 @@ We appreciate pull requests, here are our guidelines:
 
 1. File a bug on our [issue tracker](https://github.com/uofa/gulp-starter/issues) (if there isn't one already).
   - If your patch is going to be large it might be a good idea to get the discussion started early. We are happy to discuss it in a new issue beforehand.
+  - Please state which branch you are having problems with
 1. We ask that you compile all the commits together before pushing.
 1. Please follow the coding standards already adhered to in the file you're editing before committing
   - This includes the use of *4 spaces* over tabs for indentation

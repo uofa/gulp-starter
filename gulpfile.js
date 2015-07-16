@@ -311,7 +311,7 @@ function calculateAdjustedUrl(url){
 
 /*------------------------------------------------*/
 
-gulp.task('app:build:styles:src', function(){
+gulp.task('app:build:styles:src:local', function(){
     return gulp.src(srcCss)
         .pipe($.plumber({
             errorHandler: onError
@@ -329,11 +329,11 @@ gulp.task('app:build:styles:src', function(){
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
-        .pipe($.size({title: 'app:build:styles:src'}))
+        .pipe($.size({title: 'app:build:styles:src:local'}))
     ;
 });
 
-gulp.task('app:build:scripts:src', function(){
+gulp.task('app:build:scripts:src:local', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
 
@@ -359,7 +359,7 @@ gulp.task('app:build:scripts:src', function(){
         .pipe($.concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(reload({stream: true, once: true}))
-        .pipe($.size({title: 'app:build:scripts:src'}))
+        .pipe($.size({title: 'app:build:scripts:src:local'}))
     ;
 });
 
@@ -372,7 +372,7 @@ gulp.task('__app:reload:page', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('compile:css:remote', function(){
+gulp.task('app:build:styles:src:remote', function(){
     return gulp.src(srcCss)
         .pipe($.plumber({
             errorHandler: onError
@@ -389,11 +389,11 @@ gulp.task('compile:css:remote', function(){
         .pipe($.if('*.css', $.csso()))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
-        .pipe($.size({title: 'compile:css:remote'}))
+        .pipe($.size({title: 'app:build:styles:src:remote'}))
     ;
 });
 
-gulp.task('compile:js:remote', function(){
+gulp.task('app:build:scripts:src:remote', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
 
@@ -428,11 +428,11 @@ gulp.task('compile:js:remote', function(){
         ]))
         .pipe($.concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
-        .pipe($.size({title: 'compile:js:remote'}))
+        .pipe($.size({title: 'app:build:scripts:src:remote'}))
     ;
 });
 
-gulp.task('prepare:css:remote', function(){
+gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src(srcCss, {base: src})
         .pipe($.plumber({
             errorHandler: onError
@@ -449,7 +449,7 @@ gulp.task('prepare:css:remote', function(){
         .pipe($.if('*.css', $.csso()))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
-        .pipe($.size({title: 'prepare:css:remote'}))
+        .pipe($.size({title: 'app:prepare:styles:src:remote'}))
         .pipe($.if(
             !argv.production,
             $.sftp({
@@ -471,7 +471,7 @@ gulp.task('prepare:css:remote', function(){
     ;
 });
 
-gulp.task('prepare:js:remote', function(){
+gulp.task('app:prepare:scripts:src:remote', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
 
@@ -506,7 +506,7 @@ gulp.task('prepare:js:remote', function(){
         ]))
         .pipe($.concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
-        .pipe($.size({title: 'prepare:js:remote'}))
+        .pipe($.size({title: 'app:prepare:scripts:src:remote'}))
         .pipe($.if(
             !argv.production,
             $.sftp({
@@ -528,7 +528,7 @@ gulp.task('prepare:js:remote', function(){
     ;
 });
 
-gulp.task('reloadhtmlphpandupload', function(){
+gulp.task('app:reload:pages:dist', function(){
     return gulp.src(htmlPhpFiles, {base: dist})
         .pipe($.plumber({
             errorHandler: onError
@@ -576,7 +576,7 @@ gulp.task('__app:copy:files', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('sftp', function(){
+gulp.task('__app:sftp:dist', function(){
     return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!' + currentLevel + 'gulpfile.js'], {dot: true})
         .pipe(plumber({
             errorHandler: onError
@@ -602,7 +602,7 @@ gulp.task('sftp', function(){
     ;
 });
 
-gulp.task('app:serve', function(){
+gulp.task('app:serve:local', function(){
     browserSync({
         proxy: browserSyncProxyUrl,
         notify: false,
@@ -612,14 +612,14 @@ gulp.task('app:serve', function(){
     });
 
     gulp.watch(htmlPhpFiles, ['__app:reload:page']);
-    gulp.watch(srcCss, ['app:build:styles:src']);
-    gulp.watch(srcJs, ['app:build:scripts:src']);
+    gulp.watch(srcCss, ['app:build:styles:src:local']);
+    gulp.watch(srcJs, ['app:build:scripts:src:local']);
 });
 
-gulp.task('serve:remote', function(){
-    gulp.watch(htmlPhpFiles, ['reloadhtmlphpandupload']);
-    gulp.watch(srcCss, ['prepare:css:remote']);
-    gulp.watch(srcJs, ['prepare:js:remote']);
+gulp.task('app:serve:remote', function(){
+    gulp.watch(htmlPhpFiles, ['app:reload:pages:dist']);
+    gulp.watch(srcCss, ['app:prepare:styles:src:remote']);
+    gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
 });
 
 gulp.task('openurl:remote', function(){
@@ -628,20 +628,20 @@ gulp.task('openurl:remote', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('app:build', function(callback){
-    runSequence('__app:clean:all', ['app:build:styles:src', 'app:build:scripts:src', 'app:build:images:src', '__app:copy:files'], callback);
+gulp.task('app:build:local', function(callback){
+    runSequence('__app:clean:all', ['app:build:styles:src:local', 'app:build:scripts:src:local', 'app:build:images:src', '__app:copy:files'], callback);
 });
 
-gulp.task('build:remote', function(callback){
-    runSequence('__app:clean:all', ['compile:css:remote', 'compile:js:remote', 'app:build:images:src', '__app:copy:files'], callback);
+gulp.task('app:build:remote', function(callback){
+    runSequence('__app:clean:all', ['app:build:styles:src:remote', 'app:build:scripts:src:remote', 'app:build:images:src', '__app:copy:files'], callback);
 });
 
 gulp.task('default', function(callback){
-    runSequence('app:build', 'app:serve', callback);
+    runSequence('app:build:local', 'app:serve:local', callback);
 });
 
-gulp.task('upload', function(callback){
-    runSequence('build:remote', 'sftp', 'serve:remote', 'openurl:remote', callback);
+gulp.task('app:upload:dist', function(callback){
+    runSequence('app:build:remote', '__app:sftp:dist', 'app:serve:remote', 'openurl:remote', callback);
 });
 
 //Load custom tasks from the `tasks` directory (if it exists)

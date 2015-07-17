@@ -144,7 +144,7 @@ gulp.task('app:lint:src:jshint', function(){
     ;
 });
 
-gulp.task('stats', function(){
+gulp.task('app:generate:stats', function(){
     return gulp.src(srcJs)
         .pipe($.complexity())
     ;
@@ -222,7 +222,7 @@ gulp.task('bower:install', function(){
         });
 });
 
-gulp.task('critical:css', function(){
+gulp.task('app:build:styles:src:critical', function(){
     penthouse({
         url: browserSyncProxyUrl, //localhost
         css: srcStyles + '/screen.css', //main CSS file
@@ -363,7 +363,7 @@ gulp.task('app:build:scripts:src:local', function(){
     ;
 });
 
-gulp.task('__app:reload:page', function(){
+gulp.task('__app:reload:pages:local', function(){
     return gulp.src(htmlPhpFiles)
         .pipe($.changed(htmlPhpFiles))
         .pipe(reload({stream: true}))
@@ -528,7 +528,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     ;
 });
 
-gulp.task('app:reload:pages:dist', function(){
+gulp.task('__app:reload:pages:remote', function(){
     return gulp.src(htmlPhpFiles, {base: dist})
         .pipe($.plumber({
             errorHandler: onError
@@ -611,18 +611,18 @@ gulp.task('app:serve:local', function(){
         }
     });
 
-    gulp.watch(htmlPhpFiles, ['__app:reload:page']);
+    gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
     gulp.watch(srcCss, ['app:build:styles:src:local']);
     gulp.watch(srcJs, ['app:build:scripts:src:local']);
 });
 
 gulp.task('app:serve:remote', function(){
-    gulp.watch(htmlPhpFiles, ['app:reload:pages:dist']);
+    gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
     gulp.watch(srcCss, ['app:prepare:styles:src:remote']);
     gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
 });
 
-gulp.task('openurl:remote', function(){
+gulp.task('app:open:dist:remote', function(){
     return argv.production ? open(remoteBaseProdUrl, webBrowser) : open(remoteBaseDevUrl, webBrowser);
 });
 
@@ -641,7 +641,7 @@ gulp.task('default', function(callback){
 });
 
 gulp.task('app:upload:dist', function(callback){
-    runSequence('app:build:remote', '__app:sftp:dist', 'app:serve:remote', 'openurl:remote', callback);
+    runSequence('app:build:remote', '__app:sftp:dist', 'app:serve:remote', 'app:open:dist:remote', callback);
 });
 
 //Load custom tasks from the `tasks` directory (if it exists)

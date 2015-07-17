@@ -144,7 +144,7 @@ gulp.task('app:lint:src:jshint', function(){
     ;
 });
 
-gulp.task('app:generate:stats', function(){
+gulp.task('app:generate:src:stats', function(){
     return gulp.src(srcJs)
         .pipe($.complexity())
     ;
@@ -251,14 +251,14 @@ gulp.task('__app:clean:images', function(cb){
     del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true}, cb);
 });
 
-gulp.task('app:process:src:tabs', function(){
+gulp.task('__app:process:src:tabs', function(){
     return gulp.src(htmlPhpFiles)
         .pipe($.soften(4)) //4 spaces
         .pipe(gulp.dest(dist))
     ;
 });
 
-gulp.task('app:process:src:eol', function(){
+gulp.task('__app:process:src:eol', function(){
     return gulp.src(htmlPhpFiles)
         .pipe($.eol('\r\n', false))
         .pipe(gulp.dest(dist))
@@ -266,7 +266,7 @@ gulp.task('app:process:src:eol', function(){
 });
 
 gulp.task('__app:clean:all', function(callback){
-    return runSequence(['app:process:src:tabs', 'app:process:src:eol'], '__app:clean:styles', '__app:clean:scripts', '__app:clean:images', callback);
+    return runSequence(['__app:process:src:tabs', '__app:process:src:eol'], '__app:clean:styles', '__app:clean:scripts', '__app:clean:images', callback);
 });
 
 /*------------------------------------------------*/

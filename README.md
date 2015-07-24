@@ -113,7 +113,7 @@ $ gulp
 Working **remotely** in your `development` environment
 
 ```sh
-$ gulp upload
+$ gulp app:upload:dist
 ```
 
   * Open the terminal within your project directory - leave this prompt open after execution
@@ -126,7 +126,7 @@ $ gulp upload
 Working **remotely** in your `production` environment
 
 ```sh
-$ gulp upload --production
+$ gulp app:upload:dist --production
 ```
 
   * Open the terminal within your project directory - leave this prompt open after execution
@@ -141,21 +141,21 @@ $ gulp upload --production
 
 ## Other `gulp` Tasks
 
-* [View workflow diagram](https://www.lucidchart.com/documents/embeddedchart/4ff39dc5-3ddf-418a-a96b-f5e1460dd77e/0)
+* [View workflow diagram](https://www.lucidchart.com/documents/embeddedchart/4ff39dc5-3ddf-418a-a96b-f5e1460dd77e/1)
 
 ```sh
-$ gulp csslint
-$ gulp jshint
-$ gulp stats
-$ gulp jscs
-$ gulp htmlhint
-$ gulp phpcs
-$ gulp phpmd
-$ gulp phpcpd
-$ gulp screenshots
-$ gulp pagespeed
-$ gulp bower
-$ gulp critical:css
+$ gulp app:lint:src:csslint
+$ gulp app:lint:src:jshint
+$ gulp app:generate:src:stats
+$ gulp app:lint:src:jscs
+$ gulp app:lint:dist:htmlhint
+$ gulp app:lint:dist:phpcs
+$ gulp app:lint:dist:phpmd
+$ gulp app:lint:dist:phpcpd
+$ gulp app:generate:dist:screenshots
+$ gulp app:generate:dist:pagespeed
+$ gulp bower:install
+$ gulp app:build:styles:src:critical
 ```
 
 * You can also create separate task files within the `/tasks` directory (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line

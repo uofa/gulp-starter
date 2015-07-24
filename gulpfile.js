@@ -300,7 +300,7 @@ function calculateAdjustedUrl(url){
 
     if(fs.existsSync(dirname + output_without_params)){
         var stats = fs.statSync(dirname + output_without_params);
-        var filemtime = Math.round(stats.mtime.getTime() / 1000) //convert to Unix timestamp
+        var filemtime = Math.round(stats.mtime.getTime() / 1000); //convert to Unix timestamp
         output = output.replaceLast('.', '.' + filemtime + '.');
     } else {
         onError('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);

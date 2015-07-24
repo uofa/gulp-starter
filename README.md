@@ -160,7 +160,7 @@ $ gulp app:upload:dist --production
 
 ## Other `gulp` Tasks
 
-* [View workflow diagram](https://www.lucidchart.com/documents/embeddedchart/4ff39dc5-3ddf-418a-a96b-f5e1460dd77e/1)
+* [View workflow diagram](https://www.lucidchart.com/documents/embeddedchart/4ff39dc5-3ddf-418a-a96b-f5e1460dd77e)
 
 ```sh
 $ gulp app:lint:src:csslint

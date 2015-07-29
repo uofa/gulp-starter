@@ -1,9 +1,17 @@
 'use strict';
 
-var base = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/',
-    node_modules = base + 'npm/node_modules/',
-    composer_bin = base + 'Composer/vendor/bin/',
-    composer_plugins = 'composer_plugins/';
+var isWin = /^win/.test(process.platform);
+
+if(isWin){
+    var base = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/',
+        node_modules = base + 'npm/node_modules/',
+        composer_bin = base + 'Composer/vendor/bin/',
+        composer_plugins = 'composer_plugins/';
+} else {
+    var node_modules = '/usr/lib/local/node_modules/',
+        composer_bin = '/usr/local/bin/',
+        composer_plugins = 'composer_plugins/';
+}
 
 var currentLevel = './',
     upOneLevel = '../';

@@ -26,6 +26,7 @@
     "gulp-order": "*",
     "gulp-plumber": "*",
     "gulp-removelogs": "*",
+    "gulp-sass": "*",
     "gulp-sftp": "*",
     "gulp-shell": "*",
     "gulp-size": "*",

@@ -1,0 +1,9 @@
+{
+  "name": "api-documentation",
+  "version": "0.0.x",
+  "description": "API documentation",
+  "template": {
+    "withCompare": false,
+    "withGenerator": false
+  }
+}

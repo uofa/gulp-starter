@@ -270,6 +270,31 @@ gulp.task('__app:clean:all', function(callback){
     return runSequence(['__app:process:src:tabs', '__app:process:src:eol'], '__app:clean:styles', '__app:clean:scripts', '__app:clean:images', callback);
 });
 
+gulp.task('app:process:path', function(){
+    var isFolder = (argv.folder) ? true : false;
+    //gulp app:process:path --folder app/controllers
+    //gulp app:process:path --folder app/models
+    //gulp app:process:path --folder app/views
+
+    if(isFolder){
+        var folder = argv.folder;
+
+        if(fs.existsSync(folder)){
+            console.log('Processed folder: ' + folder);
+
+            return gulp.src(folder + '/**/*.{' + pageFileTypes + '}')
+                .pipe($.soften(4)) //4 spaces
+                .pipe($.eol('\r\n', false))
+                .pipe(gulp.dest(folder + '/'))
+            ;
+        } else {
+            return onError('Error: Folder not found at ' + folder);
+        }
+    } else {
+        return onError('Error: --folder flag not set');
+    }
+});
+
 /*------------------------------------------------*/
 
 String.prototype.replaceLast = function(find, replace){

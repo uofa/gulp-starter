@@ -432,6 +432,9 @@ gulp.task('app:build:scripts:src:local', function(){
         .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
+            '**/**/angular.js',
+            '**/**/angular-resource.js',
+            '**/**/ui-bootstrap.js',
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
@@ -504,9 +507,13 @@ gulp.task('app:build:scripts:src:remote', function(){
         .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
+            '**/**/angular.js',
+            '**/**/angular-resource.js',
+            '**/**/ui-bootstrap.js',
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
+            '**/**/URI.js',
             '**/**/*.js'
         ]))
         .pipe(concat(concatJsFile))
@@ -583,9 +590,13 @@ gulp.task('app:prepare:scripts:src:remote', function(){
         .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
+            '**/**/angular.js',
+            '**/**/angular-resource.js',
+            '**/**/ui-bootstrap.js',
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
+            '**/**/URI.js',
             '**/**/*.js'
         ]))
         .pipe(concat(concatJsFile))

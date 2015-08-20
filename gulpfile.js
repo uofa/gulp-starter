@@ -276,7 +276,7 @@ gulp.task('app:build:styles:src:critical', function(){
     });
 });
 
-gulp.task('__app:generate:documentation', function(){
+gulp.task('__app:compose:documentation', function(){
     apidoc.exec({
         src:  docsSrc,
         dest: docsDest
@@ -286,7 +286,7 @@ gulp.task('__app:generate:documentation', function(){
 });
 
 gulp.task('app:build:documentation', function(){
-    runSequence('__app:clean:documentation', '__app:generate:documentation');
+    runSequence('__app:clean:documentation', '__app:compose:documentation');
 });
 
 /*------------------------------------------------*/

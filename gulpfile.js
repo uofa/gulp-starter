@@ -93,6 +93,9 @@ var authDev = 'development', //defined in .ftppass
     remotePlatform = 'windows',
     browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/';
 
+var docsSrc  = 'docs/',
+    docsDest = docsSrc + 'build/';
+
 var SCREEN_RESOLUTIONS = [
     '320x480',
     '320x568',
@@ -238,6 +241,19 @@ gulp.task('app:build:styles:src:critical', function(){
     });
 });
 
+gulp.task('__app:compose:documentation', function(){
+    $.apidoc.exec({
+        src:  docsSrc,
+        dest: docsDest
+    });
+
+    console.log('Documentation can be found at: ' + currentLevel + docsDest);
+});
+
+gulp.task('app:build:documentation', function(){
+    runSequence('__app:clean:documentation', '__app:compose:documentation');
+});
+
 /*------------------------------------------------*/
 
 gulp.task('__app:clean:styles', function(cb){
@@ -250,6 +266,10 @@ gulp.task('__app:clean:scripts', function(cb){
 
 gulp.task('__app:clean:images', function(cb){
     del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true}, cb);
+});
+
+gulp.task('__app:clean:documentation', function(cb){
+    del([docsDest + '**/*.*', '!' + docsDest + '.keep'], {'force': true}, cb);
 });
 
 gulp.task('__app:process:src:tabs', function(){

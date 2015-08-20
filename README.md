@@ -163,18 +163,20 @@ $ gulp app:upload:dist --production
 * [View workflow diagram](https://www.lucidchart.com/documents/embeddedchart/4ff39dc5-3ddf-418a-a96b-f5e1460dd77e)
 
 ```sh
-$ gulp app:lint:src:csslint
-$ gulp app:lint:src:jshint
+$ gulp app:build:documentation
+$ gulp app:build:styles:src:critical
+$ gulp app:generate:dist:pagespeed
+$ gulp app:generate:dist:screenshots
 $ gulp app:generate:src:stats
-$ gulp app:lint:src:jscs
 $ gulp app:lint:dist:htmlhint
+$ gulp app:lint:dist:phpcpd
 $ gulp app:lint:dist:phpcs
 $ gulp app:lint:dist:phpmd
-$ gulp app:lint:dist:phpcpd
-$ gulp app:generate:dist:screenshots
-$ gulp app:generate:dist:pagespeed
+$ gulp app:lint:src:csslint
+$ gulp app:lint:src:jscs
+$ gulp app:lint:src:jshint
+$ gulp app:process:path --folder public_html
 $ gulp bower:install
-$ gulp app:build:styles:src:critical
 ```
 
 * You can also create separate task files within the `/tasks` directory (e.g. `/tasks/example.js`) which will be read in automatically and available to run on the command line

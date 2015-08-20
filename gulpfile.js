@@ -741,4 +741,3 @@ gulp.task('app:upload:dist', function(callback){
 
 //Load custom tasks from the `tasks` directory (if it exists)
 try { require(node_modules + 'require-dir')('tasks'); } catch (error) { onError(error); }
-try { require(node_modules + 'require-dir')('tasks'); } catch (error) { onError(error); }

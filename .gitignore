@@ -42,6 +42,7 @@ public_html/**
 !*.php
 app/**
 bower_components/**
+docs/build/**
 secure/**
 vendor/**
 tasks/**

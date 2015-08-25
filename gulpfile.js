@@ -58,7 +58,8 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     eol = require(node_modules + 'gulp-eol'),
     sass = require(node_modules + 'gulp-sass'),
     bower = require(node_modules + 'bower'),
-    rename = require(node_modules + 'gulp-rename')
+    rename = require(node_modules + 'gulp-rename'),
+    apidoc = require(node_modules + 'gulp-apidoc')
 ;
 
 var webBrowser = 'chrome',
@@ -128,6 +129,9 @@ var authDev = 'development', //defined in .ftppass
     remotePath = 'public_html/' + remoteProjectBaseDir,
     remotePlatform = 'windows',
     browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/';
+
+var docsSrc  = 'docs/',
+    docsDest = docsSrc + 'build/';
 
 var SCREEN_RESOLUTIONS = [
     '320x480',
@@ -288,6 +292,19 @@ gulp.task('app:build:styles:src:critical', function(){
     });
 });
 
+gulp.task('__app:compose:documentation', function(){
+    apidoc.exec({
+        src:  docsSrc,
+        dest: docsDest
+    });
+
+    console.log('Documentation can be found at: ' + currentLevel + docsDest);
+});
+
+gulp.task('app:build:documentation', function(){
+    runSequence('__app:clean:documentation', '__app:compose:documentation');
+});
+
 /*------------------------------------------------*/
 
 gulp.task('__app:clean:styles', function(cb){
@@ -300,6 +317,10 @@ gulp.task('__app:clean:scripts', function(cb){
 
 gulp.task('__app:clean:images', function(cb){
     del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true}, cb);
+});
+
+gulp.task('__app:clean:documentation', function(cb){
+    del([docsDest + '**/*.*', '!' + docsDest + '.keep'], {'force': true}, cb);
 });
 
 gulp.task('__app:process:src:tabs', function(){
@@ -318,6 +339,31 @@ gulp.task('__app:process:src:eol', function(){
 
 gulp.task('__app:clean:all', function(callback){
     return runSequence(['__app:process:src:tabs', '__app:process:src:eol'], '__app:clean:styles', '__app:clean:scripts', '__app:clean:images', callback);
+});
+
+gulp.task('app:process:path', function(){
+    var isFolder = (argv.folder) ? true : false;
+    //gulp app:process:path --folder app/controllers
+    //gulp app:process:path --folder app/models
+    //gulp app:process:path --folder app/views
+
+    if(isFolder){
+        var folder = argv.folder;
+
+        if(fs.existsSync(folder)){
+            console.log('Processed folder: ' + folder);
+
+            return gulp.src(folder + '/**/*.{' + pageFileTypes + '}')
+                .pipe(soften(4)) //4 spaces
+                .pipe(eol('\r\n', false))
+                .pipe(gulp.dest(folder + '/'))
+            ;
+        } else {
+            return onError('Error: Folder not found at ' + folder);
+        }
+    } else {
+        return onError('Error: --folder flag not set');
+    }
 });
 
 /*------------------------------------------------*/
@@ -402,6 +448,9 @@ gulp.task('app:build:scripts:src:local', function(){
         .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
+            '**/**/angular.js',
+            '**/**/angular-resource.js',
+            '**/**/ui-bootstrap.js',
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
@@ -474,9 +523,13 @@ gulp.task('app:build:scripts:src:remote', function(){
         .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
+            '**/**/angular.js',
+            '**/**/angular-resource.js',
+            '**/**/ui-bootstrap.js',
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
+            '**/**/URI.js',
             '**/**/*.js'
         ]))
         .pipe(concat(concatJsFile))
@@ -553,9 +606,13 @@ gulp.task('app:prepare:scripts:src:remote', function(){
         .pipe(order([
             '**/**/jquery.js',
             '**/**/jquery.ui.js',
+            '**/**/angular.js',
+            '**/**/angular-resource.js',
+            '**/**/ui-bootstrap.js',
             '**/**/custom.js',
             '**/**/modernizr.js',
             '**/**/jquery.fancybox.js',
+            '**/**/URI.js',
             '**/**/*.js'
         ]))
         .pipe(concat(concatJsFile))

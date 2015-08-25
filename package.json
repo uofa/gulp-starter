@@ -5,6 +5,7 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
+    "beepbeep": "*",
     "bower": "*",
     "browser-sync": "*",
     "del": "*",
@@ -27,6 +28,7 @@
     "gulp-order": "*",
     "gulp-plumber": "*",
     "gulp-removelogs": "*",
+    "gulp-rename": "*",
     "gulp-sass": "*",
     "gulp-sftp": "*",
     "gulp-shell": "*",

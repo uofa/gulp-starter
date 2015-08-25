@@ -21,7 +21,8 @@ var browserSync = require('browser-sync'),
     fs = require('fs'), //part of Node
     penthouse = require('penthouse'),
     del = require('del'),
-    bower = require('bower')
+    bower = require('bower'),
+    beep = require('beepbeep')
 ;
 
 var webBrowser = 'chrome',
@@ -125,11 +126,25 @@ var currentFile = ''; //used with tap plugin to know what file is currently with
 
 /*------------------------------------------------*/
 
+var onWarning = function(error){
+    var displayError = $.util.colors.yellow(error);
+    handleError.call(this, 'warning', error, displayError);
+}
+
 var onError = function(error){
-    //cause the terminal to play a beep sound to get your attention should an error occur
-    $.util.beep();
-    console.error(error);
-};
+    this.emit('end');
+    var displayError = $.util.colors.red(error);
+    handleError.call(this, 'error', error, displayError);
+}
+
+function handleError(level, error, displayError){
+    $.util.log(displayError);
+
+    if(level == 'error'){
+        beep();
+        process.exit(1);
+    }
+}
 
 /*------------------------------------------------*/
 
@@ -222,7 +237,7 @@ gulp.task('bower:install', function(){
         .install([/* custom libs */], {save: true}, {/* custom config */})
         .on('end', function(installed){
             if(Object.keys(installed).length !== 0)
-                onError(Object.keys(installed));
+                onWarning(Object.keys(installed));
         });
 });
 
@@ -236,7 +251,7 @@ gulp.task('app:build:styles:src:critical', function(){
         if(error){
             onError(error);
         } else {
-            console.log(criticalCss);
+            onWarning(criticalCss);
         }
     });
 });
@@ -261,7 +276,7 @@ gulp.task('__app:clean:styles', function(cb){
 });
 
 gulp.task('__app:clean:scripts', function(cb){
-    del([dist + '**/*.js'], {'force': true}, cb);
+    del([dist + '**/*.js', distScripts + '/tinymce'], {'force': true}, cb);
 });
 
 gulp.task('__app:clean:images', function(cb){
@@ -349,7 +364,7 @@ function calculateAdjustedUrl(url){
         var filemtime = Math.round(stats.mtime.getTime() / 1000); //convert to Unix timestamp
         output = output.replaceLast('.', '.' + filemtime + '.');
     } else {
-        onError('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
+        onWarning('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
     }
 
     return output;
@@ -366,11 +381,11 @@ gulp.task('app:build:styles:src:local', function(){
         .pipe($.tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe($.if('*.css', $.cssUrlAdjuster({
+        .pipe($.cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
-        })))
+        }))
         .pipe($.if('*.css', $.csso()))
         .pipe($.if('*.scss', $.sass({precision: 10}).on('error', onError)))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
@@ -388,7 +403,7 @@ gulp.task('app:build:scripts:src:local', function(){
         .pipe($.plumber({
             errorHandler: onError
         }))
-        .pipe($.if('*.js', $.uglify({
+        .pipe($.if(!argv.skipMinify && '*.js', $.uglify({
             mangle: false,
             output: {
                 beautify: true
@@ -431,11 +446,11 @@ gulp.task('app:build:styles:src:remote', function(){
         .pipe($.tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe($.if('*.css', $.cssUrlAdjuster({
+        .pipe($.cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
-        })))
+        }))
         .pipe($.if('*.css', $.csso()))
         .pipe($.if('*.scss', $.sass({precision: 10}).on('error', onError)))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
@@ -457,7 +472,7 @@ gulp.task('app:build:scripts:src:remote', function(){
             $.removelogs()
         ))
         .pipe($.if(
-            !argv.production && '*.js',
+            !argv.skipMinify && !argv.production && '*.js',
             $.uglify({
                 mangle: false,
                 output: {
@@ -466,7 +481,7 @@ gulp.task('app:build:scripts:src:remote', function(){
             })
         ))
         .pipe($.if(
-            argv.production && '*.js', // --production flag
+            !argv.skipMinify && argv.production && '*.js', // --production flag
             $.uglify({preserveComments: 'some'})
         ))
         .pipe($.order([
@@ -496,11 +511,11 @@ gulp.task('app:prepare:styles:src:remote', function(){
         .pipe($.tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe($.if('*.css', $.cssUrlAdjuster({
+        .pipe($.cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
-        })))
+        }))
         .pipe($.if('*.css', $.csso()))
         .pipe($.if('*.scss', $.sass({precision: 10}).on('error', onError)))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
@@ -540,7 +555,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
             $.removelogs()
         ))
         .pipe($.if(
-            !argv.production && '*.js',
+            !argv.skipMinify && !argv.production && '*.js',
             $.uglify({
                 mangle: false,
                 output: {
@@ -549,7 +564,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
             })
         ))
         .pipe($.if(
-            argv.production && '*.js', // --production flag
+            !argv.skipMinify && argv.production && '*.js', // --production flag
             $.uglify({preserveComments: 'some'})
         ))
         .pipe($.order([
@@ -629,6 +644,14 @@ gulp.task('app:build:images:src', function(){
 });
 
 gulp.task('__app:copy:files', function(){
+    //Manual copy for theme files etc.
+    gulp.src([bowerComponents + '/' + 'tinymce/**/*'], {base: currentLevel})
+        .pipe($.rename(function(path){
+            //Remove directory from destination path
+            path.dirname = path.dirname.replace(bowerComponents, '');
+        }))
+        .pipe(gulp.dest(distScripts));
+
     return gulp.src([src + '.{' + otherFileTypes + '}', src + '**/*.{' + otherFileTypes + '}'])
         .pipe(gulp.dest(dist))
     ;

@@ -94,8 +94,10 @@ var authDev = 'development', //defined in .ftppass
     remotePlatform = 'windows',
     browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/';
 
-var docsSrc  = 'docs/',
-    docsDest = docsSrc + 'build/';
+var docsBuildFile = 'compose.js',
+    docsSrc  = 'docs/',
+    docsDest = docsSrc + 'build/',
+    docsTemplate = docsSrc + 'template/';
 
 var SCREEN_RESOLUTIONS = [
     '320x480',
@@ -258,8 +260,10 @@ gulp.task('app:build:styles:src:critical', function(){
 
 gulp.task('__app:compose:documentation', function(){
     $.apidoc.exec({
+        includeFilters: [docsBuildFile],
         src:  docsSrc,
-        dest: docsDest
+        dest: docsDest,
+        template: docsTemplate
     });
 
     console.log('Documentation can be found at: ' + currentLevel + docsDest);

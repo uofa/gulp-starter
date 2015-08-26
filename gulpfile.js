@@ -381,11 +381,11 @@ gulp.task('app:build:styles:src:local', function(){
         .pipe($.tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe($.cssUrlAdjuster({
+        .pipe($.if('*.css', $.cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
-        }))
+        })))
         .pipe($.if('*.css', $.csso()))
         .pipe($.if('*.scss', $.sass({precision: 10}).on('error', onError)))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
@@ -446,11 +446,11 @@ gulp.task('app:build:styles:src:remote', function(){
         .pipe($.tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe($.cssUrlAdjuster({
+        .pipe($.if('*.css', $.cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
-        }))
+        })))
         .pipe($.if('*.css', $.csso()))
         .pipe($.if('*.scss', $.sass({precision: 10}).on('error', onError)))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
@@ -511,11 +511,11 @@ gulp.task('app:prepare:styles:src:remote', function(){
         .pipe($.tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe($.cssUrlAdjuster({
+        .pipe($.if('*.css', $.cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
-        }))
+        })))
         .pipe($.if('*.css', $.csso()))
         .pipe($.if('*.scss', $.sass({precision: 10}).on('error', onError)))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))

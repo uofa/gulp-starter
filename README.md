@@ -76,12 +76,11 @@
   * You may need to enable OpenSSL in your PHP installation by going directly to `./wamp/bin/php/php-5.4.x/php.ini` and enabling the OpenSSL extension
 * Double-click `composer-installs.bat` to run the installation
   * The prompt window will close itself when setup has finished successfully
-* Add `C:\Users\<username>\AppData\Roaming\Composer\vendor\bin` to the `PATH` **System Variable**
-    * Start > Run > `control sysdm.cpl,,3`
-    * Remember to change `<username>`
+* Add `%USERPROFILE%\AppData\Roaming\Composer\vendor\bin` to the `PATH` **System Variable**
+    * Start → Run → `control sysdm.cpl,,3`
 * To check your installation is configured properly, open a terminal and type in `composer --version`
   * This should return a long hash similar to `a309e1d89ded6919935a842faeaed8e888fbfe37`
-* Copy the directory `./gulp-starter/composer_plugins/vendor/squizlabs/`and paste at `C:\Users\%USERNAME%\AppData\Roaming\Composer\vendor\`
+* Copy the directory `./gulp-starter/composer_plugins/vendor/squizlabs/`and paste at `%USERPROFILE%\AppData\Roaming\Composer\vendor\`
   * Click 'Yes' when the 'Confirm Folder Replace' dialog appears
   * Click 'Copy and Replace' when the 'Copy File' dialog appears
 
@@ -96,11 +95,11 @@
 
 ### Modify `gulp` to run globally
 
-* Start > Run > `C:\Users\%USERNAME%\AppData\Roaming\npm\node_modules\gulp\bin\gulp.js`
+* Start → Run → `%USERPROFILE%\AppData\Roaming\npm\node_modules\gulp\bin\gulp.js`
    * @ Line ~84
 ```
 if (!env.modulePath) {
-    env.modulePath = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/npm/node_modules/gulp/';
+    env.modulePath = process.env.USERPROFILE + '/AppData/Roaming/npm/node_modules/gulp/';
     env.modulePackage.version = cliPackage.version;
 
     /*

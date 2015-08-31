@@ -3,7 +3,7 @@
 var isWin = /^win/.test(process.platform);
 
 if(isWin){
-    var base = 'C:/Users/' + process.env.USERNAME + '/AppData/Roaming/',
+    var base = process.env.USERPROFILE + '/AppData/Roaming/',
         node_modules = base + 'npm/node_modules/',
         composer_bin = base + 'Composer/vendor/bin/',
         composer_plugins = 'composer_plugins/';

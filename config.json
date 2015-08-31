@@ -28,5 +28,17 @@
   "filenameSettings" : {
     "concatJsFile" : "all.min.js",
     "_comments" : "see 'File Configuration' section in repo README.md for more info"
+  },
+  "scriptSettings" : {
+    "concatenation" : {
+      "order" : {
+        "1": "jquery.ui.js",
+        "2": "custom.js",
+        "3": "modernizr.js",
+        "4": "jquery.fancybox.js",
+        "5": "URI.js"
+      }
+    },
+    "_comments" : "Configuration to use when building the scripts"
   }
 }

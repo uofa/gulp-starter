@@ -381,6 +381,19 @@ String.prototype.replaceLast = function(find, replace){
     return this.toString();
 };
 
+function jsonToArray(jsonArray){
+    return Object.keys(jsonArray).map(function(k){ return jsonArray[k] });
+}
+
+function buildScriptsConcatenationOrder(scriptsConcatenationOrder){
+    scriptsConcatenationOrder = jsonToArray(scriptsConcatenationOrder);
+    scriptsConcatenationOrder.unshift('jquery.js');
+    scriptsConcatenationOrder.push('*.js');
+    scriptsConcatenationOrder = scriptsConcatenationOrder.map(function(val){ return '**/**/' + val });
+
+    return scriptsConcatenationOrder;
+}
+
 function calculateAdjustedUrl(url){
     var output = ''; //var to hold result
 
@@ -439,6 +452,8 @@ gulp.task('app:build:scripts:src:local', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
 
+    var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
+
     return gulp.src(files)
         .pipe(plumber({
             errorHandler: onError
@@ -449,18 +464,7 @@ gulp.task('app:build:scripts:src:local', function(){
                 beautify: true
             }
         })))
-        .pipe(order([
-            '**/**/jquery.js',
-            '**/**/jquery.ui.js',
-            '**/**/angular.js',
-            '**/**/angular-resource.js',
-            '**/**/ui-bootstrap.js',
-            '**/**/custom.js',
-            '**/**/modernizr.js',
-            '**/**/jquery.fancybox.js',
-            '**/**/URI.js',
-            '**/**/*.js'
-        ]))
+        .pipe(order(scriptsConcatenationOrder))
         .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(reload({stream: true, once: true}))
@@ -503,6 +507,8 @@ gulp.task('app:build:scripts:src:remote', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
 
+    var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
+
     return gulp.src(files)
         .pipe(plumber({
             errorHandler: onError
@@ -524,18 +530,7 @@ gulp.task('app:build:scripts:src:remote', function(){
             !argv.skipMinify && argv.production && '*.js', // --production flag
             uglify({preserveComments: 'some'})
         ))
-        .pipe(order([
-            '**/**/jquery.js',
-            '**/**/jquery.ui.js',
-            '**/**/angular.js',
-            '**/**/angular-resource.js',
-            '**/**/ui-bootstrap.js',
-            '**/**/custom.js',
-            '**/**/modernizr.js',
-            '**/**/jquery.fancybox.js',
-            '**/**/URI.js',
-            '**/**/*.js'
-        ]))
+        .pipe(order(scriptsConcatenationOrder))
         .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(size({title: 'app:build:scripts:src:remote'}))
@@ -586,6 +581,8 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
 
+    var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
+
     return gulp.src(files)
         .pipe(plumber({
             errorHandler: onError
@@ -607,18 +604,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
             !argv.skipMinify && argv.production && '*.js', // --production flag
             uglify({preserveComments: 'some'})
         ))
-        .pipe(order([
-            '**/**/jquery.js',
-            '**/**/jquery.ui.js',
-            '**/**/angular.js',
-            '**/**/angular-resource.js',
-            '**/**/ui-bootstrap.js',
-            '**/**/custom.js',
-            '**/**/modernizr.js',
-            '**/**/jquery.fancybox.js',
-            '**/**/URI.js',
-            '**/**/*.js'
-        ]))
+        .pipe(order(scriptsConcatenationOrder))
         .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(size({title: 'app:prepare:scripts:src:remote'}))

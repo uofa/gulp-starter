@@ -260,7 +260,7 @@ gulp.task('app:build:styles:src:critical', function(){
     });
 });
 
-gulp.task('__app:compose:documentation', function(){
+gulp.task('app:build:documentation', function(){
     $.apidoc.exec({
         includeFilters: [docsBuildFile],
         src:  docsSrc,
@@ -269,10 +269,6 @@ gulp.task('__app:compose:documentation', function(){
     });
 
     console.log('Documentation can be found at: ' + currentLevel + docsDest);
-});
-
-gulp.task('app:build:documentation', function(){
-    runSequence('__app:clean:documentation', '__app:compose:documentation');
 });
 
 /*------------------------------------------------*/
@@ -287,10 +283,6 @@ gulp.task('__app:clean:scripts', function(){
 
 gulp.task('__app:clean:images', function(){
     del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true});
-});
-
-gulp.task('__app:clean:documentation', function(){
-    del([docsDest + '**/*.*', '!' + docsDest + '.keep'], {'force': true});
 });
 
 gulp.task('__app:process:src:tabs', function(){

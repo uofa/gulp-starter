@@ -311,20 +311,20 @@ gulp.task('app:build:documentation', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('__app:clean:styles', function(cb){
-    del([dist + '**/*.css'], {'force': true}, cb);
+gulp.task('__app:clean:styles', function(){
+    del([dist + '**/*.css'], {'force': true});
 });
 
-gulp.task('__app:clean:scripts', function(cb){
-    del([dist + '**/*.js', distScripts + '/tinymce'], {'force': true}, cb);
+gulp.task('__app:clean:scripts', function(){
+    del([dist + '**/*.js', distScripts + '/tinymce'], {'force': true});
 });
 
-gulp.task('__app:clean:images', function(cb){
-    del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true}, cb);
+gulp.task('__app:clean:images', function(){
+    del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true});
 });
 
-gulp.task('__app:clean:documentation', function(cb){
-    del([docsDest + '**/*.*', '!' + docsDest + '.keep'], {'force': true}, cb);
+gulp.task('__app:clean:documentation', function(){
+    del([docsDest + '**/*.*', '!' + docsDest + '.keep'], {'force': true});
 });
 
 gulp.task('__app:process:src:tabs', function(){

@@ -261,13 +261,15 @@ gulp.task('app:generate:dist:screenshots', function(){
     });
 });
 
-gulp.task('app:generate:dist:pagespeed', function(cb){
-    //You can use a Google Developer API key: http://goo.gl/RkN0vE
-    pagespeed.output(remoteBaseDevUrl, {
-        //key: 'YOUR_API_KEY',
+gulp.task('app:generate:dist:pagespeed', function(){
+    return pagespeed(remoteBaseDevUrl, {
+        nokey: 'true',
         strategy: 'mobile',
         threshold: 65
-    }, cb);
+    }, function(err, data){
+        console.log(data.score);
+        console.log(data.pageStats);
+    });
 });
 
 gulp.task('bower:install', function(){

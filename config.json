@@ -32,13 +32,13 @@
   },
   "scriptSettings" : {
     "concatenation" : {
-      "order" : {
-        "1": "jquery.ui.js",
-        "2": "custom.js",
-        "3": "modernizr.js",
-        "4": "jquery.fancybox.js",
-        "5": "URI.js"
-      }
+      "order" : [
+        "jquery.ui.js",
+        "custom.js",
+        "modernizr.js",
+        "jquery.fancybox.js",
+        "URI.js"
+      ]
     },
     "_comments" : "Configuration to use when building scripts"
   }

@@ -375,16 +375,10 @@ String.prototype.replaceLast = function(find, replace){
     return this.toString();
 };
 
-function jsonToArray(jsonArray){
-    return Object.keys(jsonArray).map(function(k){ return jsonArray[k] });
-}
-
 function buildScriptsConcatenationOrder(scriptsConcatenationOrder){
-    scriptsConcatenationOrder = jsonToArray(scriptsConcatenationOrder);
     scriptsConcatenationOrder.unshift('jquery.js');
     scriptsConcatenationOrder.push('*.js');
     scriptsConcatenationOrder = scriptsConcatenationOrder.map(function(val){ return '**/**/' + val });
-
     return scriptsConcatenationOrder;
 }
 

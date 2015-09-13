@@ -39,6 +39,6 @@
         "URI.js"
       ]
     },
-    "_comments" : "Configuration to use when building the scripts"
+    "_comments" : "Configuration to use when building the scripts - jQuery included first by default"
   }
 }

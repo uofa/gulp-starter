@@ -664,13 +664,19 @@ gulp.task('__app:sftp:dist', function(){
 });
 
 gulp.task('app:serve:local', function(){
-    browserSync({
-        proxy: browserSyncProxyUrl,
-        notify: false,
-        logPrefix: function(){
-            return this.compile('{green:[' + localProjectBaseDir + '] ');
+    if(!argv.skipPageOpen){
+        if(argv.pageToOpen){
+            browserSyncProxyUrl += argv.pageToOpen.replace(/^\/|\/$/g, '');
         }
-    });
+
+        browserSync({
+            proxy: browserSyncProxyUrl,
+            notify: false,
+            logPrefix: function(){
+                return this.compile('{green:[' + localProjectBaseDir + '] ');
+            }
+        });
+    }
 
     gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
     gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
@@ -684,7 +690,9 @@ gulp.task('app:serve:remote', function(){
 });
 
 gulp.task('app:open:dist:remote', function(){
-    return argv.production ? open(remoteBaseProdUrl, webBrowser) : open(remoteBaseDevUrl, webBrowser);
+    if(!argv.skipPageOpen){
+        return argv.production ? open(remoteBaseProdUrl, webBrowser) : open(remoteBaseDevUrl, webBrowser);
+    }
 });
 
 /*------------------------------------------------*/

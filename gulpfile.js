@@ -341,8 +341,8 @@ String.prototype.replaceLast = function(find, replace){
 
 function buildScriptsConcatenationOrder(scriptsConcatenationOrder){
     scriptsConcatenationOrder.unshift('jquery.js');
-    scriptsConcatenationOrder.push('*.js');
     scriptsConcatenationOrder = scriptsConcatenationOrder.map(function(val){ return '**/**/' + val });
+    scriptsConcatenationOrder.push('*.js');
     return scriptsConcatenationOrder;
 }
 

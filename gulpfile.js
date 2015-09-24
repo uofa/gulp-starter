@@ -67,7 +67,7 @@ var webBrowser = 'chrome',
 
 var stylesheetFileTypeArray = ['css'],
     scriptFileTypeArray = ['js'],
-    imageFileTypeArray = ['gif', 'png'],
+    imageFileTypeArray = ['gif', 'jpg', 'png', 'svg'],
     pageFileTypeArray = ['html', 'php'],
     fontFileTypeArray = ['eot', 'svg', 'ttf', 'woff', 'woff2'],
     serverFileTypeArray = ['htaccess', 'access'];

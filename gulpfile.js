@@ -117,7 +117,7 @@ var AUTOPREFIXER_BROWSERS = [
     'ie_mob >= 10',
     'ff >= 30',
     'chrome >= 34',
-    'safari >= 7',
+    'safari >= 5', //box-shadow > -webkit-box-shadow
     'opera >= 23',
     'ios >= 7',
     'android >= 4.4',
@@ -678,15 +678,23 @@ gulp.task('app:serve:local', function(){
         });
     }
 
-    gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
-    gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
-    gulp.watch(srcJs, ['app:build:scripts:src:local']);
+    if(!argv.skipWatch){
+        gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
+        gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
+        gulp.watch(srcJs, ['app:build:scripts:src:local']);
+    } else {
+        console.log('Skipping watch task');
+    }
 });
 
 gulp.task('app:serve:remote', function(){
-    gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
-    gulp.watch([srcCss, srcSass], ['app:prepare:styles:src:remote']);
-    gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
+    if(!argv.skipWatch){
+        gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
+        gulp.watch([srcCss, srcSass], ['app:prepare:styles:src:remote']);
+        gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
+    } else {
+        console.log('Skipping `app:serve:remote`');
+    }
 });
 
 gulp.task('app:open:dist:remote', function(){
@@ -698,11 +706,11 @@ gulp.task('app:open:dist:remote', function(){
 /*------------------------------------------------*/
 
 gulp.task('app:build:local', function(callback){
-    runSequence('__app:clean:all', ['app:build:styles:src:local', 'app:build:scripts:src:local', 'app:build:images:src', '__app:copy:files'], callback);
+    runSequence('__app:clean:all', ['app:build:styles:src:local', 'app:build:scripts:src:local'], 'app:build:images:src', '__app:copy:files', callback);
 });
 
 gulp.task('app:build:remote', function(callback){
-    runSequence('__app:clean:all', ['app:build:styles:src:remote', 'app:build:scripts:src:remote', 'app:build:images:src', '__app:copy:files'], callback);
+    runSequence('__app:clean:all', ['app:build:styles:src:remote', 'app:build:scripts:src:remote'], 'app:build:images:src', '__app:copy:files', callback);
 });
 
 gulp.task('default', function(callback){

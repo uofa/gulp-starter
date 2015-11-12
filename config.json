@@ -1,4 +1,8 @@
 {
+  "gulpSettings" : {
+    "skipLocal" : "false",
+    "_comments" : "Override for running Gulp locally rather than globally"
+  },
   "projectSettings" : {
     "localProjectBaseDir" : "gulp-starter",
     "remoteProjectBaseDir" : "",

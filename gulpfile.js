@@ -1,24 +1,30 @@
 'use strict';
 
-var isWin = /^win/.test(process.platform);
-
-if(isWin){
-    var base = process.env.USERPROFILE + '/AppData/Roaming/',
-        node_modules = base + 'npm/node_modules/',
-        composer_bin = base + 'Composer/vendor/bin/',
-        composer_plugins = 'composer_plugins/';
-} else {
-    var node_modules = '/usr/lib/local/node_modules/',
-        composer_bin = '/usr/local/bin/',
-        composer_plugins = 'composer_plugins/';
-}
-
 var currentLevel = './',
     upOneLevel = '../';
 
-var gulp = require(node_modules + 'gulp'),
-    config = require(currentLevel + 'config.json');
+var config = require(currentLevel + 'config.json');
 
+var node_modules = '',
+    composer_bin = '',
+    composer_plugins = '';
+
+if(config.gulpSettings.skipLocal == 'false'){
+    var isWin = /^win/.test(process.platform);
+
+    if(isWin){
+        var base = process.env.USERPROFILE + '/AppData/Roaming/';
+        node_modules = base + 'npm/node_modules/',
+        composer_bin = base + 'Composer/vendor/bin/',
+        composer_plugins = 'composer_plugins/';
+    } else {
+        node_modules = '/usr/lib/local/node_modules/',
+        composer_bin = '/usr/local/bin/',
+        composer_plugins = 'composer_plugins/';
+    }
+}
+
+var gulp = require(node_modules + 'gulp');
 module.exports = gulp; //for Chrome plugin + gulp-devtools
 
 var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
@@ -153,7 +159,7 @@ var AUTOPREFIXER_BROWSERS = [
     'ie_mob >= 10',
     'ff >= 30',
     'chrome >= 34',
-    'safari >= 7',
+    'safari >= 5', //box-shadow > -webkit-box-shadow
     'opera >= 23',
     'ios >= 7',
     'android >= 4.4',
@@ -714,15 +720,23 @@ gulp.task('app:serve:local', function(){
         });
     }
 
-    gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
-    gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
-    gulp.watch(srcJs, ['app:build:scripts:src:local']);
+    if(!argv.skipWatch){
+        gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
+        gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
+        gulp.watch(srcJs, ['app:build:scripts:src:local']);
+    } else {
+        console.log('Skipping watch task');
+    }
 });
 
 gulp.task('app:serve:remote', function(){
-    gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
-    gulp.watch([srcCss, srcSass], ['app:prepare:styles:src:remote']);
-    gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
+    if(!argv.skipWatch){
+        gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
+        gulp.watch([srcCss, srcSass], ['app:prepare:styles:src:remote']);
+        gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
+    } else {
+        console.log('Skipping `app:serve:remote`');
+    }
 });
 
 gulp.task('app:open:dist:remote', function(){
@@ -734,11 +748,11 @@ gulp.task('app:open:dist:remote', function(){
 /*------------------------------------------------*/
 
 gulp.task('app:build:local', function(callback){
-    runSequence('__app:clean:all', ['app:build:styles:src:local', 'app:build:scripts:src:local', 'app:build:images:src', '__app:copy:files'], callback);
+    runSequence('__app:clean:all', ['app:build:styles:src:local', 'app:build:scripts:src:local'], 'app:build:images:src', '__app:copy:files', callback);
 });
 
 gulp.task('app:build:remote', function(callback){
-    runSequence('__app:clean:all', ['app:build:styles:src:remote', 'app:build:scripts:src:remote', 'app:build:images:src', '__app:copy:files'], callback);
+    runSequence('__app:clean:all', ['app:build:styles:src:remote', 'app:build:scripts:src:remote'], 'app:build:images:src', '__app:copy:files', callback);
 });
 
 gulp.task('default', function(callback){

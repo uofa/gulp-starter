@@ -379,6 +379,7 @@ function calculateAdjustedUrl(url){
 
 gulp.task('app:build:styles:src:local', function(){
     return gulp.src([srcCss, srcSass])
+        .pipe($.if(argv.verbose, $.filelog('app:build:styles:src:local')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -407,6 +408,7 @@ gulp.task('app:build:scripts:src:local', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe($.if(argv.verbose, $.filelog('app:build:scripts:src:local')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -462,6 +464,7 @@ gulp.task('app:build:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe($.if(argv.verbose, $.filelog('app:build:scripts:src:remote')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -491,6 +494,7 @@ gulp.task('app:build:scripts:src:remote', function(){
 
 gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass], {base: src})
+        .pipe($.if(argv.verbose, $.filelog('app:prepare:styles:src:remote')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -536,6 +540,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe($.if(argv.verbose, $.filelog('app:prepare:scripts:src:remote')))
         .pipe($.plumber({
             errorHandler: onError
         }))

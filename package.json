@@ -28,6 +28,7 @@
     "gulp-order": "*",
     "gulp-plumber": "*",
     "gulp-removelogs": "*",
+    "gulp-filelog": "*",
     "gulp-rename": "*",
     "gulp-sass": "*",
     "gulp-sftp": "*",

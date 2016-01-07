@@ -382,7 +382,6 @@ gulp.task('app:build:styles:src:local', function(){
         .pipe($.plumber({
             errorHandler: onError
         }))
-        .pipe($.changed(dist)) //must be dist
         .pipe($.tap(function(file, t){
             currentFile = file.path; //update global var
         }))

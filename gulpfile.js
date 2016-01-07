@@ -617,6 +617,7 @@ gulp.task('__app:reload:pages:remote', function(){
 
 gulp.task('app:build:images:src', function(){
     return gulp.src(srcImages)
+        .pipe($.if(argv.verbose, $.filelog('app:build:images:src')))
         .pipe($.imagemin({
             optimizationLevel: 5, //0-7
             progressive: true, //jpg
@@ -629,6 +630,7 @@ gulp.task('app:build:images:src', function(){
 gulp.task('__app:copy:files', function(){
     //Manual copy for theme files etc.
     gulp.src([bowerComponents + '/' + 'tinymce/**/*'], {base: currentLevel})
+        .pipe($.if(argv.verbose, $.filelog('__app:copy:files')))
         .pipe($.rename(function(path){
             //Remove directory from destination path
             path.dirname = path.dirname.replace(bowerComponents, '');

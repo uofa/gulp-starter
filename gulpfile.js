@@ -273,16 +273,11 @@ gulp.task('app:build:documentation', function(){
 
 /*------------------------------------------------*/
 
-gulp.task('__app:clean:styles', function(){
-    del([dist + '**/*.css'], {'force': true});
-});
-
-gulp.task('__app:clean:scripts', function(){
-    del([dist + '**/*.js', distScripts + '/tinymce'], {'force': true});
-});
-
-gulp.task('__app:clean:images', function(){
-    del([dist + '**/*.{' + imageFileTypes + '}'], {'force': true});
+gulp.task('__app:clean:files', function(){
+    del([dist + '**/*.css',
+         dist + '**/*.{' + imageFileTypes + '}',
+         dist + '**/*.js',
+         distScripts + '/tinymce'], {'force': true});
 });
 
 gulp.task('__app:process:src:tabs', function(){
@@ -300,7 +295,7 @@ gulp.task('__app:process:src:eol', function(){
 });
 
 gulp.task('__app:clean:all', function(callback){
-    return runSequence(['__app:process:src:tabs', '__app:process:src:eol'], '__app:clean:styles', '__app:clean:scripts', '__app:clean:images', callback);
+    return runSequence('__app:clean:files', '__app:process:src:tabs', '__app:process:src:eol', callback);
 });
 
 gulp.task('app:process:path', function(){

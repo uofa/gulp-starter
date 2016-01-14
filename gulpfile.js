@@ -65,7 +65,8 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     sass = require(node_modules + 'gulp-sass'),
     bower = require(node_modules + 'bower'),
     rename = require(node_modules + 'gulp-rename'),
-    apidoc = require(node_modules + 'gulp-apidoc')
+    apidoc = require(node_modules + 'gulp-apidoc'),
+    filelog = require(node_modules + 'gulp-filelog')
 ;
 
 var webBrowser = 'chrome',
@@ -416,6 +417,7 @@ function calculateAdjustedUrl(url){
 
 gulp.task('app:build:styles:src:local', function(){
     return gulp.src([srcCss, srcSass])
+        .pipe(iff(argv.verbose, filelog('app:build:styles:src:local')))
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -444,6 +446,7 @@ gulp.task('app:build:scripts:src:local', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe(iff(argv.verbose, filelog('app:build:scripts:src:local')))
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -499,6 +502,7 @@ gulp.task('app:build:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe(iff(argv.verbose, filelog('app:build:scripts:src:remote')))
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -528,6 +532,7 @@ gulp.task('app:build:scripts:src:remote', function(){
 
 gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass], {base: src})
+        .pipe(iff(argv.verbose, filelog('app:prepare:styles:src:remote')))
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -573,6 +578,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe(iff(argv.verbose, filelog('app:prepare:scripts:src:remote')))
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -649,6 +655,7 @@ gulp.task('__app:reload:pages:remote', function(){
 
 gulp.task('app:build:images:src', function(){
     return gulp.src(srcImages)
+        .pipe(iff(argv.verbose, filelog('app:build:images:src')))
         .pipe(imagemin({
             optimizationLevel: 5, //0-7
             progressive: true, //jpg
@@ -661,6 +668,7 @@ gulp.task('app:build:images:src', function(){
 gulp.task('__app:copy:files', function(){
     //Manual copy for theme files etc.
     gulp.src([bowerComponents + '/' + 'tinymce/**/*'], {base: currentLevel})
+        .pipe(iff(argv.verbose, filelog('__app:copy:files')))
         .pipe(rename(function(path){
             //Remove directory from destination path
             path.dirname = path.dirname.replace(bowerComponents, '');

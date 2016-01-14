@@ -379,6 +379,7 @@ function calculateAdjustedUrl(url){
 
 gulp.task('app:build:styles:src:local', function(){
     return gulp.src([srcCss, srcSass])
+        .pipe($.if(argv.verbose, $.filelog('app:build:styles:src:local')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -407,6 +408,7 @@ gulp.task('app:build:scripts:src:local', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe($.if(argv.verbose, $.filelog('app:build:scripts:src:local')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -462,6 +464,7 @@ gulp.task('app:build:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe($.if(argv.verbose, $.filelog('app:build:scripts:src:remote')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -491,6 +494,7 @@ gulp.task('app:build:scripts:src:remote', function(){
 
 gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass], {base: src})
+        .pipe($.if(argv.verbose, $.filelog('app:prepare:styles:src:remote')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -536,6 +540,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
+        .pipe($.if(argv.verbose, $.filelog('app:prepare:scripts:src:remote')))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -612,6 +617,7 @@ gulp.task('__app:reload:pages:remote', function(){
 
 gulp.task('app:build:images:src', function(){
     return gulp.src(srcImages)
+        .pipe($.if(argv.verbose, $.filelog('app:build:images:src')))
         .pipe($.imagemin({
             optimizationLevel: 5, //0-7
             progressive: true, //jpg
@@ -624,6 +630,7 @@ gulp.task('app:build:images:src', function(){
 gulp.task('__app:copy:files', function(){
     //Manual copy for theme files etc.
     gulp.src([bowerComponents + '/' + 'tinymce/**/*'], {base: currentLevel})
+        .pipe($.if(argv.verbose, $.filelog('__app:copy:files')))
         .pipe($.rename(function(path){
             //Remove directory from destination path
             path.dirname = path.dirname.replace(bowerComponents, '');

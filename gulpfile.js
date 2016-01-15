@@ -458,12 +458,17 @@ gulp.task('app:build:scripts:src:local', function(){
         .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe(cond(!argv.skipMinify && '*.js', uglify({
-            mangle: false,
-            output: {
-                beautify: true
-            }
-        })))
+        .pipe(cond(!argv.skipMinify && '*.js',
+            cond(argv.skipBeautify,
+                uglify(),
+                uglify({
+                    mangle: false,
+                    output: {
+                        beautify: true
+                    }
+                })
+            )
+        ))
         .pipe(order(scriptsConcatenationOrder))
         .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
@@ -522,14 +527,16 @@ gulp.task('app:build:scripts:src:remote', function(){
             argv.production, // --production flag
             removelogs()
         ))
-        .pipe(cond(
-            !argv.skipMinify && !argv.production && '*.js',
-            uglify({
-                mangle: false,
-                output: {
-                    beautify: true
-                }
-            })
+        .pipe(cond(!argv.skipMinify && !argv.production && '*.js',
+            cond(argv.skipBeautify,
+                uglify(),
+                uglify({
+                    mangle: false,
+                    output: {
+                        beautify: true
+                    }
+                })
+            )
         ))
         .pipe(cond(
             !argv.skipMinify && argv.production && '*.js', // --production flag
@@ -598,14 +605,16 @@ gulp.task('app:prepare:scripts:src:remote', function(){
             argv.production, // --production flag
             removelogs()
         ))
-        .pipe(cond(
-            !argv.skipMinify && !argv.production && '*.js',
-            uglify({
-                mangle: false,
-                output: {
-                    beautify: true
-                }
-            })
+        .pipe(cond(!argv.skipMinify && !argv.production && '*.js',
+            cond(argv.skipBeautify,
+                uglify(),
+                uglify({
+                    mangle: false,
+                    output: {
+                        beautify: true
+                    }
+                })
+            )
         ))
         .pipe(cond(
             !argv.skipMinify && argv.production && '*.js', // --production flag

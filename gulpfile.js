@@ -53,7 +53,6 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     runSequence = require(node_modules + 'run-sequence'),
     order = require(node_modules + 'gulp-order'),
     concat = require(node_modules + 'gulp-concat'),
-    iff = require(node_modules + 'gulp-if'),
     argv = require(node_modules + 'yargs').argv,
     Pageres = require(node_modules + 'pageres'),
     mainBowerFiles = require(node_modules + 'main-bower-files'),
@@ -66,7 +65,8 @@ var autoprefixer = require(node_modules + 'gulp-autoprefixer'),
     bower = require(node_modules + 'bower'),
     rename = require(node_modules + 'gulp-rename'),
     apidoc = require(node_modules + 'gulp-apidoc'),
-    filelog = require(node_modules + 'gulp-filelog')
+    debug = require(node_modules + 'gulp-debug'),
+    cond = require(node_modules + 'gulp-cond')
 ;
 
 var webBrowser = 'chrome',
@@ -420,7 +420,7 @@ function calculateAdjustedUrl(url){
 
 gulp.task('app:build:styles:src:local', function(){
     return gulp.src([srcCss, srcSass])
-        .pipe(iff(argv.verbose, filelog('app:build:styles:src:local')))
+        .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:build:styles:src:local'})))
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -428,13 +428,13 @@ gulp.task('app:build:styles:src:local', function(){
         .pipe(tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe(iff('*.css', cssUrlAdjuster({
+        .pipe(cond('*.css', cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
         })))
-        .pipe(iff('*.css', csso()))
-        .pipe(iff('*.scss', sass({precision: 10}).on('error', onError)))
+        .pipe(cond('*.css', csso()))
+        .pipe(cond('*.scss', sass({precision: 10}).on('error', onError)))
         .pipe(autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(reload({stream: true}))
@@ -454,11 +454,11 @@ gulp.task('app:build:scripts:src:local', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe(iff(argv.verbose, filelog('app:build:scripts:src:local')))
+        .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:build:scripts:src:local'})))
         .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe(iff(!argv.skipMinify && '*.js', uglify({
+        .pipe(cond(!argv.skipMinify && '*.js', uglify({
             mangle: false,
             output: {
                 beautify: true
@@ -490,13 +490,13 @@ gulp.task('app:build:styles:src:remote', function(){
         .pipe(tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe(iff('*.css', cssUrlAdjuster({
+        .pipe(cond('*.css', cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
         })))
-        .pipe(iff('*.css', csso()))
-        .pipe(iff('*.scss', sass({precision: 10}).on('error', onError)))
+        .pipe(cond('*.css', csso()))
+        .pipe(cond('*.scss', sass({precision: 10}).on('error', onError)))
         .pipe(autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(size({title: 'app:build:styles:src:remote'}))
@@ -514,15 +514,15 @@ gulp.task('app:build:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe(iff(argv.verbose, filelog('app:build:scripts:src:remote')))
+        .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:build:scripts:src:remote'})))
         .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe(iff(
+        .pipe(cond(
             argv.production, // --production flag
             removelogs()
         ))
-        .pipe(iff(
+        .pipe(cond(
             !argv.skipMinify && !argv.production && '*.js',
             uglify({
                 mangle: false,
@@ -531,7 +531,7 @@ gulp.task('app:build:scripts:src:remote', function(){
                 }
             })
         ))
-        .pipe(iff(
+        .pipe(cond(
             !argv.skipMinify && argv.production && '*.js', // --production flag
             uglify({preserveComments: 'some'})
         ))
@@ -544,7 +544,7 @@ gulp.task('app:build:scripts:src:remote', function(){
 
 gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass], {base: src})
-        .pipe(iff(argv.verbose, filelog('app:prepare:styles:src:remote')))
+        .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:prepare:styles:src:remote'})))
         .pipe(plumber({
             errorHandler: onError
         }))
@@ -552,13 +552,13 @@ gulp.task('app:prepare:styles:src:remote', function(){
         .pipe(tap(function(file, t){
             currentFile = file.path; //update global var
         }))
-        .pipe(iff('*.css', cssUrlAdjuster({
+        .pipe(cond('*.css', cssUrlAdjuster({
             append: function(url){
                 return calculateAdjustedUrl(url);
             }
         })))
-        .pipe(iff('*.css', csso()))
-        .pipe(iff('*.scss', sass({precision: 10}).on('error', onError)))
+        .pipe(cond('*.css', csso()))
+        .pipe(cond('*.scss', sass({precision: 10}).on('error', onError)))
         .pipe(autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest(dist))
         .pipe(size({title: 'app:prepare:styles:src:remote'}))
@@ -571,7 +571,7 @@ gulp.task('app:prepare:styles:src:remote', function(){
                 remotePlatform: remotePlatform
             })
         ))
-        .pipe(iff(
+        .pipe(cond(
             argv.production, // --production flag
             sftp({
                 host: sftpHost,
@@ -590,15 +590,15 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe(iff(argv.verbose, filelog('app:prepare:scripts:src:remote')))
+        .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:prepare:scripts:src:remote'})))
         .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe(iff(
+        .pipe(cond(
             argv.production, // --production flag
             removelogs()
         ))
-        .pipe(iff(
+        .pipe(cond(
             !argv.skipMinify && !argv.production && '*.js',
             uglify({
                 mangle: false,
@@ -607,7 +607,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
                 }
             })
         ))
-        .pipe(iff(
+        .pipe(cond(
             !argv.skipMinify && argv.production && '*.js', // --production flag
             uglify({preserveComments: 'some'})
         ))
@@ -615,7 +615,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
         .pipe(concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
         .pipe(size({title: 'app:prepare:scripts:src:remote'}))
-        .pipe(iff(
+        .pipe(cond(
             !argv.production,
             sftp({
                 host: sftpHost,
@@ -624,7 +624,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
                 remotePlatform: remotePlatform
             })
         ))
-        .pipe(iff(
+        .pipe(cond(
             argv.production, // --production flag
             sftp({
                 host: sftpHost,
@@ -642,7 +642,7 @@ gulp.task('__app:reload:pages:remote', function(){
             errorHandler: onError
         }))
         .pipe(changed(htmlPhpFiles))
-        .pipe(iff(
+        .pipe(cond(
             !argv.production,
             sftp({
                 host: sftpHost,
@@ -651,7 +651,7 @@ gulp.task('__app:reload:pages:remote', function(){
                 remotePlatform: remotePlatform
             })
         ))
-        .pipe(iff(
+        .pipe(cond(
             argv.production, // --production flag
             sftp({
                 host: sftpHost,
@@ -667,7 +667,7 @@ gulp.task('__app:reload:pages:remote', function(){
 
 gulp.task('app:build:images:src', function(){
     return gulp.src(srcImages)
-        .pipe(iff(argv.verbose, filelog('app:build:images:src')))
+        .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:build:images:src'})))
         .pipe(imagemin({
             optimizationLevel: 5, //0-7
             progressive: true, //jpg
@@ -680,7 +680,7 @@ gulp.task('app:build:images:src', function(){
 gulp.task('__app:copy:files', function(){
     //Manual copy for theme files etc.
     gulp.src([bowerComponents + '/' + 'tinymce/**/*'], {base: currentLevel})
-        .pipe(iff(argv.verbose, filelog('__app:copy:files')))
+        .pipe(cond(argv.verbose, debug.bind(null, {title: '__app:copy:files'})))
         .pipe(rename(function(path){
             //Remove directory from destination path
             path.dirname = path.dirname.replace(bowerComponents, '');
@@ -699,7 +699,7 @@ gulp.task('__app:sftp:dist', function(){
         .pipe(plumber({
             errorHandler: onError
         }))
-        .pipe(iff(
+        .pipe(cond(
             !argv.production,
             sftp({
                 host: sftpHost,
@@ -708,7 +708,7 @@ gulp.task('__app:sftp:dist', function(){
                 remotePlatform: remotePlatform
             })
         ))
-        .pipe(iff(
+        .pipe(cond(
             argv.production, // --production flag
             sftp({
                 host: sftpHost,

@@ -121,6 +121,8 @@ var distCss = dist + '**/*.css',
     distJs = dist + '**/*.js',
     distImages = dist + '**/*.{' + imageFileTypes + '}';
 
+var bowerComponentsJs = currentLevel + bowerComponents + '/' + '**/*.js';
+
 var remoteBaseCssDevPrependUrl = '/' + webAccount + '/' + remoteProjectBaseDir,
     remoteBaseCssProdPrependUrl = '/' + symbolicLink + '/' + remoteProjectBaseDir;
 
@@ -279,10 +281,11 @@ gulp.task('app:generate:dist:pagespeed', function(){
     });
 });
 
-gulp.task('bower:install', function(){
+gulp.task('bower:install', function(callback){
     bower.commands
         .install([/* custom libs */], {save: true}, {/* custom config */})
         .on('end', function(installed){
+            callback();
             if(Object.keys(installed).length !== 0)
                 onWarning(Object.keys(installed));
         });
@@ -439,6 +442,11 @@ gulp.task('app:build:styles:src:local', function(){
     ;
 });
 
+gulp.task('app:install:scripts:src:local', function(callback){
+    runSequence('bower:install', 'app:build:scripts:src:local', callback);
+});
+
+
 gulp.task('app:build:scripts:src:local', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
@@ -493,6 +501,10 @@ gulp.task('app:build:styles:src:remote', function(){
         .pipe(gulp.dest(dist))
         .pipe(size({title: 'app:build:styles:src:remote'}))
     ;
+});
+
+gulp.task('app:install:scripts:src:remote', function(callback){
+    runSequence(['bower:install', 'app:build:scripts:src:remote'], callback);
 });
 
 gulp.task('app:build:scripts:src:remote', function(){
@@ -726,9 +738,10 @@ gulp.task('app:serve:local', function(){
     if(!argv.skipWatch){
         gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
         gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
-        gulp.watch(srcJs, ['app:build:scripts:src:local']);
+        gulp.watch([srcJs, bowerComponentsJs], ['app:build:scripts:src:local']);
+        gulp.watch('bower.json', ['app:install:scripts:src:local']);
     } else {
-        console.log('Skipping watch task');
+        console.log('*** Skipping watch tasks ***');
     }
 });
 
@@ -736,9 +749,10 @@ gulp.task('app:serve:remote', function(){
     if(!argv.skipWatch){
         gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
         gulp.watch([srcCss, srcSass], ['app:prepare:styles:src:remote']);
-        gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
+        gulp.watch([srcJs, bowerComponentsJs], ['app:prepare:scripts:src:remote']);
+        gulp.watch('bower.json', ['app:install:scripts:src:remote']);
     } else {
-        console.log('Skipping `app:serve:remote`');
+        console.log('*** Skipping `app:serve:remote` ***');
     }
 });
 

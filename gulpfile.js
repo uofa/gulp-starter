@@ -675,17 +675,20 @@ gulp.task('__app:reload:pages:remote', function(){
 /*------------------------------------------------*/
 
 gulp.task('app:build:images:src', function(){
-    return gulp.src(srcImages)
-        .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:build:images:src'})))
-        .pipe(iff(
-            !argv.skipImageMin,
-            imagemin({
+    if(!argv.skipImageMin){
+        return gulp.src(srcImages)
+            .pipe(cond(argv.verbose, debug.bind(null, {title: 'app:build:images:src'})))
+            .pipe(imagemin({
                 optimizationLevel: 5, //0-7
                 progressive: true, //jpg
                 interlaced: true //gif
-            })
-        ))
-    ;
+            }))
+            .pipe(gulp.dest(dist))
+        ;
+    } else {
+        console.log('*** Skipping image minification ***');
+        return true;
+    }
 });
 
 gulp.task('__app:copy:files', function(){

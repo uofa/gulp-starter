@@ -78,6 +78,8 @@ var distCss = dist + '**/*.css',
     distJs = dist + '**/*.js',
     distImages = dist + '**/*.{' + imageFileTypes + '}';
 
+var bowerComponentsJs = currentLevel + bowerComponents + '/' + '**/*.js';
+
 var remoteBaseCssDevPrependUrl = '/' + webAccount + '/' + remoteProjectBaseDir,
     remoteBaseCssProdPrependUrl = '/' + symbolicLink + '/' + remoteProjectBaseDir;
 
@@ -236,10 +238,11 @@ gulp.task('app:generate:dist:pagespeed', function(){
     });
 });
 
-gulp.task('bower:install', function(){
+gulp.task('bower:install', function(callback){
     bower.commands
         .install([/* custom libs */], {save: true}, {/* custom config */})
         .on('end', function(installed){
+            callback();
             if(Object.keys(installed).length !== 0)
                 onWarning(Object.keys(installed));
         });
@@ -374,7 +377,7 @@ function calculateAdjustedUrl(url){
 
 gulp.task('app:build:styles:src:local', function(){
     return gulp.src([srcCss, srcSass])
-        .pipe($.if(argv.verbose, $.filelog('app:build:styles:src:local')))
+        .pipe($.cond(argv.verbose, $.debug.bind(null, {title: 'app:build:styles:src:local'})))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -396,6 +399,10 @@ gulp.task('app:build:styles:src:local', function(){
     ;
 });
 
+gulp.task('app:install:scripts:src:local', function(callback){
+    runSequence('bower:install', 'app:build:scripts:src:local', callback);
+});
+
 gulp.task('app:build:scripts:src:local', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
@@ -403,16 +410,21 @@ gulp.task('app:build:scripts:src:local', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe($.if(argv.verbose, $.filelog('app:build:scripts:src:local')))
+        .pipe($.cond(argv.verbose, $.debug.bind(null, {title: 'app:build:scripts:src:local'})))
         .pipe($.plumber({
             errorHandler: onError
         }))
-        .pipe($.if(!argv.skipMinify && '*.js', $.uglify({
-            mangle: false,
-            output: {
-                beautify: true
-            }
-        })))
+        .pipe($.if(!argv.skipMinify && '*.js',
+            $.if(argv.skipBeautify,
+                $.uglify(),
+                $.uglify({
+                    mangle: false,
+                    output: {
+                        beautify: true
+                    }
+                })
+            )
+        ))
         .pipe($.order(scriptsConcatenationOrder))
         .pipe($.concat(concatJsFile))
         .pipe(gulp.dest(distScripts))
@@ -452,6 +464,10 @@ gulp.task('app:build:styles:src:remote', function(){
     ;
 });
 
+gulp.task('app:install:scripts:src:remote', function(callback){
+    runSequence(['bower:install', 'app:build:scripts:src:remote'], callback);
+});
+
 gulp.task('app:build:scripts:src:remote', function(){
     var files = mainBowerFiles({filter: /\.(js)$/i});
     files.push(srcJs);
@@ -459,7 +475,7 @@ gulp.task('app:build:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe($.if(argv.verbose, $.filelog('app:build:scripts:src:remote')))
+        .pipe($.cond(argv.verbose, $.debug.bind(null, {title: 'app:build:scripts:src:remote'})))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -467,14 +483,16 @@ gulp.task('app:build:scripts:src:remote', function(){
             argv.production, // --production flag
             $.removelogs()
         ))
-        .pipe($.if(
-            !argv.skipMinify && !argv.production && '*.js',
-            $.uglify({
-                mangle: false,
-                output: {
-                    beautify: true
-                }
-            })
+        .pipe($.if(!argv.skipMinify && !argv.production && '*.js',
+            $.if(argv.skipBeautify,
+                $.uglify(),
+                $.uglify({
+                    mangle: false,
+                    output: {
+                        beautify: true
+                    }
+                })
+            )
         ))
         .pipe($.if(
             !argv.skipMinify && argv.production && '*.js', // --production flag
@@ -489,7 +507,7 @@ gulp.task('app:build:scripts:src:remote', function(){
 
 gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass], {base: src})
-        .pipe($.if(argv.verbose, $.filelog('app:prepare:styles:src:remote')))
+        .pipe($.cond(argv.verbose, $.debug.bind(null, {title: 'app:prepare:styles:src:remote'})))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -535,7 +553,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe($.if(argv.verbose, $.filelog('app:prepare:scripts:src:remote')))
+        .pipe($.cond(argv.verbose, $.debug.bind(null, {title: 'app:prepare:scripts:src:remote'})))
         .pipe($.plumber({
             errorHandler: onError
         }))
@@ -543,15 +561,16 @@ gulp.task('app:prepare:scripts:src:remote', function(){
             argv.production, // --production flag
             $.removelogs()
         ))
-        .pipe($.if(
-            !argv.skipMinify && !argv.production && '*.js',
-            $.uglify({
-                mangle: false,
-                output: {
-                    beautify: true
-                }
-            })
-        ))
+        .pipe($.if(!argv.skipMinify && !argv.production && '*.js',
+            $.if(argv.skipBeautify,
+                $.uglify(),
+                $.uglify({
+                    mangle: false,
+                    output: {
+                        beautify: true
+                    }
+                })
+            )
         .pipe($.if(
             !argv.skipMinify && argv.production && '*.js', // --production flag
             $.uglify({preserveComments: 'some'})
@@ -611,21 +630,26 @@ gulp.task('__app:reload:pages:remote', function(){
 /*------------------------------------------------*/
 
 gulp.task('app:build:images:src', function(){
-    return gulp.src(srcImages)
-        .pipe($.if(argv.verbose, $.filelog('app:build:images:src')))
-        .pipe($.imagemin({
-            optimizationLevel: 5, //0-7
-            progressive: true, //jpg
-            interlaced: true //gif
-        }))
-        .pipe(gulp.dest(dist))
-    ;
+    if(!argv.skipImageMin){
+        return gulp.src(srcImages)
+            .pipe($.if(argv.verbose, $.filelog('app:build:images:src')))
+            .pipe($.imagemin({
+                optimizationLevel: 5, //0-7
+                progressive: true, //jpg
+                interlaced: true //gif
+            }))
+            .pipe(gulp.dest(dist))
+        ;
+    } else {
+        console.log('*** Skipping image minification ***');
+        return true;
+    }
 });
 
 gulp.task('__app:copy:files', function(){
     //Manual copy for theme files etc.
     gulp.src([bowerComponents + '/' + 'tinymce/**/*'], {base: currentLevel})
-        .pipe($.if(argv.verbose, $.filelog('__app:copy:files')))
+        .pipe($.cond(argv.verbose, $.debug.bind(null, {title: '__app:copy:files'})))
         .pipe($.rename(function(path){
             //Remove directory from destination path
             path.dirname = path.dirname.replace(bowerComponents, '');
@@ -684,8 +708,10 @@ gulp.task('app:serve:local', function(){
         gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
         gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
         gulp.watch(srcJs, ['app:build:scripts:src:local']);
+        gulp.watch([srcJs, bowerComponentsJs], ['app:build:scripts:src:local']);
+        gulp.watch('bower.json', ['app:install:scripts:src:local']);
     } else {
-        console.log('Skipping watch task');
+        console.log('*** Skipping watch tasks ***');
     }
 });
 
@@ -694,8 +720,10 @@ gulp.task('app:serve:remote', function(){
         gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
         gulp.watch([srcCss, srcSass], ['app:prepare:styles:src:remote']);
         gulp.watch(srcJs, ['app:prepare:scripts:src:remote']);
+        gulp.watch([srcJs, bowerComponentsJs], ['app:prepare:scripts:src:remote']);
+        gulp.watch('bower.json', ['app:install:scripts:src:remote']);
     } else {
-        console.log('Skipping `app:serve:remote`');
+        console.log('*** Skipping `app:serve:remote` ***');
     }
 });
 

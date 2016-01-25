@@ -1,3 +1,14 @@
+/**
+* @code --skipBeautify   Skip beautifying JavaScript code
+* @code --skipImageMin   Skip image minification
+* @code --skipLocal      Override referencing dependencies globally
+* @code --skipMinify     Skip obfuscation of JavaScript code (supersedes --skipBeautify)
+* @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
+* @code --skipWatch      Skip all watch tasks
+*
+* @code --production     Run tasks as production ready (e.g. force minification, etc.)
+* @code --verbose        Per task, output each file that is processed in the stream
+*/
 'use strict';
 
 var currentLevel = './',

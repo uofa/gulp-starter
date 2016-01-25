@@ -1,10 +1,11 @@
 /**
 * @code --skipBeautify   Skip beautifying JavaScript code
+* @code --skipBowerWatch Skip watching Bower resources
 * @code --skipImageMin   Skip image minification
 * @code --skipLocal      Override referencing dependencies globally
 * @code --skipMinify     Skip obfuscation of JavaScript code (supersedes --skipBeautify)
 * @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
-* @code --skipWatch      Skip all watch tasks
+* @code --skipWatch      Skip all watch tasks (supersedes --skipBowerWatch)
 *
 * @code --production     Run tasks as production ready (e.g. force minification, etc.)
 * @code --verbose        Per task, output each file that is processed in the stream
@@ -763,8 +764,13 @@ gulp.task('app:serve:local', function(){
     if(!argv.skipWatch){
         gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
         gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
-        gulp.watch([srcJs, bowerComponentsJs], ['app:build:scripts:src:local']);
-        gulp.watch('bower.json', ['app:install:scripts:src:local']);
+
+        if(!argv.skipBowerWatch){
+            gulp.watch([srcJs, bowerComponentsJs], ['app:build:scripts:src:local']);
+            gulp.watch('bower.json', ['app:install:scripts:src:local']);
+        } else {
+            gulp.watch(srcJs, ['app:build:scripts:src:local']);
+        }
     } else {
         console.log('*** Skipping watch tasks ***');
     }

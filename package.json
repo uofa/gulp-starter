@@ -1,8 +1,8 @@
 {
-  "name": "gulp-starter",
+  "name": "uofa-gulp-starter",
   "description": "Gulp Starter Project",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12"
   },
   "devDependencies": {
     "beepbeep": "*",

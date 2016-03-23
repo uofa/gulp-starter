@@ -1,9 +1,9 @@
 {
-  "name": "uofa/gulp-starter",
+  "name": "uofa-gulp-starter",
   "version": "1.0.0",
   "main": [
     "gulpfile.js"
-  ],  
+  ],
   "dependencies": {
   },
   "overrides": {

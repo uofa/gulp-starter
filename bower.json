@@ -4,10 +4,8 @@
   "main": [
     "gulpfile.js"
   ],
-  "dependencies": {
-  },
-  "ignore": {
-  },
+  "dependencies": {},
+  "ignore": {},
   "overrides": {
     "modernizr": {
       "ignore": "true"

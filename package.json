@@ -1,12 +1,12 @@
 {
   "name": "uofa-gulp-starter",
+  "version": "1.0.0",
   "description": "Gulp Starter Project",
   "engines": {
     "node": ">=0.12"
   },
   "devDependencies": {},
   "author": "University of Aberdeen",
-  "private": true,
   "license": "MIT License, http://www.opensource.org/licenses/MIT",
   "repository": {
     "type": "git",

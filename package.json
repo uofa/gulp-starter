@@ -1,15 +1,16 @@
 {
   "name": "uofa-gulp-starter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Gulp Starter Project",
   "engines": {
     "node": ">=0.12"
   },
+  "main": "gulpfile.js",
   "devDependencies": {},
   "author": "University of Aberdeen",
   "license": "MIT License, http://www.opensource.org/licenses/MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:uofa/gulp-starter.git"
+    "url": "git@github.com:uofa/gulp-starter.git#v1.0.0"
   }
 }

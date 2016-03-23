@@ -1,0 +1,19 @@
+{
+  "name": "uofa/gulp-starter",
+  "description": "Gulp Starter Project",
+  "homepage": "https://github.com/uofa/gulp-starter",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jonathan Goode",
+      "email": "jonathan.goode@abdn.ac.uk",
+      "role": "Lead developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:uofa/gulp-starter.git"
+    }
+  ]
+}

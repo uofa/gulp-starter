@@ -1,5 +1,12 @@
 {
   "license": "MIT",
+  "authors": [
+    {
+      "name": "Jonathan Goode",
+      "email": "jonathan.goode@abdn.ac.uk",
+      "role": "Lead developer"
+    }
+  ],
   "config": {
     "vendor-dir": "./composer_plugins"
   },

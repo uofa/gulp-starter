@@ -6,6 +6,8 @@
   ],  
   "dependencies": {
   },
+  "ignore": {
+  },  
   "overrides": {
     "modernizr": {
       "ignore": "true"

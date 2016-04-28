@@ -40,7 +40,8 @@
         "custom.js",
         "modernizr.js",
         "jquery.fancybox.js",
-        "URI.js"
+        "URI.js",
+        "jquery.dataTables.js"
       ]
     },
     "_comments" : "Configuration to use when building the scripts - jQuery included first by default"

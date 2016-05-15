@@ -23,13 +23,18 @@ var node_modules = '',
 
 if(config.gulpSettings.skipLocal == 'false'){
     var isWin = /^win/.test(process.platform);
+    var isMacOS = /^darwin/.test(process.platform);
 
     if(isWin){
         var base = process.env.USERPROFILE + '/AppData/Roaming/';
         node_modules = base + 'npm/node_modules/',
         composer_bin = base + 'Composer/vendor/bin/',
         composer_plugins = 'composer_plugins/';
-    } else {
+    } else if(isMacOS){
+        node_modules = '/usr/local/lib/node_modules/',
+        composer_bin = '/usr/local/bin/',
+        composer_plugins = 'composer_plugins/';
+    } else { // Generic Linux / Unix
         node_modules = '/usr/lib/local/node_modules/',
         composer_bin = '/usr/local/bin/',
         composer_plugins = 'composer_plugins/';

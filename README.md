@@ -95,11 +95,31 @@
 
 ### Modify `gulp` to run globally
 
+####Windows
 * Start → Run → `%USERPROFILE%\AppData\Roaming\npm\node_modules\gulp\bin\gulp.js`
    * @ Line ~84
 ```
 if (!env.modulePath) {
     env.modulePath = process.env.USERPROFILE + '/AppData/Roaming/npm/node_modules/gulp/';
+    env.modulePackage.version = cliPackage.version;
+
+    /*
+    gutil.log(
+      chalk.red('Local gulp not found in'),
+      chalk.magenta(tildify(env.cwd))
+    );
+    gutil.log(chalk.red('Try running: npm install gulp'));
+    process.exit(1);
+    */
+}
+```
+
+####Mac OS X
+* Terminal nano /usr/local/lib/node_modules/gulp/bin/gulp.js
+   * @ Line ~84
+```
+if (!env.modulePath) {
+    env.modulePath = '/usr/local/lib/node_modules/gulp/';
     env.modulePackage.version = cliPackage.version;
 
     /*

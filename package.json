@@ -1,6 +1,6 @@
 {
   "name": "uofa-gulp-starter",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Gulp Starter Project",
   "engines": {
     "node": ">=0.12"
@@ -11,6 +11,6 @@
   "license": "MIT License, http://www.opensource.org/licenses/MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:uofa/gulp-starter.git#v1.0.0"
+    "url": "git@github.com:uofa/gulp-starter.git#v1.0.4"
   }
 }

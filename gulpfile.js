@@ -275,13 +275,13 @@ gulp.task('app:build:styles:src:critical', function(){
     });
 });
 
-gulp.task('app:build:documentation', function(){
-    $.apidoc.exec({
-        includeFilters: [docsBuildFile],
+gulp.task('app:build:documentation', function(done){
+    $.apidoc({
         src:  docsSrc,
         dest: docsDest,
-        template: docsTemplate
-    });
+        template: docsTemplate,
+        includeFilters: [docsBuildFile]
+    }, done);
 
     console.log('Documentation can be found at: ' + currentLevel + docsDest);
 });

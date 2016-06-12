@@ -447,6 +447,18 @@ function calculateAdjustedUrl(url){
     return output;
 }
 
+function loadBowerFiles() {
+    var files = [];
+    if (!config.customBowerFiles) {
+        files = mainBowerFiles({filter: /\.(js)$/i});
+    } else {
+        files = config.customBowerFiles.map(function(bowerFile) {
+            return config.folderSettings.bowerComponents + '/' + bowerFile;
+        });
+    }
+    return files;
+}
+
 /*------------------------------------------------*/
 
 gulp.task('app:build:styles:src:local', function(){
@@ -478,7 +490,7 @@ gulp.task('app:install:scripts:src:local', function(callback){
 });
 
 gulp.task('app:build:scripts:src:local', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
+    var files = loadBowerFiles();
     files.push(srcJs);
 
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
@@ -543,7 +555,7 @@ gulp.task('app:install:scripts:src:remote', function(callback){
 });
 
 gulp.task('app:build:scripts:src:remote', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
+    var files = loadBowerFiles();
     files.push(srcJs);
 
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
@@ -621,7 +633,7 @@ gulp.task('app:prepare:styles:src:remote', function(){
 });
 
 gulp.task('app:prepare:scripts:src:remote', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
+    var files = loadBowerFiles();
     files.push(srcJs);
 
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);

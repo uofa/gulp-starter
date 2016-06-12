@@ -7,6 +7,8 @@
 * @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
 * @code --skipWatch      Skip all watch tasks (supersedes --skipBowerWatch)
 *
+* @code --loadConfig     Sets the config for a specific target admin
+*
 * @code --production     Run tasks as production ready (e.g. force minification, etc.)
 * @code --verbose        Per task, output each file that is processed in the stream
 */
@@ -15,7 +17,18 @@
 var currentLevel = './',
     upOneLevel = '../';
 
-var config = require(currentLevel + 'config.json');
+// Check if the '--load-config' argument is supplied
+// This cannot be done via argv since the config needs to be loaded before the node_modules are loaded
+var loadConfig = process.argv.indexOf('--load-config'),
+    configFilename;
+if (loadConfig === -1) {
+    configFilename = 'config.json';
+} else {
+    var loadConfigValueIndex = loadConfig + 1;
+    var configFilename = (!!process.argv[loadConfigValueIndex]) ? 'config_' + process.argv[loadConfigValueIndex] + '.json' : 'config.json';
+} 
+
+var config = require(currentLevel + configFilename);
 
 var node_modules = '',
     composer_bin = '',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Squiz_Sniffs_Strings_ConcatenationSpacingSniff.
+ * CustomPHPCS_Sniffs_Strings_ConcatenationSpacingSniff.
  *
  * PHP version 5
  *
@@ -14,7 +14,7 @@
  */
 
 /**
- * Squiz_Sniffs_Strings_ConcatenationSpacingSniff.
+ * CustomPHPCS_Sniffs_Strings_ConcatenationSpacingSniff.
  *
  * Makes sure there are no spaces between the concatenation operator (.) and
  * the strings being concatenated.
@@ -28,7 +28,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class Squiz_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSniffer_Sniff
+class CustomPHPCS_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSniffer_Sniff
 {
 
 

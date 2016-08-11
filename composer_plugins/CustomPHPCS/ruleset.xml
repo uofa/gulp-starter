@@ -45,15 +45,13 @@
     <rule ref="PEAR.NamingConventions.ValidClassName" />
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
-    <rule ref="Squiz.Strings.ConcatenationSpacing" />
+    <rule ref="CustomPHPCS.Strings.ConcatenationSpacing"/>
     <rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
         <severity>0</severity>
     </rule>
     <rule ref="Squiz.Strings.EchoedStrings" />
 
-    <rule ref="Squiz.ControlStructures.ControlSignature">
-        <severity>0</severity>
-    </rule>
+    <rule ref="CustomPHPCS.ControlStructures" />
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration" />
     <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration" />
     <rule ref="Squiz.ControlStructures.ForLoopDeclaration" />

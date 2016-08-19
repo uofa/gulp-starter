@@ -45,6 +45,9 @@ bower_components/**
 docs/build/**
 secure/**
 vendor/**
+composer_plugins/*
+!composer_plugins/CustomPHPCS/
+!composer_plugins/*-ruleset.xml
 tasks/**
 !tasks/*.js
 !.keep

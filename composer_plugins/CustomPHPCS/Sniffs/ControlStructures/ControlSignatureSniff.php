@@ -23,7 +23,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class Squiz_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_CodeSniffer_Sniff
+class CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_CodeSniffer_Sniff
 {
 
     /**

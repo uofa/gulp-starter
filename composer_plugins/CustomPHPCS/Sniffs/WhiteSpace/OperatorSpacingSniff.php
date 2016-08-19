@@ -1,6 +1,6 @@
 <?php
 /**
- * Sniffs_Squiz_WhiteSpace_OperatorSpacingSniff.
+ * CustomPHPCS_Sniffs_WhiteSpace_OperatorSpacingSniff.
  *
  * PHP version 5
  *
@@ -14,7 +14,7 @@
  */
 
 /**
- * Sniffs_Squiz_WhiteSpace_OperatorSpacingSniff.
+ * CustomPHPCS_Sniffs_WhiteSpace_OperatorSpacingSniff.
  *
  * Verifies that operators have valid spacing surrounding them.
  *
@@ -27,7 +27,7 @@
  * @version   Release: @package_version@
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff
+class CustomPHPCS_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff
 {
 
     /**

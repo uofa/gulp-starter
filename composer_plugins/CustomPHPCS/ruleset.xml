@@ -51,7 +51,8 @@
     </rule>
     <rule ref="Squiz.Strings.EchoedStrings" />
 
-    <rule ref="CustomPHPCS.ControlStructures" />
+    <rule ref="CustomPHPCS.ControlStructures.AssignmentInCondition" />
+    <rule ref="CustomPHPCS.ControlStructures.ControlSignature" />
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration" />
     <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration" />
     <rule ref="Squiz.ControlStructures.ForLoopDeclaration" />

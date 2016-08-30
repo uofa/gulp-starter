@@ -26,7 +26,7 @@ if(loadConfig === -1){
 } else {
     var loadConfigValueIndex = loadConfig + 1;
     var configFilename = (!!process.argv[loadConfigValueIndex]) ? 'config_' + process.argv[loadConfigValueIndex] + '.json' : 'config.json';
-} 
+}
 
 var config = require(currentLevel + configFilename);
 
@@ -842,4 +842,4 @@ gulp.task('app:upload:dist', function(callback){
 });
 
 //Load custom tasks from the `tasks` directory (if it exists)
-try { require(node_modules + 'require-dir')('tasks'); } catch (error) { onError(error); }
+try { require(node_modules + 'require-dir')('tasks'); } catch(error){ onError(error); }

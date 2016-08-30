@@ -240,14 +240,16 @@ $ gulp bower:install
 
 ---
 
-##Creating multiple build targets
+## Creating Multiple Build Targets
 
 A custom build target should have a separate `config_custom_target_name.json` file.
 
 Usage example:
+
+```sh
+$ gulp --load-config custom_target_name
 ```
-gulp --load-config custom_target_name
-```
+
 Makes gulp use the values from `config_custom_target_name.json` in order to create a custom build target.
 
 ---

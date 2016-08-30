@@ -7,6 +7,8 @@
 * @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
 * @code --skipWatch      Skip all watch tasks (supersedes --skipBowerWatch)
 *
+* @code --loadConfig     Sets the config for a specific target (e.g. `gulp --load-config custom_target` makes Gulp use `config_custom_target.json`)
+*
 * @code --production     Run tasks as production ready (e.g. force minification, etc.)
 * @code --verbose        Per task, output each file that is processed in the stream
 */
@@ -15,7 +17,18 @@
 var currentLevel = './',
     upOneLevel = '../';
 
-var config = require(currentLevel + 'config.json');
+// Check if the '--load-config' argument is supplied
+// This cannot be done via the node module argv because the config needs to be loaded before the node_modules are loaded
+var loadConfig = process.argv.indexOf('--load-config'),
+    configFilename;
+if(loadConfig === -1){
+    configFilename = 'config.json';
+} else {
+    var loadConfigValueIndex = loadConfig + 1;
+    var configFilename = (!!process.argv[loadConfigValueIndex]) ? 'config_' + process.argv[loadConfigValueIndex] + '.json' : 'config.json';
+}
+
+var config = require(currentLevel + configFilename);
 
 var node_modules = '',
     composer_bin = '',
@@ -434,6 +447,18 @@ function calculateAdjustedUrl(url){
     return output;
 }
 
+function loadBowerFiles(){
+    var files = [];
+    if(!config.customBowerFiles){
+        files = mainBowerFiles({filter: /\.(js)$/i});
+    } else {
+        files = config.customBowerFiles.map(function(bowerFile){
+            return config.folderSettings.bowerComponents + '/' + bowerFile;
+        });
+    }
+    return files;
+}
+
 /*------------------------------------------------*/
 
 gulp.task('app:build:styles:src:local', function(){
@@ -465,7 +490,7 @@ gulp.task('app:install:scripts:src:local', function(callback){
 });
 
 gulp.task('app:build:scripts:src:local', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
+    var files = loadBowerFiles();
     files.push(srcJs);
 
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
@@ -530,7 +555,7 @@ gulp.task('app:install:scripts:src:remote', function(callback){
 });
 
 gulp.task('app:build:scripts:src:remote', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
+    var files = loadBowerFiles();
     files.push(srcJs);
 
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
@@ -608,7 +633,7 @@ gulp.task('app:prepare:styles:src:remote', function(){
 });
 
 gulp.task('app:prepare:scripts:src:remote', function(){
-    var files = mainBowerFiles({filter: /\.(js)$/i});
+    var files = loadBowerFiles();
     files.push(srcJs);
 
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
@@ -817,4 +842,4 @@ gulp.task('app:upload:dist', function(callback){
 });
 
 //Load custom tasks from the `tasks` directory (if it exists)
-try { require(node_modules + 'require-dir')('tasks'); } catch (error) { onError(error); }
+try { require(node_modules + 'require-dir')('tasks'); } catch(error){ onError(error); }

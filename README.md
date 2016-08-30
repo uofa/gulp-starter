@@ -240,6 +240,20 @@ $ gulp bower:install
 
 ---
 
+## Creating Multiple Build Targets
+
+A custom build target should have a separate `config_custom_target.json` file.
+
+Usage example:
+
+```sh
+$ gulp --load-config custom_target
+```
+
+Makes Gulp use the values from `config_custom_target.json` in order to create a custom build target.
+
+---
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT) © [Jonathan Goode](http://jonathangoode.co.uk)

@@ -447,12 +447,12 @@ function calculateAdjustedUrl(url){
     return output;
 }
 
-function loadBowerFiles() {
+function loadBowerFiles(){
     var files = [];
     if(!config.customBowerFiles){
         files = mainBowerFiles({filter: /\.(js)$/i});
     } else {
-        files = config.customBowerFiles.map(function(bowerFile) {
+        files = config.customBowerFiles.map(function(bowerFile){
             return config.folderSettings.bowerComponents + '/' + bowerFile;
         });
     }

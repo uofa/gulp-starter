@@ -21,7 +21,7 @@ var currentLevel = './',
 // This cannot be done via the node module argv because the config needs to be loaded before the node_modules are loaded
 var loadConfig = process.argv.indexOf('--load-config'),
     configFilename;
-if (loadConfig === -1) {
+if(loadConfig === -1){
     configFilename = 'config.json';
 } else {
     var loadConfigValueIndex = loadConfig + 1;

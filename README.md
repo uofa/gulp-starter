@@ -95,7 +95,7 @@
 
 ### Modify `gulp` to run globally
 
-####Windows
+#### Windows
 * Start → Run → `%USERPROFILE%\AppData\Roaming\npm\node_modules\gulp\bin\gulp.js`
    * @ Line ~84
 ```
@@ -114,7 +114,7 @@ if (!env.modulePath) {
 }
 ```
 
-####Mac OS X
+#### Mac OS X
 * Terminal nano /usr/local/lib/node_modules/gulp/bin/gulp.js
    * @ Line ~84
 ```
@@ -219,7 +219,7 @@ $ gulp bower:install
 
 ## Rulesets
 
-* [PHP Codesniffer (phpcs)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/phpcs-ruleset.xml)
+* [PHP Codesniffer (phpcs)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/CustomPHPCS/ruleset.xml)
 * [PHP Mess Detector (phpmd)](https://github.com/u01jmg3/gulp-starter/blob/master/composer_plugins/phpmd-ruleset.xml)
 
 ---

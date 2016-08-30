@@ -449,7 +449,7 @@ function calculateAdjustedUrl(url){
 
 function loadBowerFiles() {
     var files = [];
-    if (!config.customBowerFiles) {
+    if(!config.customBowerFiles){
         files = mainBowerFiles({filter: /\.(js)$/i});
     } else {
         files = config.customBowerFiles.map(function(bowerFile) {

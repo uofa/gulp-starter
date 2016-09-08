@@ -45,6 +45,9 @@
     <rule ref="PEAR.NamingConventions.ValidClassName" />
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
+    <rule ref="Squiz.Arrays.ArrayDeclaration">
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+    </rule>
     <rule ref="CustomPHPCS.Strings.ConcatenationSpacing"/>
     <rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
         <severity>0</severity>
@@ -53,6 +56,7 @@
 
     <rule ref="CustomPHPCS.ControlStructures.AssignmentInCondition" />
     <rule ref="CustomPHPCS.ControlStructures.ControlSignature" />
+    <rule ref="Generic.ControlStructures.InlineControlStructure" />
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration" />
     <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration" />
     <rule ref="Squiz.ControlStructures.ForLoopDeclaration" />

@@ -72,11 +72,13 @@ class CustomPHPCS_Sniffs_ControlStructures_AssignmentInConditionSniff implements
             return;
         }
 
-        $phpcsFile->addError(
-            'Assignment in "' . $tokens[$stackPtr]['content'] . '" control structure is forbidden',
-            $equalOperator,
-            'Forbidden'
-        );
+        $error = 'Assignment in "' . $tokens[$stackPtr]['content'] . '" control structure is forbidden';
+        $found = 0;
+        $data  = array($found);
+        $fix   = $phpcsFile->addFixableError($error, $equalOperator, 'Forbidden', $data);
+        if ($fix === true) {
+            $phpcsFile->fixer->addContent(($equalOperator), '=');
+        }
 
     }//end process()
 

@@ -60,11 +60,17 @@ class CustomPHPCS_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSn
 		if ($tokens[($stackPtr + 1)]['code'] != T_WHITESPACE)
 		{
 			// space after
-			$message = 'Concat operator must be followed by one space';
-			$phpcsFile->addError($message, $stackPtr, 'Missing');
-		}
-		else
-		{
+			$error = 'Concat operator must be followed by one space';
+            $found = strlen($tokens[($stackPtr + 1)]['content']);
+            $data  = array(
+                      strtoupper($tokens[$stackPtr]['content']),
+                      $found,
+                     );
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Missing', $data);
+            if ($fix === true) {
+                $phpcsFile->fixer->addContent(($stackPtr), ' ');
+            }
+		} else {
 			if ((strpos($tokens[($stackPtr + 2)]['content'], $phpcsFile->eolChar) !== false
             && strpos($tokens[($stackPtr + 2)]['content'], $phpcsFile->eolChar) == 0)
             || (strpos($tokens[($stackPtr + 1)]['content'], $phpcsFile->eolChar) !== false
@@ -79,15 +85,30 @@ class CustomPHPCS_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSn
 			if ($found > 1)
 			{
 				$error = sprintf('Expected 1 space after concat operator; %s found', $found);
-				$phpcsFile->addError($error, $stackPtr, 'Too much');
+				$data  = array(
+                          strtoupper($tokens[$stackPtr]['content']),
+                          $found,
+                         );
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Too much', $data);
+                if ($fix === true) {
+                    $phpcsFile->fixer->replaceToken(($stackPtr + 1), ' ');
+                }
 			}
 		}
 
 		if ($tokens[($stackPtr - 1)]['code'] != T_WHITESPACE)
 		{
 			// space before
-			$message = 'Concat operator must be preceded by one space';
-			$phpcsFile->addError($message, $stackPtr, 'Missing');
+			$error = 'Concat operator must be preceded by one space';
+            $found = strlen($tokens[($stackPtr + 1)]['content']);
+            $data  = array(
+                      strtoupper($tokens[$stackPtr]['content']),
+                      $found,
+                     );
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Missing', $data);
+            if ($fix === true) {
+                $phpcsFile->fixer->addContent(($stackPtr - 1), ' ');
+            }
 		}
 		else
 		{
@@ -103,7 +124,14 @@ class CustomPHPCS_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSn
 			if ($found > 1)
 			{
 				$error = sprintf('Expected 1 space before concat operator; %s found', $found);
-				$phpcsFile->addError($error, $stackPtr, 'Too much');
+				$data  = array(
+                          strtoupper($tokens[$stackPtr]['content']),
+                          $found,
+                         );
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Too much', $data);
+                if ($fix === true) {
+                    $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
+                }
 			}
 		}
 

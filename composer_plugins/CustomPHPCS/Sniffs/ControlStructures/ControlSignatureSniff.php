@@ -54,6 +54,7 @@ class CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_
                 T_FOREACH,
                 T_ELSE,
                 T_ELSEIF,
+                T_FUNCTION,
                );
 
     }//end register()
@@ -84,7 +85,7 @@ class CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_
             }
         }
 
-        if ($found !== 0 && (!in_array($tokens[$stackPtr]['code'], array(T_TRY, T_DO, T_ELSE)))) {
+        if ($found !== 0 && (!in_array($tokens[$stackPtr]['code'], array(T_TRY, T_DO, T_ELSE, T_FUNCTION)))) {
             $error = 'Expected 0 spaces after %s keyword; %s found';
             $data  = array(
                       strtoupper($tokens[$stackPtr]['content']),
@@ -94,9 +95,9 @@ class CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_
             $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterKeyword', $data);
             if ($fix === true) {
                 if ($found === 1) {
-                    $phpcsFile->fixer->addContent($stackPtr, '');
-                } else {
                     $phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
+                } else {
+                    $phpcsFile->fixer->addContent($stackPtr, '');
                 }
             }
         } else if (($found !== 1 && $found !== 'newline') && (in_array($tokens[$stackPtr]['code'], array(T_TRY, T_DO, T_ELSE)))) {
@@ -174,27 +175,7 @@ class CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_
                     $phpcsFile->fixer->endChangeset();
                 }
             }
-        }/* else if ($tokens[$stackPtr]['code'] === T_WHILE) {
-            // Zero spaces after parenthesis closer.
-            $closer = $tokens[$stackPtr]['parenthesis_closer'];
-            $found  = 0;
-            if ($tokens[($closer + 1)]['code'] === T_WHITESPACE) {
-                if (strpos($tokens[($closer + 1)]['content'], $phpcsFile->eolChar) !== false) {
-                    $found = 'newline';
-                } else {
-                    $found = strlen($tokens[($closer + 1)]['content']);
-                }
-            }
-
-            if ($found !== 0) {
-                $error = 'Expected 0 spaces before semicolon; %s found';
-                $data  = array($found);
-                $fix   = $phpcsFile->addFixableError($error, $closer, 'SpaceBeforeSemicolon', $data);
-                if ($fix === true) {
-                    $phpcsFile->fixer->replaceToken(($closer + 1), '');
-                }
-            }
-        }//end if */
+        }//end if
 
         // Only want to check multi-keyword structures from here on.
         if ($tokens[$stackPtr]['code'] === T_TRY

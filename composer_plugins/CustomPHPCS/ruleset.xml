@@ -47,6 +47,19 @@
     <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
     <rule ref="Squiz.Arrays.ArrayDeclaration">
         <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+        <!-- Optional -->
+        <exclude name="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.FirstIndexNoNewline" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.FirstValueNoNewline" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.IndexNoNewline" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SpaceBeforeDoubleArrow" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SpaceAfterComma" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.NoCommaAfterLast" />
     </rule>
     <rule ref="Squiz.Strings.ConcatenationSpacing">
         <properties>
@@ -65,7 +78,13 @@
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration" />
     <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration" />
     <rule ref="Squiz.ControlStructures.ForLoopDeclaration" />
-    <rule ref="Squiz.ControlStructures.InlineIfDeclaration" />
+    <rule ref="Squiz.ControlStructures.InlineIfDeclaration">
+        <!-- Optional -->
+        <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingBeforeThen" />
+        <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingAfterThen" />
+        <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingBeforeElse" />
+        <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingAfterElse" />
+    </rule>
     <rule ref="Squiz.ControlStructures.LowercaseDeclaration" />
     <rule ref="Squiz.ControlStructures.SwitchDeclaration" />
 
@@ -76,14 +95,21 @@
         </properties>
     </rule>
     <!-- Method names MUST NOT be declared with a space after the method name. The opening brace MUST go on its own line, and the closing brace MUST go on the next line following the body. There MUST NOT be a space after the opening parenthesis, and there MUST NOT be a space before the closing parenthesis. -->
-    <rule ref="Squiz.Functions.FunctionDeclaration" />
+    <rule ref="PEAR.Functions.FunctionDeclaration">
+        <!-- Optional -->
+        <exclude name="PEAR.Functions.FunctionDeclaration.SpaceAfterFunction" />
+        <exclude name="PEAR.Functions.FunctionDeclaration.SpaceAfterUse" />
+    </rule>
     <rule ref="Squiz.Functions.LowercaseFunctionKeywords" />
 
     <rule ref="Squiz.Operators.IncrementDecrementUsage" />
 
     <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing" />
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing" />
-    <rule ref="Squiz.WhiteSpace.OperatorSpacing" />
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+        <!-- Optional -->
+        <exclude name="Squiz.WhiteSpace.OperatorSpacing.SpacingBefore" />
+    </rule>
     <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing" /><!-- Visibility MUST be declared on all methods. -->
     <rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />

@@ -1,6 +1,6 @@
 <?php
 /**
- * Verifies that control statements conform to their coding standards.
+ * CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff.
  *
  * PHP version 5
  *
@@ -13,6 +13,8 @@
  */
 
 /**
+ * CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff.
+ *
  * Verifies that control statements conform to their coding standards.
  *
  * @category  PHP
@@ -130,7 +132,12 @@ class CustomPHPCS_Sniffs_ControlStructures_ControlSignatureSniff implements PHP_
             $opener  = $tokens[$stackPtr]['scope_opener'];
             $content = $phpcsFile->getTokensAsString(($closer + 1), ($opener - $closer - 1));
 
-            if ($content !== '') {
+            if ($content !== ''
+                // Allow both KernighanRitchie and BsdAllman brace styles
+                && (($tokens[$stackPtr]['code'] !== T_FUNCTION)
+                || ($tokens[$stackPtr]['code'] === T_FUNCTION
+                    && trim(str_replace($phpcsFile->eolChar, '\n', $content)) !== '\n'))
+            ) {
                 $error = 'Expected nothing after closing parenthesis; found "%s"';
                 $data  = array(str_replace($phpcsFile->eolChar, '\n', $content));
                 $fix   = $phpcsFile->addFixableError($error, $closer, 'SpaceAfterCloseParenthesis', $data);

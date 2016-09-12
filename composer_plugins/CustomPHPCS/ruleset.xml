@@ -99,6 +99,8 @@
         <!-- Optional -->
         <exclude name="PEAR.Functions.FunctionDeclaration.SpaceAfterFunction" />
         <exclude name="PEAR.Functions.FunctionDeclaration.SpaceAfterUse" />
+        <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnNewLine" />
+        <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
     </rule>
     <rule ref="Squiz.Functions.LowercaseFunctionKeywords" />
 

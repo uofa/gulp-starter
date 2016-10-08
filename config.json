@@ -1,7 +1,7 @@
 {
   "gulpSettings": {
-    "skipLocal": "false",
-    "_comments": "Override for running Gulp locally rather than globally"
+    "skipLocalInstall": "true",
+    "_comments": "Override for running Gulp locally rather than globally. When switching from local to global, make sure to truncate the contents of `./node_modules` otherwise Gulp will error out."
   },
   "projectSettings": {
     "localProjectBaseDir": "gulp-starter",
@@ -41,7 +41,9 @@
         "modernizr.js",
         "jquery.fancybox.js",
         "URI.js",
-        "jquery.dataTables.js"
+        "jquery.dataTables.js",
+        "vue.js",
+        "tether.js"
       ]
     },
     "_comments": "Configuration to use when building the scripts - jQuery included first by default"

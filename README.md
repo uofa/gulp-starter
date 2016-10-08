@@ -86,16 +86,46 @@
 
 ---
 
-## Gulp Installation
+## Gulp Installation (incl. Bower)
 
-- Double-click `global-installs-npm.cmd` to run the installation
-  - Ensure that setup completes successfully
-- To check your installation is configured properly, open a terminal and type in `gulp --version`
-  - This should return a version number at or above `3.8.x`
+### Pre-requisite command:
 
-### Modify `gulp` to run globally
+```csh
+$ npm install --global gulp
+```
 
-#### Windows
+### Running Gulp and its dependencies _locally_
+
+- Ensure `config.json` has `skipLocalInstall` set to `false`
+
+--
+
+#### Commands:
+
+```csh
+$ npm update --save-dev
+$ gulp
+```
+
+--
+
+### Running Gulp and its dependencies _globally_
+
+- Ensure `config.json` has `skipLocalInstall` set to `true`
+- Ensure `./node_modules` is deleted or empty
+
+--
+
+#### First command:
+
+```csh
+$ global-installs-npm.cmd
+```
+
+#### Modify `gulp` to run _globally_
+
+##### Windows
+
 - Start → Run → `%USERPROFILE%\AppData\Roaming\npm\node_modules\gulp\bin\gulp.js`
    - @ Line ~84
 ```
@@ -114,8 +144,9 @@ if (!env.modulePath) {
 }
 ```
 
-#### Mac OS X
-- Terminal nano /usr/local/lib/node_modules/gulp/bin/gulp.js
+##### Mac OS X
+
+- Terminal → `nano /usr/local/lib/node_modules/gulp/bin/gulp.js`
    - @ Line ~84
 ```
 if (!env.modulePath) {
@@ -131,6 +162,14 @@ if (!env.modulePath) {
     process.exit(1);
     */
 }
+```
+
+--
+
+#### Final command:
+
+```csh
+$ gulp
 ```
 
 ---
@@ -232,6 +271,12 @@ $ gulp bower:install
 ---
 
 ## Chrome and Gulp (Optional)
+
+```csh
+$ npm install --global gulp-devtools
+```
+
+--
 
 - Download the [Gulp Devtools extension for Chrome Developer Tools](https://chrome.google.com/webstore/detail/gulp-devtools/ojpmgjhofceebfifeajnjojpokebkkji) from the Chrome Web Store
 - Open a terminal within your project directory and type in `gulp-devtools`

@@ -47,6 +47,7 @@ secure/**
 vendor/**
 composer_plugins/*
 !composer_plugins/CustomPHPCS/
+!composer_plugins/PSR2PHPCS/
 !composer_plugins/*-ruleset.xml
 tasks/**
 !tasks/*.js

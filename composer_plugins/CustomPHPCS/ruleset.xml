@@ -84,6 +84,7 @@
         <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingAfterThen" />
         <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingBeforeElse" />
         <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingAfterElse" />
+        <exclude name="Squiz.ControlStructures.InlineIfDeclaration.NotSingleLine" />
     </rule>
     <rule ref="Squiz.ControlStructures.LowercaseDeclaration" />
     <rule ref="Squiz.ControlStructures.SwitchDeclaration" />

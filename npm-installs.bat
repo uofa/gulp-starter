@@ -1,1 +1,0 @@
-npm update --save-dev & npm install --global gulp gulp-devtools

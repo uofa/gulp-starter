@@ -41,6 +41,7 @@
     "gulp-tap": "*",
     "gulp-uglify": "*",
     "gulp-util": "*",
+    "jshint": "*",
     "jshint-stylish": "*",
     "main-bower-files": "*",
     "opn": "*",
@@ -51,10 +52,15 @@
     "run-sequence": "*",
     "yargs": "*"
   },
+  "dependencies": {},
   "author": "University of Aberdeen",
-  "license": "MIT License, http://www.opensource.org/licenses/MIT",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git@github.com:uofa/gulp-starter.git#v1.0.4"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/uofa/gulp-starter/issues"
+  },
+  "homepage": "https://github.com/uofa/gulp-starter/tree/v1.0.4#readme"
 }

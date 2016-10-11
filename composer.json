@@ -1,7 +1,7 @@
 {
   "name": "uofa/gulp-starter",
   "description": "Gulp Starter Project",
-  "homepage": "https://github.com/uofa/gulp-starter",  
+  "homepage": "https://github.com/uofa/gulp-starter",
   "license": "MIT",
   "authors": [
     {
@@ -10,13 +10,10 @@
       "role": "Lead developer"
     }
   ],
-  "config": {
-    "vendor-dir": "./composer_plugins"
-  },
-  "require": {
-    "squizlabs/php_codesniffer": "*",
-    "pdepend/pdepend": "*",
-    "phpmd/phpmd": "*",
-    "sebastian/phpcpd": "*"
-  }
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:uofa/gulp-starter.git"
+    }
+  ]
 }

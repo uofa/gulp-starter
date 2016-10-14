@@ -1,6 +1,6 @@
 {
   "gulpSettings": {
-    "skipLocalInstall": "true",
+    "skipLocalInstall": true,
     "_comments": "Override for running Gulp locally rather than globally. When switching from local to global, make sure to truncate the contents of `./node_modules` otherwise Gulp will error out."
   },
   "projectSettings": {
@@ -47,5 +47,16 @@
       ]
     },
     "_comments": "Configuration to use when building the scripts - jQuery included first by default"
+  },
+  "flagSettings": {
+    "skipMinify":     false,
+    "skipBeautify":   false,
+    "skipWatch":      false,
+    "skipBowerWatch": false,
+    "skipImageMin":   false,
+    "skipPageOpen":   false,
+    "production":     false,
+    "verbose":        false,
+    "_comments": "Enables the permanent setting of flags usually passed in with the `gulp` command. skipBeautify and skipBowerWatch have dependant flags."
   }
 }

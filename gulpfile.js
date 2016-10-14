@@ -16,7 +16,7 @@
 var currentLevel = './',
     upOneLevel   = '../';
 
-// Check if the '--load-config' argument is supplied
+// Check if the '--load-config' flag is supplied
 // This cannot be done via the node module argv because the config needs to be loaded before the node_modules are loaded
 var loadConfig = process.argv.indexOf('--load-config'),
     configFilename;
@@ -34,7 +34,7 @@ var node_modules     = '',
     composer_bin     = '',
     composer_plugins = '';
 
-if(config.gulpSettings.skipLocalInstall == 'true'){
+if(config.gulpSettings.skipLocalInstall === true){
     var isWin   = /^win/.test(process.platform);
     var isMacOS = /^darwin/.test(process.platform);
 
@@ -206,6 +206,15 @@ var AUTOPREFIXER_BROWSERS = [
 ];
 
 var currentFile = ''; // Used with tap plugin to know what file is currently within the pipe
+
+var flags = [];
+for(var key in config.flagSettings){
+    if(config.flagSettings.hasOwnProperty(key)){
+        if(key.substr(0, 1) !== '_'){
+            flags[key] = argv[key] || config.flagSettings[key];
+        }
+    }
+}
 
 /*------------------------------------------------*/
 
@@ -470,7 +479,7 @@ function loadBowerFiles(){
 
 gulp.task('app:build:styles:src:local', function(){
     return gulp.src([srcCss, srcSass])
-        .pipe($.cond(argv.verbose, $.debug.bind(null, { title: 'app:build:styles:src:local' })))
+        .pipe($.cond(flags.verbose, $.debug.bind(null, { title: 'app:build:styles:src:local' })))
         .pipe($.plumber({ errorHandler: onError }))
         .pipe($.changed(dist)) // Must be dist
         .pipe($.tap(function(file, t){
@@ -501,10 +510,10 @@ gulp.task('app:build:scripts:src:local', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe($.cond(argv.verbose, $.debug.bind(null, { title: 'app:build:scripts:src:local' })))
+        .pipe($.cond(flags.verbose, $.debug.bind(null, { title: 'app:build:scripts:src:local' })))
         .pipe($.plumber({ errorHandler: onError }))
-        .pipe($.iff(!argv.skipMinify && '*.js',
-            $.iff(argv.skipBeautify,
+        .pipe($.iff(!flags.skipMinify && '*.js',
+            $.iff(flags.skipBeautify,
                 $.uglify(),
                 $.uglify({
                     mangle: false,
@@ -560,14 +569,14 @@ gulp.task('app:build:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe($.cond(argv.verbose, $.debug.bind(null, { title: 'app:build:scripts:src:remote' })))
+        .pipe($.cond(flags.verbose, $.debug.bind(null, { title: 'app:build:scripts:src:remote' })))
         .pipe($.plumber({ errorHandler: onError }))
         .pipe($.iff(
-            argv.production, // --production flag
+            flags.production, // --production flag
             $.removelogs()
         ))
-        .pipe($.iff(!argv.skipMinify && !argv.production && '*.js',
-            $.iff(argv.skipBeautify,
+        .pipe($.iff(!flags.skipMinify && !flags.production && '*.js',
+            $.iff(flags.skipBeautify,
                 $.uglify(),
                 $.uglify({
                     mangle: false,
@@ -576,7 +585,7 @@ gulp.task('app:build:scripts:src:remote', function(){
             )
         ))
         .pipe($.iff(
-            !argv.skipMinify && argv.production && '*.js', // --production flag
+            !flags.skipMinify && flags.production && '*.js', // --production flag
             $.uglify({ preserveComments: 'some' })
         ))
         .pipe($.order(scriptsConcatenationOrder))
@@ -588,7 +597,7 @@ gulp.task('app:build:scripts:src:remote', function(){
 
 gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass], {base: src})
-        .pipe($.cond(argv.verbose, $.debug.bind(null, {title: 'app:prepare:styles:src:remote'})))
+        .pipe($.cond(flags.verbose, $.debug.bind(null, {title: 'app:prepare:styles:src:remote'})))
         .pipe($.plumber({ errorHandler: onError }))
         .pipe($.changed(dist)) // Must be dist
         .pipe($.tap(function(file, t){
@@ -605,7 +614,7 @@ gulp.task('app:prepare:styles:src:remote', function(){
         .pipe(gulp.dest(dist))
         .pipe($.size({ title: 'app:prepare:styles:src:remote' }))
         .pipe($.iff(
-            !argv.production,
+            !flags.production,
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
@@ -614,7 +623,7 @@ gulp.task('app:prepare:styles:src:remote', function(){
             })
         ))
         .pipe($.iff(
-            argv.production, // --production flag
+            flags.production, // --production flag
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
@@ -632,14 +641,14 @@ gulp.task('app:prepare:scripts:src:remote', function(){
     var scriptsConcatenationOrder = buildScriptsConcatenationOrder(config.scriptSettings.concatenation.order);
 
     return gulp.src(files)
-        .pipe($.cond(argv.verbose, $.debug.bind(null, { title: 'app:prepare:scripts:src:remote' })))
+        .pipe($.cond(flags.verbose, $.debug.bind(null, { title: 'app:prepare:scripts:src:remote' })))
         .pipe($.plumber({ errorHandler: onError }))
         .pipe($.iff(
-            argv.production, // --production flag
+            flags.production, // --production flag
             $.removelogs()
         ))
-        .pipe($.iff(!argv.skipMinify && !argv.production && '*.js',
-            $.iff(argv.skipBeautify,
+        .pipe($.iff(!flags.skipMinify && !flags.production && '*.js',
+            $.iff(flags.skipBeautify,
                 $.uglify(),
                 $.uglify({
                     mangle: false,
@@ -648,7 +657,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
             )
         ))
         .pipe($.iff(
-            !argv.skipMinify && argv.production && '*.js', // --production flag
+            !flags.skipMinify && flags.production && '*.js', // --production flag
             $.uglify({ preserveComments: 'some' })
         ))
         .pipe($.order(scriptsConcatenationOrder))
@@ -656,7 +665,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
         .pipe(gulp.dest(distScripts))
         .pipe($.size({ title: 'app:prepare:scripts:src:remote' }))
         .pipe($.iff(
-            !argv.production,
+            !flags.production,
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
@@ -665,7 +674,7 @@ gulp.task('app:prepare:scripts:src:remote', function(){
             })
         ))
         .pipe($.iff(
-            argv.production, // --production flag
+            flags.production, // --production flag
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
@@ -681,7 +690,7 @@ gulp.task('__app:reload:pages:remote', function(){
         .pipe($.plumber({ errorHandler: onError }))
         .pipe($.changed(htmlPhpFiles))
         .pipe($.iff(
-            !argv.production,
+            !flags.production,
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
@@ -690,7 +699,7 @@ gulp.task('__app:reload:pages:remote', function(){
             })
         ))
         .pipe($.iff(
-            argv.production, // --production flag
+            flags.production, // --production flag
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
@@ -704,9 +713,9 @@ gulp.task('__app:reload:pages:remote', function(){
 /*------------------------------------------------*/
 
 gulp.task('app:build:images:src', function(){
-    if(!argv.skipImageMin){
+    if(!flags.skipImageMin){
         return gulp.src(srcImages)
-            .pipe($.cond(argv.verbose, $.debug.bind(null, { title: 'app:build:images:src' })))
+            .pipe($.cond(flags.verbose, $.debug.bind(null, { title: 'app:build:images:src' })))
             .pipe($.imagemin({
                 optimizationLevel: 5, // 0-7
                 progressive: true, // jpg
@@ -723,7 +732,7 @@ gulp.task('app:build:images:src', function(){
 gulp.task('__app:copy:files', function(){
     // Manual copy for theme files etc.
     gulp.src([bowerComponents + '/' + 'tinymce/**/*'], { base: currentLevel })
-        .pipe($.cond(argv.verbose, $.debug.bind(null, { title: '__app:copy:files' })))
+        .pipe($.cond(flags.verbose, $.debug.bind(null, { title: '__app:copy:files' })))
         .pipe($.rename(function(path){
             // Remove directory from destination path
             path.dirname = path.dirname.replace(bowerComponents, '');
@@ -741,7 +750,7 @@ gulp.task('__app:sftp:dist', function(){
     return gulp.src([dist + '**/*.{' + allValidFileTypes + '}', '!' + currentLevel + 'gulpfile.js'], { dot: true })
         .pipe($.plumber({ errorHandler: onError }))
         .pipe($.iff(
-            !argv.production,
+            !flags.production,
             $.sftp({
                 host: sftpHost,
                 auth: authDev,
@@ -750,7 +759,7 @@ gulp.task('__app:sftp:dist', function(){
             })
         ))
         .pipe($.iff(
-            argv.production, // --production flag
+            flags.production, // --production flag
             $.sftp({
                 host: sftpHost,
                 auth: authProd,
@@ -762,9 +771,9 @@ gulp.task('__app:sftp:dist', function(){
 });
 
 gulp.task('app:serve:local', function(){
-    if(!argv.skipPageOpen){
-        if(argv.pageToOpen){
-            browserSyncProxyUrl += argv.pageToOpen.replace(/^\/|\/$/g, '');
+    if(!flags.skipPageOpen){
+        if(flags.pageToOpen){
+            browserSyncProxyUrl += flags.pageToOpen.replace(/^\/|\/$/g, '');
         }
 
         browserSync({
@@ -776,11 +785,11 @@ gulp.task('app:serve:local', function(){
         });
     }
 
-    if(!argv.skipWatch){
+    if(!flags.skipWatch){
         gulp.watch(htmlPhpFiles, ['__app:reload:pages:local']);
         gulp.watch([srcCss, srcSass], ['app:build:styles:src:local']);
 
-        if(!argv.skipBowerWatch){
+        if(!flags.skipBowerWatch){
             gulp.watch([srcJs, bowerComponentsJs], ['app:build:scripts:src:local']);
             gulp.watch('bower.json', ['app:install:scripts:src:local']);
         } else {
@@ -792,7 +801,7 @@ gulp.task('app:serve:local', function(){
 });
 
 gulp.task('app:serve:remote', function(){
-    if(!argv.skipWatch){
+    if(!flags.skipWatch){
         gulp.watch(htmlPhpFiles, ['__app:reload:pages:remote']);
         gulp.watch([srcCss, srcSass], ['app:prepare:styles:src:remote']);
         gulp.watch([srcJs, bowerComponentsJs], ['app:prepare:scripts:src:remote']);
@@ -803,8 +812,8 @@ gulp.task('app:serve:remote', function(){
 });
 
 gulp.task('app:open:dist:remote', function(){
-    if(!argv.skipPageOpen){
-        return argv.production ? open(remoteBaseProdUrl, webBrowser) : open(remoteBaseDevUrl, webBrowser);
+    if(!flags.skipPageOpen){
+        return flags.production ? open(remoteBaseProdUrl, webBrowser) : open(remoteBaseDevUrl, webBrowser);
     }
 });
 

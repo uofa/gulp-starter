@@ -1,14 +1,14 @@
 /**
-* @code --skipBeautify   Skip beautifying JavaScript code
-* @code --skipBowerWatch Skip watching Bower resources
-* @code --skipImageMin   Skip image minification
 * @code --skipMinify     Skip obfuscation of JavaScript code (supersedes --skipBeautify)
-* @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
+* @code --skipBeautify   Skip beautifying JavaScript code. Requires skipMinify to be set to false
 * @code --skipWatch      Skip all watch tasks (supersedes --skipBowerWatch)
+* @code --skipBowerWatch Skip watching Bower resources. Requires skipWatch to be set to false
+* @code --skipImageMin   Skip image minification
+* @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
 *
 * @code --loadConfig     Sets the config for a specific target (e.g. `gulp --load-config custom_target` makes Gulp use `config_custom_target.json`)
 *
-* @code --production     Run tasks as production ready (e.g. force minification, etc.)
+* @code --production     Run tasks as production ready (e.g. force minification, remove logs, etc.)
 * @code --verbose        Per task, output each file that is processed in the stream
 */
 'use strict';
@@ -88,7 +88,7 @@ if(config.gulpSettings.skipLocalInstall == 'true'){
 }
 
 var gulp = require(node_modules + 'gulp');
-module.exports = gulp; //for Chrome plugin + gulp-devtools
+module.exports = gulp; // For Chrome plugin + gulp-devtools
 
 var Pageres        = require(node_modules + 'pageres'),
     argv           = require(node_modules + 'yargs').argv,
@@ -96,7 +96,7 @@ var Pageres        = require(node_modules + 'pageres'),
     bower          = require(node_modules + 'bower'),
     browserSync    = require(node_modules + 'browser-sync'),
     del            = require(node_modules + 'del'),
-    fs             = require('fs'), //part of Node
+    fs             = require('fs'), // Part of Node
     mainBowerFiles = require(node_modules + 'main-bower-files'),
     open           = require(node_modules + 'opn'),
     pagespeed      = require(node_modules + 'psi'),
@@ -117,8 +117,8 @@ var stylesheetFileTypeArray = ['css'],
 
 var imageFileTypes    = imageFileTypeArray.join(','),
     pageFileTypes     = pageFileTypeArray.join(','),
-    otherFileTypes    = pageFileTypeArray.concat(fontFileTypeArray, serverFileTypeArray).join(','), //html,php,eot,svg,ttf,woff,htaccess,access
-    allValidFileTypes = stylesheetFileTypeArray.concat(scriptFileTypeArray, imageFileTypeArray, pageFileTypeArray, fontFileTypeArray, serverFileTypeArray).join(','); //css,js,gif,png,html,php,eot,svg,ttf,woff,htaccess,access
+    otherFileTypes    = pageFileTypeArray.concat(fontFileTypeArray, serverFileTypeArray).join(','), // html,php,eot,svg,ttf,woff,htaccess,access
+    allValidFileTypes = stylesheetFileTypeArray.concat(scriptFileTypeArray, imageFileTypeArray, pageFileTypeArray, fontFileTypeArray, serverFileTypeArray).join(','); // css,js,gif,png,html,php,eot,svg,ttf,woff,htaccess,access
 
 // Loaded from ./config.json
 var localProjectBaseDir  = config.projectSettings.localProjectBaseDir,
@@ -162,15 +162,15 @@ var bowerComponentsJs = currentLevel + bowerComponents + '/' + '**/*.js';
 var remoteBaseCssDevPrependUrl  = '/' + webAccount + '/' + remoteProjectBaseDir,
     remoteBaseCssProdPrependUrl = '/' + symbolicLink + '/' + remoteProjectBaseDir;
 
-//prepend URL is based on location of CSS files
+// Prepend URL is based on location of CSS files
 var remoteCssDevPrependUrl  = remoteBaseCssDevPrependUrl + '/',
     remoteCssProdPrependUrl = remoteBaseCssProdPrependUrl + '/';
 
 remoteBaseDevUrl  = protocol + '://' + remoteBaseDevUrl + remoteBaseCssDevPrependUrl,
 remoteBaseProdUrl = protocol + '://' + remoteBaseProdUrl + remoteBaseCssProdPrependUrl;
 
-var authDev             = 'development', //defined in .ftppass
-    authProd            = 'production', //defined in .ftppass
+var authDev             = 'development', // Defined in .ftppass
+    authProd            = 'production', // Defined in .ftppass
     remotePath          = 'public_html/' + remoteProjectBaseDir,
     remotePlatform      = 'windows',
     browserSyncProxyUrl = protocol + '://' + 'localhost' + '/' + localProjectBaseDir + '/';
@@ -194,18 +194,18 @@ var SCREEN_RESOLUTIONS = [
 ];
 
 var AUTOPREFIXER_BROWSERS = [
-    'ie >= 7', //10
+    'ie >= 7', // 10
     'ie_mob >= 10',
     'ff >= 30',
     'chrome >= 34',
-    'safari >= 5', //box-shadow > -webkit-box-shadow
+    'safari >= 5', // box-shadow > -webkit-box-shadow
     'opera >= 23',
     'ios >= 7',
     'android >= 4.4',
     'bb >= 10',
 ];
 
-var currentFile = ''; //used with tap plugin to know what file is currently within the pipe
+var currentFile = ''; // Used with tap plugin to know what file is currently within the pipe
 
 /*------------------------------------------------*/
 
@@ -253,7 +253,7 @@ gulp.task('app:generate:src:stats', function(){
 });
 
 gulp.task('app:lint:src:jscs', function(){
-    return gulp.src(srcScripts + '/custom.js') //only run against single file - memory intensive
+    return gulp.src(srcScripts + '/custom.js') // Only run against single file - memory intensive
         .pipe($.jscs(currentLevel + '.jscsrc'))
     ;
 });
@@ -329,8 +329,8 @@ gulp.task('bower:install', function(callback){
 
 gulp.task('app:build:styles:src:critical', function(){
     penthouse({
-        url: browserSyncProxyUrl, //localhost
-        css: srcStyles + '/screen.css', //main CSS file
+        url: browserSyncProxyUrl, // localhost
+        css: srcStyles + '/screen.css', // Main CSS file
         width: 400,
         height: 240
     }, function(error, criticalCss){
@@ -364,7 +364,7 @@ gulp.task('__app:clean:files', function(){
 
 gulp.task('__app:process:src:tabs', function(){
     return gulp.src(htmlPhpFiles)
-        .pipe($.soften(4)) //4 spaces
+        .pipe($.soften(4)) // 4 spaces
         .pipe(gulp.dest(dist))
     ;
 });
@@ -382,9 +382,9 @@ gulp.task('__app:clean:all', function(callback){
 
 gulp.task('app:process:path', function(){
     var isFolder = (argv.folder) ? true : false;
-    //gulp app:process:path --folder app/controllers
-    //gulp app:process:path --folder app/models
-    //gulp app:process:path --folder app/views
+    // gulp app:process:path --folder app/controllers
+    // gulp app:process:path --folder app/models
+    // gulp app:process:path --folder app/views
 
     if(isFolder){
         var folder = argv.folder;
@@ -393,7 +393,7 @@ gulp.task('app:process:path', function(){
             console.log('Processed folder: ' + folder);
 
             return gulp.src(folder + '/**/*.{' + pageFileTypes + '}')
-                .pipe($.soften(4)) //4 spaces
+                .pipe($.soften(4)) // 4 spaces
                 .pipe($.eol('\r\n', false))
                 .pipe(gulp.dest(folder + '/'))
             ;
@@ -425,26 +425,27 @@ function buildScriptsConcatenationOrder(scriptsConcatenationOrder){
 }
 
 function calculateAdjustedUrl(url){
-    var output = ''; //var to hold result
+    var output = ''; // var to hold result
 
-    currentFile = currentFile.replace(/\\/g, '/'); //convert all back-slashes to forward-slashes
+    currentFile = currentFile.replace(/\\/g, '/'); // Convert all back-slashes to forward-slashes
     var dirname = currentFile.replace(/\/[^\/]*\/?$/, '') + '/';
     var url_without_params = url.replace(/(\?.*)|(#.*)/g, '');
 
-    if(fs.existsSync(dirname + url_without_params)) //if path already exists, leave alone
+    if(fs.existsSync(dirname + url_without_params)){ // If path already exists, leave alone
         output = url;
-    else if(url.charAt(0) == '/') //absolute URL, leave alone
+    } else if(url.charAt(0) == '/'){ // Absolute URL, leave alone
         output = url;
-    else if(url.indexOf('/') == -1)
+    } else if(url.indexOf('/') == -1){
         output = upOneLevel + images + '/' + url;
-    else
+    } else {
         output = upOneLevel + url.replace(/^(?:\.\.\/)+/, '');
+    }
 
     var output_without_params = output.replace(/(\?.*)|(#.*)/g, '');
 
     if(fs.existsSync(dirname + output_without_params)){
         var stats = fs.statSync(dirname + output_without_params);
-        var filemtime = Math.round(stats.mtime.getTime() / 1000); //convert to Unix timestamp
+        var filemtime = Math.round(stats.mtime.getTime() / 1000); // Convert to Unix timestamp
         output = output.replaceLast('.', '.' + filemtime + '.');
     } else {
         onWarning('File not found: ' + (dirname + output_without_params) + "\n" + 'Defined in: ' + currentFile.split('/').reverse()[0]);
@@ -471,9 +472,9 @@ gulp.task('app:build:styles:src:local', function(){
     return gulp.src([srcCss, srcSass])
         .pipe($.cond(argv.verbose, $.debug.bind(null, { title: 'app:build:styles:src:local' })))
         .pipe($.plumber({ errorHandler: onError }))
-        .pipe($.changed(dist)) //must be dist
+        .pipe($.changed(dist)) // Must be dist
         .pipe($.tap(function(file, t){
-            currentFile = file.path; //update global var
+            currentFile = file.path; // Update global var
         }))
         .pipe($.iff('*.css', $.cssUrlAdjuster({
             append: function(url){
@@ -531,9 +532,9 @@ gulp.task('__app:reload:pages:local', function(){
 gulp.task('app:build:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass])
         .pipe($.plumber({ errorHandler: onError }))
-        .pipe($.changed(dist)) //must be dist
+        .pipe($.changed(dist)) // Must be dist
         .pipe($.tap(function(file, t){
-            currentFile = file.path; //update global var
+            currentFile = file.path; // Update global var
         }))
         .pipe($.iff('*.css', $.cssUrlAdjuster({
             append: function(url){
@@ -589,9 +590,9 @@ gulp.task('app:prepare:styles:src:remote', function(){
     return gulp.src([srcCss, srcSass], {base: src})
         .pipe($.cond(argv.verbose, $.debug.bind(null, {title: 'app:prepare:styles:src:remote'})))
         .pipe($.plumber({ errorHandler: onError }))
-        .pipe($.changed(dist)) //must be dist
+        .pipe($.changed(dist)) // Must be dist
         .pipe($.tap(function(file, t){
-            currentFile = file.path; //update global var
+            currentFile = file.path; // Update global var
         }))
         .pipe($.iff('*.css', $.cssUrlAdjuster({
             append: function(url){
@@ -707,9 +708,9 @@ gulp.task('app:build:images:src', function(){
         return gulp.src(srcImages)
             .pipe($.cond(argv.verbose, $.debug.bind(null, { title: 'app:build:images:src' })))
             .pipe($.imagemin({
-                optimizationLevel: 5, //0-7
-                progressive: true, //jpg
-                interlaced: true, //gif
+                optimizationLevel: 5, // 0-7
+                progressive: true, // jpg
+                interlaced: true, // gif
             }))
             .pipe(gulp.dest(dist))
         ;
@@ -720,11 +721,11 @@ gulp.task('app:build:images:src', function(){
 });
 
 gulp.task('__app:copy:files', function(){
-    //Manual copy for theme files etc.
+    // Manual copy for theme files etc.
     gulp.src([bowerComponents + '/' + 'tinymce/**/*'], { base: currentLevel })
         .pipe($.cond(argv.verbose, $.debug.bind(null, { title: '__app:copy:files' })))
         .pipe($.rename(function(path){
-            //Remove directory from destination path
+            // Remove directory from destination path
             path.dirname = path.dirname.replace(bowerComponents, '');
         }))
         .pipe(gulp.dest(distScripts));
@@ -825,5 +826,5 @@ gulp.task('app:upload:dist', function(callback){
     runSequence('app:build:remote', '__app:sftp:dist', 'app:serve:remote', 'app:open:dist:remote', callback);
 });
 
-//Load custom tasks from the `tasks` directory (if it exists)
+// Load custom tasks from the `tasks` directory (if it exists)
 try { require(node_modules + 'require-dir')('tasks'); } catch(error){ onError(error); }

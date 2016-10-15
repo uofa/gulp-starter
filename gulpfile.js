@@ -1,16 +1,16 @@
 /**
-* @code --skipMinify     Skip obfuscation of JavaScript code (supersedes --skipBeautify)
-* @code --skipBeautify   Skip beautifying JavaScript code. Requires skipMinify to be set to false
-* @code --skipWatch      Skip all watch tasks (supersedes --skipBowerWatch)
-* @code --skipBowerWatch Skip watching Bower resources. Requires skipWatch to be set to false
-* @code --skipImageMin   Skip image minification
-* @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
-*
-* @code --loadConfig     Sets the config for a specific target (e.g. `gulp --load-config custom_target` makes Gulp use `config_custom_target.json`)
-*
-* @code --production     Run tasks as production ready (e.g. force minification, remove logs, etc.)
-* @code --verbose        Per task, output each file that is processed in the stream
-*/
+ * @code --skipMinify     Skip obfuscation of JavaScript code (supersedes --skipBeautify)
+ * @code --skipBeautify   Skip beautifying JavaScript code. Requires skipMinify to be set to false
+ * @code --skipWatch      Skip all watch tasks (supersedes --skipBowerWatch)
+ * @code --skipBowerWatch Skip watching Bower resources. Requires skipWatch to be set to false
+ * @code --skipImageMin   Skip image minification
+ * @code --skipPageOpen   Skip BrowserSync opening a web page on completion of Gulp tasks
+ *
+ * @code --loadConfig     Sets the config for a specific target (e.g. `gulp --load-config custom_target` makes Gulp use `config_custom_target.json`)
+ *
+ * @code --production     Run tasks as production ready (e.g. force minification, remove logs, etc.)
+ * @code --verbose        Per task, output each file that is processed in the stream
+ */
 'use strict';
 
 var currentLevel = './',

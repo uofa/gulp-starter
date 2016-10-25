@@ -32,7 +32,7 @@ var config = require(currentLevel + configFilename);
 
 var node_modules     = '',
     composer_bin     = '',
-    composer_plugins = '';
+    composer_plugins = 'composer_plugins/';
 
 if(config.gulpSettings.skipLocalInstall === true){
     var isWin   = /^win/.test(process.platform);
@@ -41,16 +41,13 @@ if(config.gulpSettings.skipLocalInstall === true){
     if(isWin){
         var base         = process.env.USERPROFILE + '/AppData/Roaming/';
         node_modules     = base + 'npm/node_modules/',
-        composer_bin     = base + 'Composer/vendor/bin/',
-        composer_plugins = 'composer_plugins/';
+        composer_bin     = base + 'Composer/vendor/bin/';
     } else if(isMacOS){
         node_modules     = '/usr/local/lib/node_modules/',
-        composer_bin     = '/usr/local/bin/',
-        composer_plugins = 'composer_plugins/';
+        composer_bin     = '/usr/local/bin/';
     } else { // Generic Linux / Unix
         node_modules     = '/usr/lib/local/node_modules/',
-        composer_bin     = '/usr/local/bin/',
-        composer_plugins = 'composer_plugins/';
+        composer_bin     = '/usr/local/bin/';
     }
 
     var $ = {
@@ -269,7 +266,7 @@ gulp.task('app:lint:src:jscs', function(){
 
 gulp.task('app:lint:dist:htmlhint', function(){
     return gulp.src(phpFiles, { base: currentLevel })
-        .pipe($.htmlhint({'htmlhintrc': currentLevel + '.htmlhintrc'}))
+        .pipe($.htmlhint({ 'htmlhintrc': currentLevel + '.htmlhintrc' }))
         .pipe($.htmlhint.reporter(stylish))
     ;
 });
@@ -278,7 +275,7 @@ gulp.task('app:lint:dist:phpcs', function(){
     return gulp.src(phpFiles, { base: currentLevel })
         .pipe($.shell([
             'echo phpcs -n --standard="' + composer_plugins + 'phpcs-ruleset.xml" "<%= file.path %>"',
-            'phpcs -n --standard="' + composer_plugins + 'phpcs-ruleset.xml" "<%= file.path %>"'
+            'phpcs -n --standard="' + composer_plugins + 'phpcs-ruleset.xml" "<%= file.path %>"',
         ], { ignoreErrors: true }))
     ;
 });
@@ -287,7 +284,7 @@ gulp.task('app:lint:dist:phpmd', function(){
     return gulp.src(phpFiles, { base: currentLevel })
         .pipe($.shell([
             'echo phpmd "<%= file.path %>" text "' + composer_plugins + 'phpmd-ruleset.xml"',
-            'phpmd "<%= file.path %>" text "' + composer_plugins + 'phpmd-ruleset.xml"'
+            'phpmd "<%= file.path %>" text "' + composer_plugins + 'phpmd-ruleset.xml"',
         ], { ignoreErrors: true }))
     ;
 });
@@ -296,7 +293,7 @@ gulp.task('app:lint:dist:phpcpd', function(){
     return gulp.src(phpFiles, { base: currentLevel })
         .pipe($.shell([
             'echo phpcpd "<%= file.path %>"',
-            'phpcpd "<%= file.path %>"'
+            'phpcpd "<%= file.path %>"',
         ], { ignoreErrors: true }))
     ;
 });
@@ -319,7 +316,7 @@ gulp.task('app:generate:dist:pagespeed', function(){
     return pagespeed(remoteBaseDevUrl, {
         nokey: 'true',
         strategy: 'mobile',
-        threshold: 65
+        threshold: 65,
     }, function(err, data){
         console.log(data.score);
         console.log(data.pageStats);
@@ -339,9 +336,9 @@ gulp.task('bower:install', function(callback){
 gulp.task('app:build:styles:src:critical', function(){
     penthouse({
         url: browserSyncProxyUrl, // localhost
-        css: srcStyles + '/screen.css', // Main CSS file
+        css: srcStyles + '/screen.scss', // Main styles file
         width: 400,
-        height: 240
+        height: 240,
     }, function(error, criticalCss){
         if(error){
             onError(error);
@@ -356,7 +353,7 @@ gulp.task('app:build:documentation', function(done){
         src:  docsSrc,
         dest: docsDest,
         template: docsTemplate,
-        includeFilters: [docsBuildFile]
+        includeFilters: [docsBuildFile],
     }, done);
 
     console.log('Documentation can be found at: ' + currentLevel + docsDest);
@@ -386,7 +383,7 @@ gulp.task('__app:process:src:eol', function(){
 });
 
 gulp.task('__app:clean:all', function(callback){
-    return runSequence('__app:clean:files', '__app:process:src:tabs', '__app:process:src:eol', callback);
+    runSequence('__app:clean:files', '__app:process:src:tabs', '__app:process:src:eol', callback);
 });
 
 gulp.task('app:process:path', function(){
@@ -596,7 +593,7 @@ gulp.task('app:build:scripts:src:remote', function(){
 });
 
 gulp.task('app:prepare:styles:src:remote', function(){
-    return gulp.src([srcCss, srcSass], {base: src})
+    return gulp.src([srcCss, srcSass], { base: src })
         .pipe($.cond(flags.verbose, $.debug.bind(null, {title: 'app:prepare:styles:src:remote'})))
         .pipe($.plumber({ errorHandler: onError }))
         .pipe($.changed(dist)) // Must be dist

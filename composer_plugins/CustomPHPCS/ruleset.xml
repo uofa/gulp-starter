@@ -118,5 +118,13 @@
     <rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
 
+    <rule ref="Squiz.Commenting.ClassComment" />
+    <rule ref="Squiz.Commenting.FunctionComment">
+        <!-- Optional -->
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+        <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
+    </rule>
+    <rule ref="Squiz.Commenting.VariableComment" />
+
     <exclude-pattern>*/.git/*</exclude-pattern>
 </ruleset>

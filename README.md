@@ -229,6 +229,7 @@ $ gulp app:generate:src:stats
 $ gulp app:lint:dist:htmlhint
 $ gulp app:lint:dist:phpcpd
 $ gulp app:lint:dist:phpcs
+$ gulp app:lint:dist:phpcbf
 $ gulp app:lint:dist:phpmd
 $ gulp app:lint:src:csslint
 $ gulp app:lint:src:jscs

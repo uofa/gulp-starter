@@ -1,4 +1,7 @@
 module.exports = function(gulp, functions, $, paths, config, flags){
+    // Prevent "Warning: Possible EventEmitter memory leak detected"
+    require('events').EventEmitter.defaultMaxListeners = Infinity;
+
     if(!flags.skipImageMin){
         return gulp.src(paths.srcImages)
                    .pipe($.cond(flags.verbose, $.debug.bind(null, { title: 'app:build:images:src' })))

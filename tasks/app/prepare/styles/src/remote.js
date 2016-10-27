@@ -6,9 +6,9 @@ module.exports = function(gulp, functions, $, paths, config, flags){
                .pipe($.tap(function(file, t){
                    paths.currentFile = file.path; // Update global var
                }))
-               .pipe($.rework($.reworkUrl(function(url){
+               .pipe($.iff('*.css', $.rework($.reworkUrl(function(url){
                    return functions.calculateAdjustedUrl(url);
-               })))
+               }))))
                .pipe($.iff('*.css', $.csso()))
                .pipe($.iff('*.scss', $.sass({ precision: 10 }).on('error', functions.onError)))
                .pipe($.autoprefixer({ browsers: config.AUTOPREFIXER_BROWSERS }))

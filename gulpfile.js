@@ -85,7 +85,7 @@ if(config.gulpSettings.skipLocalInstall === true){
         util          : require(node_modules + 'gulp-util'),
     };
 } else {
-    var $ = require('gulp-load-plugins')({ rename: { 'gulp-if': 'iff' } });
+    var $ = require(node_modules + 'gulp-load-plugins')({ rename: { 'gulp-if': 'iff' } });
 }
 
 var gulp = require(node_modules + 'gulp');

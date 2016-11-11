@@ -2,6 +2,7 @@
 <ruleset name="Custom">
     <description>Custom Coding Standards</description>
 
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax.Found" />
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
     <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedIF">
         <severity>0</severity>

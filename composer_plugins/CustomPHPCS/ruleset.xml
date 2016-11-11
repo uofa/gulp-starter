@@ -31,21 +31,21 @@
     <rule ref="PEAR.NamingConventions.ValidClassName" />
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
-    <rule ref="Squiz.Arrays.ArrayDeclaration">
-        <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+    <rule ref="CustomPHPCS.Arrays.ArrayDeclaration">
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
         <!-- Optional -->
-        <exclude name="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.FirstIndexNoNewline" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.FirstValueNoNewline" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.IndexNoNewline" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.SpaceBeforeDoubleArrow" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.SpaceAfterComma" />
-        <exclude name="Squiz.Arrays.ArrayDeclaration.NoCommaAfterLast" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.MultiLineNotAllowed" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.FirstIndexNoNewline" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.FirstValueNoNewline" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.IndexNoNewline" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.ValueNoNewline" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.CloseBraceNewLine" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.KeyNotAligned" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.ValueNotAligned" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.CloseBraceNotAligned" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.SpaceBeforeDoubleArrow" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.SpaceAfterComma" />
+        <exclude name="CustomPHPCS.Arrays.ArrayDeclaration.NoCommaAfterLast" />
     </rule>
     <rule ref="Squiz.Strings.ConcatenationSpacing">
         <properties>
@@ -56,7 +56,7 @@
     <rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
         <severity>0</severity>
     </rule>
-    <rule ref="Squiz.Strings.EchoedStrings" />
+    <rule ref="CustomPHPCS.Strings.EchoedStrings" />
 
     <rule ref="CustomPHPCS.ControlStructures.AssignmentInCondition" />
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration" />

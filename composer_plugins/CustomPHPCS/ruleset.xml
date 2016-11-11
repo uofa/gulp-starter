@@ -74,7 +74,6 @@
     <rule ref="Squiz.Strings.EchoedStrings" />
 
     <rule ref="CustomPHPCS.ControlStructures.AssignmentInCondition" />
-    <rule ref="CustomPHPCS.ControlStructures.ControlSignature" />
     <rule ref="Generic.ControlStructures.InlineControlStructure" />
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration" />
     <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration" />

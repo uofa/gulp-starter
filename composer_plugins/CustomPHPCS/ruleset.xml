@@ -2,6 +2,14 @@
 <ruleset name="Custom">
     <description>Custom Coding Standards</description>
 
+    <rule ref="Internal.NoCodeFound">
+        <severity>0</severity>
+    </rule>
+
+    <!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
+        <type>error</type>
+    </rule>-->
+
     <rule ref="Generic.Arrays.DisallowLongArraySyntax.Found" />
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
     <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedIF">
@@ -99,6 +107,26 @@
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
     </rule>
     <rule ref="Squiz.Commenting.VariableComment" />
+
+    <!-- Reduce errors to warnings for missing comments -->
+    <rule ref="Squiz.Commenting.ClassComment.Missing">
+        <type>warning</type>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.Missing">
+        <type>warning</type>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.MissingParamName">
+        <type>warning</type>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.MissingParamTag">
+        <type>warning</type>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.TypeHintMissing">
+        <type>warning</type>
+    </rule>
+    <rule ref="Squiz.Commenting.VariableComment.Missing">
+        <type>warning</type>
+    </rule>
 
     <exclude-pattern>*/.git/*</exclude-pattern>
 </ruleset>

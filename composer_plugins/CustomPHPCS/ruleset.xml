@@ -33,7 +33,10 @@
     <rule ref="Generic.NamingConventions.ConstructorName" />
     <rule ref="Generic.NamingConventions.UpperCaseConstantName" />
     <rule ref="Generic.PHP.DeprecatedFunctions" />
-    <rule ref="Generic.PHP.DisallowShortOpenTag" />
+    <rule ref="Generic.PHP.DisallowShortOpenTag">
+        <!-- Optional -->
+        <exclude name="Generic.PHP.DisallowShortOpenTag.EchoFound" />
+    </rule>
     <rule ref="Generic.PHP.NoSilencedErrors" />
 
     <rule ref="PEAR.NamingConventions.ValidClassName" />
@@ -100,7 +103,10 @@
     <!-- PSR-2 ignores trailing whitespace at the end of blank lines but let's keep things tidy -->
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
 
-    <rule ref="Squiz.Commenting.ClassComment" />
+    <rule ref="Squiz.Commenting.ClassComment">
+        <!-- Optional -->
+        <exclude name="Squiz.Commenting.ClassComment.Missing" />
+    </rule>
     <rule ref="Squiz.Commenting.FunctionComment">
         <!-- Optional -->
         <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
@@ -109,9 +115,6 @@
     <rule ref="Squiz.Commenting.VariableComment" />
 
     <!-- Reduce errors to warnings for missing comments -->
-    <rule ref="Squiz.Commenting.ClassComment.Missing">
-        <type>warning</type>
-    </rule>
     <rule ref="Squiz.Commenting.FunctionComment.Missing">
         <type>warning</type>
     </rule>

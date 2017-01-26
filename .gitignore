@@ -1,4 +1,5 @@
-# Compiled source #
+###################
+# Compiled Source #
 ###################
 *.com
 *.class
@@ -7,6 +8,7 @@
 *.o
 *.so
 
+############
 # Packages #
 ############
 *.7z
@@ -18,12 +20,14 @@
 *.tar
 *.zip
 
-# Logs and databases #
+######################
+# Logs and Databases #
 ######################
 *.log
 *.sqlite
 
-# OS generated files #
+######################
+# OS Generated Files #
 ######################
 .DS_Store
 .DS_Store?
@@ -33,8 +37,9 @@
 ehthumbs.db
 Thumbs.db
 
+##########
 # Custom #
-######################
+##########
 private
 public_html/**
 !.htaccess
@@ -49,6 +54,4 @@ composer_plugins/*
 !composer_plugins/CustomPHPCS/
 !composer_plugins/PSR2PHPCS/
 !composer_plugins/*-ruleset.xml
-tasks/**
-!tasks/*.js
 !.keep

@@ -6,24 +6,24 @@
         "do",
         "switch",
         "try",
-        "catch"
+        "catch",
     ],
     "disallowSpaceBeforeBlockStatements": true,
     "disallowSpacesInFunctionExpression": {
         "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
+        "beforeOpeningCurlyBrace": true,
     },
     "disallowSpacesInAnonymousFunctionExpression": {
         "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
+        "beforeOpeningCurlyBrace": true,
     },
     "disallowSpacesInNamedFunctionExpression": {
         "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
+        "beforeOpeningCurlyBrace": true,
     },
     "disallowSpacesInFunctionExpression": {
         "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
+        "beforeOpeningCurlyBrace": true,
     },
     "requireBlocksOnNewline": true,
     "disallowPaddingNewlinesInBlocks": true,
@@ -46,7 +46,7 @@
         ">",
         ">=",
         "<",
-        "<="
+        "<=",
     ],
     "disallowRightStickedOperators": [
         "?",
@@ -62,7 +62,7 @@
         ">",
         ">=",
         "<",
-        "<="
+        "<=",
     ],
     "requireLeftStickedOperators": [","],
     "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
@@ -76,7 +76,7 @@
         "==",
         "===",
         "!=",
-        "!=="
+        "!==",
     ],
     "requireSpaceAfterBinaryOperators": [
         "+",
@@ -87,12 +87,12 @@
         "==",
         "===",
         "!=",
-        "!=="
+        "!==",
     ],
     "disallowMultipleLineBreaks": true,
     "disallowMixedSpacesAndTabs": true,
     "disallowTrailingWhitespace": true,
-    "disallowTrailingComma": true,
+    "disallowTrailingComma": false,
     "disallowKeywordsOnNewLine": ["else"],
-    "disallowYodaConditions": true
+    "disallowYodaConditions": true,
 }

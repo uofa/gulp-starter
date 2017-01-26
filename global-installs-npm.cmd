@@ -6,7 +6,6 @@
 ::jshint-stylish
 ::gulp-plumber
 ::gulp-changed
-::gulp-css-url-adjuster
 ::gulp-csso
 ::gulp-uglify
 ::gulp-imagemin
@@ -40,4 +39,7 @@
 ::gulp-apidoc
 ::gulp-debug
 ::gulp-cond
-npm install -g bower gulp-util gulp-csslint jshint gulp-jshint jshint-stylish gulp-plumber gulp-changed gulp-css-url-adjuster gulp-csso gulp-uglify gulp-imagemin gulp-sftp gulp-complexity opn gulp-jscs gulp-soften gulp-htmlhint run-sequence psi gulp-autoprefixer browser-sync gulp-removelogs gulp-size gulp-shell gulp-order gulp-concat gulp-if yargs pageres main-bower-files require-dir gulp-tap penthouse del gulp-eol gulp-sass beepbeep gulp-rename gulp-apidoc gulp-debug gulp-cond
+::gulp-require-tasks
+::gulp-rework
+::rework-plugin-url
+npm install -g bower gulp-util gulp-csslint jshint gulp-jshint jshint-stylish gulp-plumber gulp-changed gulp-css-url-adjuster gulp-csso gulp-uglify gulp-imagemin gulp-sftp gulp-complexity opn gulp-jscs gulp-soften gulp-htmlhint run-sequence psi gulp-autoprefixer browser-sync gulp-removelogs gulp-size gulp-shell gulp-order gulp-concat gulp-if yargs pageres main-bower-files require-dir gulp-tap penthouse del gulp-eol gulp-sass beepbeep gulp-rename gulp-apidoc gulp-debug gulp-cond gulp-require-tasks gulp-rework rework-plugin-url

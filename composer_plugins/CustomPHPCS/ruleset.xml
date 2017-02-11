@@ -41,7 +41,16 @@
         <exclude name="Generic.PHP.DisallowShortOpenTag.EchoFound" />
     </rule>
 
-    <rule ref="PEAR.NamingConventions.ValidClassName" />
+    <!-- PHP code MUST use only UTF-8 without BOM. -->
+    <rule ref="Generic.Files.ByteOrderMark" />
+    <!-- Class names MUST be declared in StudlyCaps. -->
+    <rule ref="Squiz.Classes.ValidClassName" />
+    <!-- Method names SHOULD be declared in camelCase. -->
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName" />
+        <!-- Reduce errors to warnings for methods not in camel caps format. -->
+        <rule ref="Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps">
+            <type>warning</type>
+        </rule>
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
     <rule ref="Squiz.Arrays.ArrayDeclaration">

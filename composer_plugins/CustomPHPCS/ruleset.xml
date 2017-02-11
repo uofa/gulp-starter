@@ -33,11 +33,13 @@
     <rule ref="Generic.NamingConventions.ConstructorName" />
     <rule ref="Generic.NamingConventions.UpperCaseConstantName" />
     <rule ref="Generic.PHP.DeprecatedFunctions" />
+    <rule ref="Generic.PHP.NoSilencedErrors" />
+    <!-- PHP code MUST use the long <?php ?> tags or the short-echo <?= ?> tags
+         It MUST NOT use other tag variations. -->
     <rule ref="Generic.PHP.DisallowShortOpenTag">
         <!-- Optional -->
         <exclude name="Generic.PHP.DisallowShortOpenTag.EchoFound" />
     </rule>
-    <rule ref="Generic.PHP.NoSilencedErrors" />
 
     <rule ref="PEAR.NamingConventions.ValidClassName" />
 
@@ -81,7 +83,10 @@
     </rule>
     <rule ref="Squiz.ControlStructures.SwitchDeclaration" />
 
-    <!-- Method names MUST NOT be declared with a space after the method name. The opening brace MUST go on its own line, and the closing brace MUST go on the next line following the body. There MUST NOT be a space after the opening parenthesis, and there MUST NOT be a space before the closing parenthesis. -->
+    <!-- Method names MUST NOT be declared with a space after the method name.
+         The opening brace MUST go on its own line, and the closing brace MUST
+         go on the next line following the body. There MUST NOT be a space after
+         the opening parenthesis, and there MUST NOT be a space before the closing parenthesis. -->
     <rule ref="PEAR.Functions.FunctionDeclaration">
         <!-- Optional -->
         <exclude name="PEAR.Functions.FunctionDeclaration.SpaceAfterFunction" />
@@ -100,36 +105,36 @@
         <exclude name="Squiz.WhiteSpace.OperatorSpacing.SpacingBefore" />
     </rule>
     <rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
-    <!-- PSR-2 ignores trailing whitespace at the end of blank lines but let's keep things tidy -->
+    <!-- PSR-2 ignores trailing whitespace at the end of blank lines but let's keep things tidy. -->
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
 
     <rule ref="Squiz.Commenting.ClassComment">
         <!-- Optional -->
         <exclude name="Squiz.Commenting.ClassComment.Missing" />
     </rule>
+    <rule ref="Squiz.Commenting.VariableComment" />
     <rule ref="Squiz.Commenting.FunctionComment">
         <!-- Optional -->
         <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
     </rule>
-    <rule ref="Squiz.Commenting.VariableComment" />
 
-    <!-- Reduce errors to warnings for missing comments -->
-    <rule ref="Squiz.Commenting.FunctionComment.Missing">
-        <type>warning</type>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.MissingParamName">
-        <type>warning</type>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.MissingParamTag">
-        <type>warning</type>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.TypeHintMissing">
-        <type>warning</type>
-    </rule>
-    <rule ref="Squiz.Commenting.VariableComment.Missing">
-        <type>warning</type>
-    </rule>
+        <!-- Reduce errors to warnings for missing comments. -->
+        <rule ref="Squiz.Commenting.FunctionComment.Missing">
+            <type>warning</type>
+        </rule>
+        <rule ref="Squiz.Commenting.FunctionComment.MissingParamName">
+            <type>warning</type>
+        </rule>
+        <rule ref="Squiz.Commenting.FunctionComment.MissingParamTag">
+            <type>warning</type>
+        </rule>
+        <rule ref="Squiz.Commenting.FunctionComment.TypeHintMissing">
+            <type>warning</type>
+        </rule>
+        <rule ref="Squiz.Commenting.VariableComment.Missing">
+            <type>warning</type>
+        </rule>
 
     <exclude-pattern>*/.git/*</exclude-pattern>
 </ruleset>

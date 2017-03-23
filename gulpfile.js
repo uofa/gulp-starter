@@ -112,7 +112,7 @@ var stylesheetFileTypeArray = ['css', 'scss'],
     scriptFileTypeArray     = ['js'],
     imageFileTypeArray      = ['gif', 'jpg', 'png', 'svg'],
     pageFileTypeArray       = ['html', 'php'],
-    fontFileTypeArray       = ['eot', 'svg', 'ttf', 'woff', 'woff2'],
+    fontFileTypeArray       = ['eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'],
     serverFileTypeArray     = ['htaccess'];
 
 var imageFileTypes = imageFileTypeArray.join(',');

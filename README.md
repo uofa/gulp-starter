@@ -98,7 +98,7 @@ $ npm install --global gulp
 
 - Ensure `config.json` has `skipLocalInstall` set to `false`
 
---
+---
 
 #### Commands:
 
@@ -107,14 +107,14 @@ $ npm update --save-dev
 $ gulp
 ```
 
---
+---
 
 ### Running Gulp and its dependencies _globally_
 
 - Ensure `config.json` has `skipLocalInstall` set to `true`
 - Ensure `./node_modules` is deleted or empty
 
---
+---
 
 #### First command:
 
@@ -164,7 +164,7 @@ if (!env.modulePath) {
 }
 ```
 
---
+---
 
 #### Final command:
 
@@ -277,7 +277,7 @@ $ gulp bower:install
 $ npm install --global gulp-devtools
 ```
 
---
+---
 
 - Download the [Gulp Devtools extension for Chrome Developer Tools](https://chrome.google.com/webstore/detail/gulp-devtools/ojpmgjhofceebfifeajnjojpokebkkji) from the Chrome Web Store
 - Open a terminal within your project directory and type in `gulp-devtools`
@@ -297,9 +297,3 @@ $ gulp --load-config custom_target
 ```
 
 Makes Gulp use the values from `config_custom_target.json` in order to create a custom build target.
-
----
-
-## License
-
-[MIT](http://opensource.org/licenses/MIT) © [Jonathan Goode](http://jonathangoode.co.uk)

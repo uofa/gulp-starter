@@ -1,6 +1,6 @@
 {
   "name": "uofa-gulp-starter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Gulp Starter Project",
   "engines": {
     "node": ">=0.12"
@@ -59,10 +59,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:uofa/gulp-starter.git#v1.0.4"
+    "url": "git@github.com:uofa/gulp-starter.git#v1.0.5"
   },
   "bugs": {
     "url": "https://github.com/uofa/gulp-starter/issues"
   },
-  "homepage": "https://github.com/uofa/gulp-starter/tree/v1.0.4#readme"
+  "homepage": "https://github.com/uofa/gulp-starter/tree/v1.0.5#readme"
 }

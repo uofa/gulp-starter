@@ -201,6 +201,11 @@ for(var key in config.flagSettings){
     }
 }
 
+config.sassSettings = { precision: 10 };
+if (!flags.skipMinify) {
+    config.sassSettings['outputStyle'] = 'compressed';
+}
+
 /*------------------------------------------------*/
 
 String.prototype.replaceLast = function(find, replace){

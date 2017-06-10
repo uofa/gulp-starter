@@ -9,8 +9,8 @@
     <!--<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
         <type>error</type>
     </rule>-->
-
     <rule ref="Generic.Arrays.DisallowLongArraySyntax.Found" />
+
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
     <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedIF">
         <severity>0</severity>
@@ -24,7 +24,9 @@
     <rule ref="Generic.CodeAnalysis.UselessOverridingMethod" />
 
     <rule ref="Generic.Classes.DuplicateClassName" />
+    <rule ref="Generic.Commenting.Fixme" />
     <rule ref="Generic.Commenting.Todo" />
+    <rule ref="Generic.Formatting.SpaceAfterCast" />
 
     <rule ref="Internal.LineEndings.Mixed">
         <type>error</type>
@@ -45,6 +47,8 @@
     <rule ref="Generic.Files.ByteOrderMark" />
     <!-- Class names MUST be declared in StudlyCaps. -->
     <rule ref="Squiz.Classes.ValidClassName" />
+    <!-- Check usage of `self::`. -->
+    <rule ref="Squiz.Classes.SelfMemberReference" />
     <!-- Method names SHOULD be declared in camelCase. -->
     <rule ref="Generic.NamingConventions.CamelCapsFunctionName" />
         <!-- Reduce errors to warnings for methods not in camel caps format. -->
@@ -81,7 +85,6 @@
     <rule ref="Squiz.Strings.EchoedStrings" />
 
     <rule ref="CustomPHPCS.ControlStructures.AssignmentInCondition" />
-    <rule ref="Squiz.ControlStructures.ElseIfDeclaration" />
     <rule ref="Squiz.ControlStructures.InlineIfDeclaration">
         <!-- Optional -->
         <exclude name="Squiz.ControlStructures.InlineIfDeclaration.SpacingBeforeThen" />
@@ -121,9 +124,13 @@
         <!-- Optional -->
         <exclude name="Squiz.Commenting.ClassComment.Missing" />
     </rule>
+    <rule ref="Squiz.Commenting.DocCommentAlignment" />
+    <rule ref="Squiz.Commenting.EmptyCatchComment" />
+    <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
     <rule ref="Squiz.Commenting.VariableComment" />
     <rule ref="Squiz.Commenting.FunctionComment">
         <!-- Optional -->
+        <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows" />
         <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
     </rule>
@@ -144,6 +151,12 @@
         <rule ref="Squiz.Commenting.VariableComment.Missing">
             <type>warning</type>
         </rule>
+
+    <!-- Other -->
+    <rule ref="Generic.PHP.DeprecatedFunctions" />
+    <rule ref="Squiz.PHP.DiscouragedFunctions" />
+    <rule ref="Squiz.PHP.NonExecutableCode" />
+    <rule ref="Squiz.Scope.StaticThisUsage" />
 
     <exclude-pattern>*/.git/*</exclude-pattern>
 </ruleset>

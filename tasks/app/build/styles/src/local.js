@@ -10,7 +10,7 @@ module.exports = function(gulp, functions, $, paths, config, flags){
                    return functions.calculateAdjustedUrl(url);
                }))))
                .pipe($.iff('*.css', $.csso()))
-               .pipe($.iff('*.scss', $.sass({ precision: 10 }).on('error', functions.onError)))
+               .pipe($.iff('*.scss', $.sass(config.sassSettings).on('error', functions.onError)))
                .pipe($.autoprefixer({ browsers: config.AUTOPREFIXER_BROWSERS }))
                .pipe(gulp.dest(paths.dist))
                .pipe($.browserSync.reload({ stream: true }))

@@ -82,7 +82,7 @@
     <rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
         <severity>0</severity>
     </rule>
-    <rule ref="CustomPHPCS.Strings.EchoedStrings" />
+    <rule ref="Squiz.Strings.EchoedStrings" />
 
     <rule ref="CustomPHPCS.ControlStructures.AssignmentInCondition" />
     <rule ref="Squiz.ControlStructures.InlineIfDeclaration">
